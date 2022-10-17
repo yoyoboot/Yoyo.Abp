@@ -5,9 +5,9 @@ using Abp.Domain.Repositories;
 
 namespace AbpAspNetCoreDemo.Controllers
 {
-    public class ProductsController : AbpODataEntityController<Product>, ITransientDependency
+    public class ProductsController : AbpODataEntityController<Product, long>, ITransientDependency
     {
-        public ProductsController(IRepository<Product> repository) : base(repository)
+        public ProductsController(IRepository<Product, long> repository) : base(repository)
         {
             GetPermissionName = "GetProductPermission";
             GetAllPermissionName = "GetAllProductsPermission";

@@ -15,7 +15,6 @@ using Xunit;
 
 namespace AbpAspNetCoreDemo.IntegrationTests.Tests
 {
-    // Waiting for OData .NET Core 3.0 support, see https://github.com/OData/WebApi/issues/1748
     public class AbpODataEntityControllerTests
     {
         private readonly WebApplicationFactory<Startup> _factory;
@@ -44,7 +43,25 @@ namespace AbpAspNetCoreDemo.IntegrationTests.Tests
             );
         }
 
-        //[Fact]
+        [Fact]
+        public async Task AbpODataEntityController_DontWrapResult_Test()
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/odata");
+            var response2 = await client.GetAsync("/odata/$metadata");
+
+            // Assert
+            response.StatusCode.ShouldBe(Enum.Parse<HttpStatusCode>("200"));
+            (await response.Content.ReadAsStringAsync()).ShouldNotContain("__abp");
+
+            response2.StatusCode.ShouldBe(Enum.Parse<HttpStatusCode>("200"));
+            (await response2.Content.ReadAsStringAsync()).ShouldNotContain("__abp");
+        }
+
+        [Fact]
         public async Task AbpODataEntityController_GetAll_Permission_Test()
         {
             // Arrange
@@ -56,12 +73,12 @@ namespace AbpAspNetCoreDemo.IntegrationTests.Tests
             // Assert
             response.StatusCode.ShouldBe(Enum.Parse<HttpStatusCode>("500"));
 
-            await _permissionChecker.Received().IsGrantedAsync(
+            _permissionChecker.Received().IsGranted(
                 Arg.Is<string>(permissionNames => permissionNames == "GetAllProductsPermission")
             );
         }
 
-        //[Fact]
+        [Fact]
         public async Task AbpODataEntityController_Get_Permission_Test()
         {
             // Arrange
@@ -73,12 +90,12 @@ namespace AbpAspNetCoreDemo.IntegrationTests.Tests
             // Assert
             response.StatusCode.ShouldBe(Enum.Parse<HttpStatusCode>("500"));
 
-            await _permissionChecker.Received().IsGrantedAsync(
+            _permissionChecker.Received().IsGranted(
                 Arg.Is<string>(permissionNames => permissionNames == "GetProductPermission")
             );
         }
 
-        //[Fact]
+        [Fact]
         public async Task AbpODataEntityController_Create_Permission_Test()
         {
             // Arrange
@@ -92,12 +109,12 @@ namespace AbpAspNetCoreDemo.IntegrationTests.Tests
             // Assert
             response.StatusCode.ShouldBe(Enum.Parse<HttpStatusCode>("500"));
 
-            await _permissionChecker.Received().IsGrantedAsync(Arg.Is<string>(
+            _permissionChecker.Received().IsGranted(Arg.Is<string>(
                 permissionNames => permissionNames == "CreateProductPermission")
             );
         }
 
-        //[Fact]
+        [Fact]
         public async Task AbpODataEntityController_Update_Permission_Test()
         {
             // Arrange
@@ -113,12 +130,12 @@ namespace AbpAspNetCoreDemo.IntegrationTests.Tests
             // Assert
             response.StatusCode.ShouldBe(Enum.Parse<HttpStatusCode>("500"));
 
-            await _permissionChecker.Received().IsGrantedAsync(Arg.Is<string>(
+            _permissionChecker.Received().IsGranted(Arg.Is<string>(
                 permissionNames => permissionNames == "UpdateProductPermission")
             );
         }
 
-        //[Fact]
+        [Fact]
         public async Task AbpODataEntityController_Delete_Permission_Test()
         {
             // Arrange
@@ -130,7 +147,7 @@ namespace AbpAspNetCoreDemo.IntegrationTests.Tests
             // Assert
             response.StatusCode.ShouldBe(Enum.Parse<HttpStatusCode>("500"));
 
-            await _permissionChecker.Received().IsGrantedAsync(Arg.Is<string>(
+            _permissionChecker.Received().IsGranted(Arg.Is<string>(
                 permissionNames => permissionNames == "DeleteProductPermission")
             );
         }

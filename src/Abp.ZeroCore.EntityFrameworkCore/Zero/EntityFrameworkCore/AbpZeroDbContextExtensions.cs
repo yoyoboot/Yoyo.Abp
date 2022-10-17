@@ -22,6 +22,7 @@ using Abp.Organizations;
 using Abp.Webhooks;
 using Abp.Domain.Entities.Auditing;
 using Abp.Application.Editions;
+using Abp.EntityFrameworkCore;
 
 namespace Abp.Zero.EntityFrameworkCore
 {
@@ -29,7 +30,7 @@ namespace Abp.Zero.EntityFrameworkCore
     {
 
         /// <summary>
-        /// 配置zero模块,使用 <see cref="AbpZeroStringPrimaryKeyValueGenerator"/> 生成字符串类型主键
+        /// 配置zero模块,使用 <see cref="AbpStringPrimaryKeyValueGenerator"/> 生成字符串类型主键
         /// </summary>
         /// <typeparam name="TTenant">租户类型</typeparam>
         /// <typeparam name="TRole">角色类型</typeparam>
@@ -42,7 +43,7 @@ namespace Abp.Zero.EntityFrameworkCore
           where TRole : AbpRole<TUser>
           where TUser : AbpUser<TUser>
         {
-            return modelBuilder.ConfigurationZeroModule<TTenant, TRole, TUser, AbpZeroStringPrimaryKeyValueGenerator>(maxLength);
+            return modelBuilder.ConfigurationZeroModule<TTenant, TRole, TUser, AbpStringPrimaryKeyValueGenerator>(maxLength);
         }
 
         /// <summary>
@@ -62,7 +63,22 @@ namespace Abp.Zero.EntityFrameworkCore
             where TStringPrimaryKeyValueGenerator : ValueGenerator<string>
         {
 
-            #region MyRegion
+            modelBuilder.ConfigurationZeroModuleEntity(maxLength);
+
+            modelBuilder.ConfigurationZeroModuleCommon<TTenant, TRole, TUser, TStringPrimaryKeyValueGenerator>(maxLength);
+
+            return modelBuilder;
+        }
+
+
+        /// <summary>
+        /// 配置Zero模块实体
+        /// </summary>
+        /// <param name="modelBuilder"></param>
+        /// <param name="maxLength"></param>
+        /// <returns></returns>
+        public static ModelBuilder ConfigurationZeroModuleEntity(this ModelBuilder modelBuilder, int maxLength = 32)
+        {
             // 实体关系
             modelBuilder.Entity<EditionFeatureSetting>((b) =>
             {
@@ -143,90 +159,34 @@ namespace Abp.Zero.EntityFrameworkCore
             //});
 
 
+            return modelBuilder;
+        }
 
-            #endregion
 
-
-            // 通用实体
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        /// <summary>
+        /// 配置Zero模块通用
+        /// </summary>
+        /// <typeparam name="TTenant"></typeparam>
+        /// <typeparam name="TRole"></typeparam>
+        /// <typeparam name="TUser"></typeparam>
+        /// <typeparam name="TStringPrimaryKeyValueGenerator"></typeparam>
+        /// <param name="modelBuilder"></param>
+        /// <param name="maxLength"></param>
+        /// <returns></returns>
+        public static ModelBuilder ConfigurationZeroModuleCommon<TTenant, TRole, TUser, TStringPrimaryKeyValueGenerator>(this ModelBuilder modelBuilder, int maxLength = 32)
+            where TTenant : AbpTenant<TUser>
+            where TRole : AbpRole<TUser>
+            where TUser : AbpUser<TUser>
+            where TStringPrimaryKeyValueGenerator : ValueGenerator<string>
+        {
+            modelBuilder.ConfigurationAbpDbContext<TStringPrimaryKeyValueGenerator>(maxLength,
+                (entityType, fk) =>
             {
-                // 主键字段为string
-                if (typeof(IEntity<string>).IsAssignableFrom(entityType.ClrType))
-                {
-                    modelBuilder.Entity(entityType.ClrType)
-                        .Property(nameof(IEntity<string>.Id))
-                        .HasMaxLength(maxLength)
-                        .HasValueGenerator<TStringPrimaryKeyValueGenerator>();
-                }
-
-                // 主键字段为string
-                if (typeof(IMayHaveTenant).IsAssignableFrom(entityType.ClrType)
-                    || typeof(IMustHaveTenant).IsAssignableFrom(entityType.ClrType))
-                {
-                    modelBuilder.Entity(entityType.ClrType)
-                        .Property(nameof(IMayHaveTenant.TenantId))
-                        .HasMaxLength(maxLength);
-                }
-
-                // 增删改审计长度限制
-                if (typeof(ICreationAudited).IsAssignableFrom(entityType.ClrType))
-                {
-                    modelBuilder.Entity(entityType.ClrType)
-                        .Property(nameof(ICreationAudited.CreatorUserId))
-                        .HasMaxLength(maxLength);
-                }
-                if (typeof(IDeletionAudited).IsAssignableFrom(entityType.ClrType))
-                {
-                    modelBuilder.Entity(entityType.ClrType)
-                        .Property(nameof(IDeletionAudited.DeleterUserId))
-                        .HasMaxLength(maxLength);
-                }
-                if (typeof(IModificationAudited).IsAssignableFrom(entityType.ClrType))
-                {
-                    modelBuilder.Entity(entityType.ClrType)
-                        .Property(nameof(IModificationAudited.LastModifierUserId))
-                        .HasMaxLength(maxLength);
-                }
-
-                // 引用型外键约束，设置为关联删除
-                var referencingForeignKeys = entityType.GetReferencingForeignKeys().ToList();
-                foreach (var item in referencingForeignKeys)
-                {
-                    if (entityType.ClrType == typeof(TRole)
-                        || entityType.ClrType == typeof(TUser)
-                        || entityType.ClrType == typeof(DynamicProperty)
-                        || entityType.ClrType == typeof(DynamicEntityProperty)
-                        || entityType.ClrType == typeof(EntityChangeSet)
-                        || entityType.ClrType == typeof(EntityChange)
-                        )
-                    {
-                        if (item.PrincipalToDependent != null
-                            && item.PrincipalToDependent.ClrType.GetInterface(nameof(IEnumerable)) != null)
-                        {
-                            item.DeleteBehavior = DeleteBehavior.Cascade;
-                        }
-                    }
-                }
-
-                // 其它外键
-                var foreignKeys = entityType.GetForeignKeys().ToList();
-                foreach (var item in foreignKeys)
-                {
-                    // 审计用户信息，设置为空
-                    if (item.PrincipalEntityType.ClrType == typeof(TUser)
-                        && item.DependentToPrincipal != null)
-                    {
-                        if (item.DependentToPrincipal.Name == "CreatorUser"
-                            || item.DependentToPrincipal.Name == "DeleterUser"
-                            || item.DependentToPrincipal.Name == "LastModifierUser"
-                        )
-                        {
-                            item.DeleteBehavior = DeleteBehavior.ClientSetNull;
-                        }
-                    }
-                }
-            }
-
+                return entityType.ClrType == typeof(TRole) || entityType.ClrType == typeof(TUser);
+            }, (entityType, fk) =>
+            {
+                return fk.PrincipalEntityType.ClrType == typeof(TUser) && fk.DependentToPrincipal != null;
+            });
             return modelBuilder;
         }
 

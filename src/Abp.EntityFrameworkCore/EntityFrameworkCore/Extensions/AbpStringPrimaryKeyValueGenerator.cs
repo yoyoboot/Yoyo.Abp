@@ -5,9 +5,9 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 
-namespace Abp.Zero.EntityFrameworkCore
+namespace Abp.EntityFrameworkCore
 {
-    public class AbpZeroStringPrimaryKeyValueGenerator : ValueGenerator<string>
+    public class AbpStringPrimaryKeyValueGenerator : ValueGenerator<string>
     {
         public override bool GeneratesTemporaryValues => false;
 

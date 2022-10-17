@@ -5,7 +5,7 @@ using AbpAspNetCoreDemo.Core.Domain;
 namespace AbpAspNetCoreDemo.Core.Application.Dtos
 {
     [AutoMap(typeof(Product))]
-    public class ProductDto : EntityDto
+    public class ProductDto : EntityDto<long>
     {
         public string Name { get; set; }
 

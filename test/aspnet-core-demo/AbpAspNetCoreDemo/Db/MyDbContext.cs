@@ -19,7 +19,7 @@ namespace AbpAspNetCoreDemo.Db
 
             modelBuilder.Entity<Product>().HasData(new Product("Test product", 100)
             {
-                Id = "1"
+                Id = 1
             });
         }
     }

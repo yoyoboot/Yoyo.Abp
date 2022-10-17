@@ -42,7 +42,7 @@ namespace Abp.Notifications
             _iocResolver = iocResolver;
         }
 
-        public async Task DistributeAsync(Guid notificationId)
+        public virtual async Task DistributeAsync(Guid notificationId)
         {
             await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -51,7 +51,9 @@ namespace Abp.Notifications
                 {
                     Logger.Warn(
                         "NotificationDistributionJob can not continue since could not found notification by id: " +
-                        notificationId);
+                        notificationId
+                    );
+
                     return;
                 }
 
@@ -280,7 +282,8 @@ namespace Abp.Notifications
                             {
                                 TenantId = tenantGroup.Key,
                                 UserId = user.UserId,
-                                TenantNotificationId = tenantNotificationInfo.Id
+                                TenantNotificationId = tenantNotificationInfo.Id,
+                                TargetNotifiers = notificationInfo.TargetNotifiers
                             };
 
                             await _notificationStore.InsertUserNotificationAsync(userNotification);
@@ -294,7 +297,7 @@ namespace Abp.Notifications
                 return userNotifications;
             });
         }
-        
+
         protected virtual List<UserNotification> SaveUserNotifications(
             UserIdentifier[] users,
             NotificationInfo notificationInfo)
@@ -346,7 +349,35 @@ namespace Abp.Notifications
                 {
                     using (var notifier = _iocResolver.ResolveAsDisposable<IRealTimeNotifier>(notifierType))
                     {
-                        await notifier.Object.SendNotificationsAsync(userNotifications);
+                        UserNotification[] notificationsToSendWithThatNotifier;
+                        
+                        // if UseOnlyIfRequestedAsTarget is true, then we should send notifications which requests this notifier
+                        if (notifier.Object.UseOnlyIfRequestedAsTarget)
+                        {
+                            notificationsToSendWithThatNotifier = userNotifications
+                                .Where(n => n.TargetNotifiersList.Contains(notifierType.FullName))
+                                .ToArray();
+                        }
+                        else
+                        {
+                            // notifier allows to send any notifications 
+                            // we can send all notifications which does not have TargetNotifiersList(since there is no target, we can send it with any notifier)
+                            // or current notifier is in TargetNotifiersList
+                            
+                            notificationsToSendWithThatNotifier = userNotifications
+                                .Where(n =>
+                                        n.TargetNotifiersList == null || n.TargetNotifiersList.Count == 0 ||// if there is no target notifiers, send it to all of them
+                                        n.TargetNotifiersList.Contains(notifierType.FullName)// if there is target notifiers, check if current notifier is in it
+                                )
+                                .ToArray();
+                        }
+                        
+                        if (notificationsToSendWithThatNotifier.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        await notifier.Object.SendNotificationsAsync(notificationsToSendWithThatNotifier);
                     }
                 }
                 catch (Exception ex)
