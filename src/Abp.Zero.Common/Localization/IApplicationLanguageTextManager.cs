@@ -38,5 +38,14 @@ namespace Abp.Localization
         /// <param name="key">Localization key</param>
         /// <param name="value">New localized value.</param>
         Task UpdateStringAsync(string tenantId, string sourceName, CultureInfo culture, string key, string value);
+
+        /// <summary>
+        /// Delete a localized string value for a tenant.
+        /// </summary>
+        /// <param name="tenantId">TenantId</param>
+        /// <param name="sourceName">Source name</param>
+        /// <param name="culture">Culture</param>
+        /// <param name="key">Localization key</param>
+        Task DeleteStringAsync(string tenantId, string sourceName, CultureInfo culture, string key);
     }
 }

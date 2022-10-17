@@ -14,9 +14,9 @@ namespace AbpAspNetCoreDemo.Core.Application
 {
     public class ProductAppService : ApplicationService
     {
-        private readonly IRepository<Product> _productRepository;
+        private readonly IRepository<Product, long> _productRepository;
 
-        public ProductAppService(IRepository<Product> productRepository)
+        public ProductAppService(IRepository<Product, long> productRepository)
         {
             _productRepository = productRepository;
         }
@@ -26,7 +26,7 @@ namespace AbpAspNetCoreDemo.Core.Application
             return ObjectMapper.Map<List<ProductDto>>(await _productRepository.GetAllListAsync());
         }
         
-        public string CreateProduct(ProductCreateInput input)
+        public long CreateProduct(ProductCreateInput input)
         {
             var product = ObjectMapper.Map<Product>(input);
             return _productRepository.InsertAndGetId(product);

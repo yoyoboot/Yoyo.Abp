@@ -17,7 +17,7 @@ namespace AbpAspNetCoreDemo.Core.Application
         {
             return new ProductDto()
             {
-                Id = "42",
+                Id = 42,
                 Name = "My product 1",
                 Price = 99.9f
             };

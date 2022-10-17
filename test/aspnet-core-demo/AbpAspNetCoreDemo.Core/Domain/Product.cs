@@ -5,7 +5,7 @@ using Abp.Domain.Entities.Auditing;
 namespace AbpAspNetCoreDemo.Core.Domain
 {
     [Table("AppProducts")]
-    public class Product : FullAuditedEntity
+    public class Product : FullAuditedEntity<long>
     {
         [Required]
         [StringLength(200)]
