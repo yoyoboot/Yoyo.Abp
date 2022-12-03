@@ -8,7 +8,7 @@ pre_packs:
   retry:
     max: 2
   image:
-    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-5
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
     entrypoint: [ "" ]
   script:
     - cd nupkg
@@ -25,7 +25,7 @@ push_gitlab:
   tags:
     - portal-runner
   image:
-    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-5
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
     entrypoint: [ "" ]
   script:
     - cd nupkg
@@ -47,7 +47,7 @@ push_nexus:
   tags:
     - portal-runner
   image:
-    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-5
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
     entrypoint: [ "" ]
   script:
     - cd nupkg
@@ -68,7 +68,7 @@ push_nuget:
   tags:
     - portal-runner
   image:
-    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-5
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
     entrypoint: [ "" ]
   script:
     - cd nupkg
