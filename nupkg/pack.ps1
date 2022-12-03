@@ -61,37 +61,24 @@ Set-Location $slnPath
 & dotnet restore
 
 # Copy all nuget packages to the pack folder
-$packageCounter = 0;
+$packageCounter = 0
 foreach ($project in $projects) {
     
     ## path
     $projectFolder = Join-Path $srcPath $project
-    if (!(Test-Path $projectFolder)) {
+    $csprojFile = Join-Path $projectFolder ($project + '.csproj')
+    if (!(Test-Path $csprojFile)) {
         continue
     }
 
     # Create nuget pack
     Set-Location $projectFolder
-    Get-ChildItem (Join-Path $projectFolder "bin/Release") -ErrorAction SilentlyContinue | Remove-Item -Recurse
-    & dotnet msbuild /p:Configuration=Release
-    & dotnet msbuild /p:Configuration=Release /t:pack /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg -p:Version=${version}
+    & dotnet publish -c Release
+    & dotnet pack -c Release -o $packFolder -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:Version=${version}
 
-    # Copy nuget package
-    $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + 'Yoyo.' + $project + ".*.nupkg")
-    if ($projectPackPath -match $version) {
-        Move-Item $projectPackPath $packFolder
-    }
-
-
-    # Copy symbol package
-    $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + 'Yoyo.' + $project + ".*.snupkg")
-    if ($projectPackPath -match $version) {
-        Move-Item $projectPackPath $packFolder
-    }
-    # +1
     $packageCounter += 1
 }
 
-Write-Host ('package count' + $packageCounter )
+Write-Host ('package count: ' + $packageCounter )
 # Go back to the pack folder
 Set-Location $packFolder
