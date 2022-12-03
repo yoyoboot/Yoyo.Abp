@@ -3,7 +3,7 @@ $packFolder = (Get-Item -Path "./" -Verbose).FullName
 $slnPath = Join-Path $packFolder "../"
 $srcPath = Join-Path $slnPath "src"
 $version = $env:TAG
-$version = '7.3.0.1'
+# $version = '7.3.0.1'
 
 # List of projects
 $projects = (
