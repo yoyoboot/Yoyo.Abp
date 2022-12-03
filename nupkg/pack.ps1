@@ -3,7 +3,7 @@ $packFolder = (Get-Item -Path "./" -Verbose).FullName
 $slnPath = Join-Path $packFolder "../"
 $srcPath = Join-Path $slnPath "src"
 $version = $env:TAG
-# $version = '7.3.0.1'
+$version = '7.3.0.1'
 
 # List of projects
 $projects = (
@@ -61,6 +61,7 @@ Set-Location $slnPath
 & dotnet restore
 
 # Copy all nuget packages to the pack folder
+$packageCounter = 0;
 foreach ($project in $projects) {
     
     ## path
@@ -77,12 +78,20 @@ foreach ($project in $projects) {
 
     # Copy nuget package
     $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + 'Yoyo.' + $project + ".*.nupkg")
-    Move-Item $projectPackPath $packFolder
+    if ($projectPackPath -match $version) {
+        Move-Item $projectPackPath $packFolder
+    }
+
 
     # Copy symbol package
     $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + 'Yoyo.' + $project + ".*.snupkg")
-    Move-Item $projectPackPath $packFolder
+    if ($projectPackPath -match $version) {
+        Move-Item $projectPackPath $packFolder
+    }
+    # +1
+    $packageCounter += 1
 }
 
+Write-Host ('package count' + $packageCounter )
 # Go back to the pack folder
 Set-Location $packFolder

@@ -31,9 +31,10 @@ push_gitlab:
     - cd nupkg
     - pwsh ./pack.ps1
     - dotnet nuget add source "${gitlab_pack_nuget}" -n "${gitlab_pack_user}" -u "${gitlab_pack_user}" -p "${gitlab_pack_token}" --store-password-in-clear-text
-    - export NUGET_SOURCE="${gitlab_pack_nuget}"
+    - export NUGET_SOURCE="${gitlab_pack_user}"
     - export NUGET_SOURCE_APIKEY="${gitlab_pack_token}"
     - export PUSH_FILE_NAME='./push-nuget.ps1'
+    # - export DISABLE_API_KEY='True'
     - pwsh ./pack_push.ps1
 
 # 推送到Nexus私有源
