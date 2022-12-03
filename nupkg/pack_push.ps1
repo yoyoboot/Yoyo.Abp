@@ -15,7 +15,7 @@ if ($disableApiKey -eq $True) {
 
 # 生成脚本
 Get-ChildItem ./*.nupkg | Select-Object { $prefix + $_.Name + $suffix }  `
-| Out-File -width 1000 $fileName -Force
+| Out-File -width 5000 $fileName -Force
 
 (Get-Content $fileName | Select-Object -Skip 3) | Set-Content $fileName
 
