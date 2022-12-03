@@ -1,0 +1,79 @@
+# 预编译
+pre_packs:
+  stage: build
+  only:
+    - tags
+  tags:
+    - portal-runner
+  retry:
+    max: 2
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-5
+    entrypoint: [ "" ]
+  script:
+    - cd nupkg
+    - pwsh ./pack.ps1
+
+# 推送到gitlab源
+push_gitlab:
+  stage: deploy
+  #when: manual
+  dependencies:
+    - pre_packs
+  only:
+    - tags
+  tags:
+    - portal-runner
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-5
+    entrypoint: [ "" ]
+  script:
+    - cd nupkg
+    - pwsh ./pack.ps1
+    - dotnet nuget add source "${gitlab_pack_nuget}" -n "${gitlab_pack_user}" -u "${gitlab_pack_user}" -p "${gitlab_pack_token}" --store-password-in-clear-text
+    - export NUGET_SOURCE="${gitlab_pack_nuget}"
+    - export NUGET_SOURCE_APIKEY="${gitlab_pack_token}"
+    - export PUSH_FILE_NAME='./push-nuget.ps1'
+    - pwsh ./pack_push.ps1
+
+# 推送到Nexus私有源
+push_nexus:
+  stage: deploy
+  #when: manual
+  dependencies:
+    - pre_packs
+  only:
+    - tags
+  tags:
+    - portal-runner
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-5
+    entrypoint: [ "" ]
+  script:
+    - cd nupkg
+    - pwsh ./pack.ps1
+    - export NUGET_SOURCE="${nexus_nuget}"
+    - export NUGET_SOURCE_APIKEY="${nexus_nuget_token}"
+    - export PUSH_FILE_NAME='./push-nuget.ps1'
+    - pwsh ./pack_push.ps1
+
+# 推送到nuget源
+push_nuget:
+  stage: deploy
+  when: manual
+  dependencies:
+    - pre_packs
+  only:
+    - tags
+  tags:
+    - portal-runner
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-5
+    entrypoint: [ "" ]
+  script:
+    - cd nupkg
+    - pwsh ./pack.ps1
+    - export NUGET_SOURCE="${nuget}"
+    - export NUGET_SOURCE_APIKEY="${nuget_token}"
+    - export PUSH_FILE_NAME='./push-nuget.ps1'
+    - pwsh ./pack_push.ps1

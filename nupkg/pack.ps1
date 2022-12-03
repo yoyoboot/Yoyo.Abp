@@ -2,6 +2,7 @@
 $packFolder = (Get-Item -Path "./" -Verbose).FullName
 $slnPath = Join-Path $packFolder "../"
 $srcPath = Join-Path $slnPath "src"
+$version = $env:TAG
 
 # List of projects
 $projects = (
@@ -71,7 +72,7 @@ foreach ($project in $projects) {
     Set-Location $projectFolder
     Get-ChildItem (Join-Path $projectFolder "bin/Release") -ErrorAction SilentlyContinue | Remove-Item -Recurse
     & dotnet msbuild /p:Configuration=Release
-    & dotnet msbuild /p:Configuration=Release /t:pack /p:IncludeSymbols=false /p:SymbolPackageFormat=snupkg
+    & dotnet msbuild /p:Configuration=Release /t:pack /p:IncludeSymbols=false /p:SymbolPackageFormat=snupkg -p:Version=${version}
 
     # Copy nuget package
     $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + 'Yoyo.' + $project + ".*.nupkg")

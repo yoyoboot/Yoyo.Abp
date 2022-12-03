@@ -1,0 +1,23 @@
+# 从编译项目通过、构建包内容
+
+# 编译项目为docker镜像，然后推送到仓库中
+
+# 定义stages
+stages:
+  - build # 编译
+  - publish # 发布
+  - deploy # 部署
+  - withdraw_deploy # 撤销部署
+
+variables:
+  TAG: $CI_COMMIT_REF_NAME
+  IMAGE_NAME: "yoyoboot"
+  BRANCE_NAME: "develop"
+
+
+include: 
+  # - local: ".gitlab/ci/docker-images.dev-ci.yml"
+  # - local: ".gitlab/ci/docker-images.tag-ci.yml"
+  # - local: ".gitlab/ci/sync-code.any-ci.yml"
+  - local: ".gitlab/ci/module-nuget.tag-ci.yml"
+ 
