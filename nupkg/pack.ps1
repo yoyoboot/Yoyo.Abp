@@ -1,9 +1,19 @@
+# 全局通用的配置变量信息
+$version = "1.0.0"
+
+# 是否为发布
+$isProduction = $env:IS_PRODUCTION
+
+# 发布模式，从环境变量读取
+if ($isProduction -eq $True) {
+    $version = $env:TAG
+}
+
 # Paths
 $packFolder = (Get-Item -Path "./" -Verbose).FullName
+$distPath = Join-Path $packFolder "dist"
 $slnPath = Join-Path $packFolder "../"
 $srcPath = Join-Path $slnPath "src"
-$version = $env:TAG
-# $version = '7.3.0.1'
 
 # List of projects
 $projects = (
@@ -58,7 +68,7 @@ $projects = (
 
 # Rebuild solution
 Set-Location $slnPath
-& dotnet restore
+& dotnet restore --ignore-failed-sources
 
 # Copy all nuget packages to the pack folder
 $packageCounter = 0
@@ -74,7 +84,11 @@ foreach ($project in $projects) {
     # Create nuget pack
     Set-Location $projectFolder
     & dotnet publish -c Release
-    & dotnet pack -c Release -o $packFolder -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg -p:Version=${version}
+    & dotnet pack -c Release `
+        -o $distPath `
+        -p:IncludeSymbols=true `
+        -p:SymbolPackageFormat=snupkg `
+        -p:Version=${version}
 
     $packageCounter += 1
 }
