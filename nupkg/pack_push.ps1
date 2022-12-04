@@ -1,7 +1,7 @@
 # 预定义参数
 $source = 'http://nuget.org/index.json' # 源
 $apikey = 'key' # key
-$fileName = './a-push.ps1' # 发布文件
+$fileName = './push.ps1' # 发布文件
 $disableApiKey = $False # 禁用apikey
 $distPath = './dist' # nupkg 所在目录
 
@@ -20,6 +20,9 @@ if ($isProduction -eq $True) {
 # 处理路径
 if ($Null -eq $distPath) {
     $distPath = './dist'
+}
+if ($Null -eq $fileName) {
+    $fileName = './push.ps1'
 }
 
 
