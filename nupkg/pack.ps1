@@ -83,8 +83,9 @@ foreach ($project in $projects) {
 
     # Create nuget pack
     Set-Location $projectFolder
-    & dotnet publish -c Release
-    & dotnet pack -c Release `
+    & dotnet publish --no-restore -c Release
+    & dotnet pack --no-restore `
+        -c Release `
         -o $distPath `
         -p:IncludeSymbols=true `
         -p:SymbolPackageFormat=snupkg `
