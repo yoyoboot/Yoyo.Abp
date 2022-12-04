@@ -135,3 +135,4 @@ nupkg/push-hikalkan.bat
 
 # Nuke Test Results
 output/test-results/*
+nupkg/dist/*
