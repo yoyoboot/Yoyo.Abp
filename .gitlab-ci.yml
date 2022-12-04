@@ -13,7 +13,8 @@ variables:
   TAG: $CI_COMMIT_REF_NAME
   IMAGE_NAME: "yoyoboot"
   BRANCE_NAME: "develop"
-
+  IS_PRODUCTION: 'True'
+  
 
 include: 
   # - local: ".gitlab/ci/docker-images.dev-ci.yml"
