@@ -8,6 +8,10 @@ $distPath = './dist' # nupkg 所在目录
 # 是否为发布
 $isProduction = $env:IS_PRODUCTION
 
+# export NUGET_SOURCE="${gitlab_pack_nuget}"
+# export NUGET_SOURCE_APIKEY="${gitlab_pack_token}"
+# export DISABLE_API_KEY='True'
+
 # 发布模式，从环境变量读取
 if ($isProduction -eq $True) {
     $source = $env:NUGET_SOURCE
