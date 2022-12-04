@@ -30,12 +30,12 @@ push_gitlab:
   script:
     - cd nupkg
     - pwsh ./pack.ps1
-    - export NUGET_GITLAB_SOURCE="${gitlab_pack_nuget}"
-    - export NUGET_GITLAB_USER="${gitlab_pack_user}"
-    - export NUGET_GITLAB_TOKEN="${gitlab_pack_token}"
+    - export NUGET_GITLAB_SOURCE="${gitlab_52abp_nuget_source}"
+    - export NUGET_GITLAB_USER="${gitlab_52abp_nuget_user}"
+    - export NUGET_GITLAB_TOKEN="${gitlab_52abp_nuget_token}"
     - pwsh ./nuget_gitlab_login.ps1
-    - export NUGET_SOURCE="${gitlab_pack_nuget}"
-    - export NUGET_SOURCE_APIKEY="${gitlab_pack_token}"
+    - export NUGET_SOURCE="${gitlab_52abp_nuget_source}"
+    - export NUGET_SOURCE_APIKEY="${gitlab_52abp_nuget_token}"
     # - export DISABLE_API_KEY='True'
     - pwsh ./pack_push.ps1
 
