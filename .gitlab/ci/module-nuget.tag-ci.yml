@@ -17,7 +17,7 @@ pre_packs:
 # 推送到gitlab源
 push_gitlab:
   stage: deploy
-  #when: manual
+  when: manual
   dependencies:
     - pre_packs
   only:
@@ -62,7 +62,6 @@ push_nexus:
 # 推送到nuget源
 push_nuget:
   stage: deploy
-  when: manual
   dependencies:
     - pre_packs
   only:
