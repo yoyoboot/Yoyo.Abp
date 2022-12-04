@@ -36,7 +36,7 @@ push_gitlab:
     - pwsh ./nuget_gitlab_login.ps1
     - export NUGET_SOURCE="${gitlab_pack_nuget}"
     - export NUGET_SOURCE_APIKEY="${gitlab_pack_token}"
-    - export DISABLE_API_KEY='True'
+    # - export DISABLE_API_KEY='True'
     - pwsh ./pack_push.ps1
 
 # 推送到Nexus私有源
