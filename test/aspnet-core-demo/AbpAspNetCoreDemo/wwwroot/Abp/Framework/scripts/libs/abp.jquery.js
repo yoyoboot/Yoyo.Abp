@@ -19,14 +19,14 @@
         return $.Deferred(function ($dfd) {
             $.ajax(options)
                 .done(function (data, textStatus, jqXHR) {
-                    if (data.__abp) {
+                    if (data.__wrapper) {
                         abp.ajax.handleResponse(data, userOptions, $dfd, jqXHR);
                     } else {
                         $dfd.resolve(data);
                         userOptions.success && userOptions.success(data);
                     }
                 }).fail(function (jqXHR) {
-                    if (jqXHR.responseJSON && jqXHR.responseJSON.__abp) {
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.__wrapper) {
                         abp.ajax.handleResponse(jqXHR.responseJSON, userOptions, $dfd, jqXHR);
                     } else {
                         abp.ajax.handleNonAbpErrorResponse(jqXHR, userOptions, $dfd);

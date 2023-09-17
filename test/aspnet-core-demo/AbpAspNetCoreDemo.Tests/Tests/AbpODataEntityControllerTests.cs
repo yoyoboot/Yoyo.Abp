@@ -55,10 +55,10 @@ namespace AbpAspNetCoreDemo.IntegrationTests.Tests
 
             // Assert
             response.StatusCode.ShouldBe(Enum.Parse<HttpStatusCode>("200"));
-            (await response.Content.ReadAsStringAsync()).ShouldNotContain("__abp");
+            (await response.Content.ReadAsStringAsync()).ShouldNotContain("__wrapper");
 
             response2.StatusCode.ShouldBe(Enum.Parse<HttpStatusCode>("200"));
-            (await response2.Content.ReadAsStringAsync()).ShouldNotContain("__abp");
+            (await response2.Content.ReadAsStringAsync()).ShouldNotContain("__wrapper");
         }
 
         [Fact]

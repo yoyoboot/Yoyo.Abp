@@ -96,7 +96,7 @@
                     },
 
                     'response': function (response) {
-                        if (!response.data || !response.data.__abp) {
+                        if (!response.data || !response.data.__wrapper) {
                             return response;
                         }
 
@@ -106,7 +106,7 @@
                     },
 
                     'responseError': function (ngError) {
-                        if (!ngError.data || !ngError.data.__abp) {
+                        if (!ngError.data || !ngError.data.__wrapper) {
                             abp.ng.http.showError(abp.ng.http.defaultError);
                             return ngError;
                         }
