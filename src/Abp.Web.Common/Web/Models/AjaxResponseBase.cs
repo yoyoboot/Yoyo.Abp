@@ -26,6 +26,6 @@ namespace Abp.Web.Models
         /// <summary>
         /// A special signature for AJAX responses. It's used in the client to detect if this is a response wrapped by ABP.
         /// </summary>
-        public bool __abp { get; } = true;
+        public bool __wrapper { get; } = true;
     }
 }
