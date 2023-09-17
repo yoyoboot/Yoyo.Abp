@@ -19,6 +19,8 @@ if ($isProduction -eq $True) {
     $fileName = $env:PUSH_FILE_NAME
     $disableApiKey = $env:DISABLE_API_KEY
     $distPath = $env:DIST_PATH
+    Write-Host "PACK PUSH Production Mode"
+    Write-Host ("API KEY" + $apikey)
 }
 
 # 处理路径
