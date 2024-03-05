@@ -2,8 +2,7 @@
 
 <p align="center">
   <a href="./README.md">English</a> |
-  <a href="./README_CN.md">简体中文</a>
-  
+  <a href="./README_CN.md">简体中文</a>  
 </p>
 
 [![NuGet Version](https://img.shields.io/nuget/v/Yoyo.Abp)](https://www.nuget.org/packages/Yoyo.Abp)
