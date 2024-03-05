@@ -3,11 +3,8 @@
 
 <p align="center">
   <a href="./README.md">English</a> |
-  <a href="./README_CN.md">简体中文</a> |
-  <a href="./README_JA.md">日本語</a> |
-  <a href="./README_ES.md">Español</a> |
-  <a href="./README_KL.md">Klingon</a> |
-  <a href="./README_FR.md">Français</a>
+  <a href="./README_CN.md">简体中文</a>
+  
 </p>
 
 [![NuGet Version](https://img.shields.io/nuget/v/Yoyo.Abp)](https://www.nuget.org/packages/Yoyo.Abp)
@@ -21,7 +18,8 @@
 
 请访问我们的 GitHub 仓库[Yoyo.Abp](https://github.com/YoYoBoot/Yoyo.Abp)，那里有更多详细信息，也请继续关注我们的项目更新。别忘了给我们的仓库加星标和关注，以便实时接收最新进展！
 
-我们诚挚地欢迎任何宝贵的意见和建议，并期待着听取您的反馈。一起加入YoYoBoot的旅程，让我们共同促进这个项目的发展，进一步优化和创新。🚀🌟
+我们诚挚地欢迎任何宝贵的意见和建议，并期待着听取您的反馈。
+一起加入YoYoBoot的旅程，让我们共同促进这个项目的发展，进一步优化和创新。🚀🌟
 
 ## 特点
 
