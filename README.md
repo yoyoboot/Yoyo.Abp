@@ -1,4 +1,21 @@
+
 # Yoyo.Abp
+
+<p align="center">
+  <a href="./README.md">English</a> |
+  <a href="./README_CN.md">简体中文</a> |
+  <a href="./README_JA.md">日本語</a> |
+  <a href="./README_ES.md">Español</a> |
+  <a href="./README_KL.md">Klingon</a> |
+  <a href="./README_FR.md">Français</a>
+</p>
+
+# ASP.NET Boilerplate
+
+[![Build Status](https://github.com/aspnetboilerplate/aspnetboilerplate/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/aspnetboilerplate/aspnetboilerplate/actions/workflows/build-and-test.yml)
+[![NuGet](https://img.shields.io/nuget/v/Abp.svg?style=flat-square)](https://www.nuget.org/packages/Abp)
+[![MyGet (with prereleases)](https://img.shields.io/myget/abp-nightly/vpre/Abp.svg?style=flat-square)](https://aspnetboilerplate.com/Pages/Documents/Nightly-Builds)
+[![NuGet Download](https://img.shields.io/nuget/dt/Abp.svg?style=flat-square)](https://www.nuget.org/packages/Abp)
 
 欢迎光临 `Yoyo.Abp` 仓库！这个项目源自 [ASP.NET Boilerplate](https://github.com/aspnetboilerplate/aspnetboilerplate) 框架，并进行了改良，主要是将实体主键的默认类型由 `int` 更新为 `string`。我们兴奋地宣布 [Yoyo.Abp](https://github.com/YoYoBoot/Yoyo.Abp) 项目的推出，此项主旨更新不仅增强了系统的灵活性和扩展性，同时继承了原始 `ABP` 框架的强大功能与易用性。
 
