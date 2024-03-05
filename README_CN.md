@@ -73,11 +73,23 @@
 
 ## 文档
 
-要了解关于 Yoyo.Abp 的详尽文档，请访问[文档](link-to-docs)。
+要了解关于 Yoyo.Abp 的详尽文档，请访问[文档](https://github.com/yoyoboot/OpenYoYoBoot)。
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=yoyoboot/yoyo.abp&type=Date)](https://star-history.com/#yoyoboot/yoyo.abp&Date)
 
 ## 贡献
 
-我们欢迎各种形式的贡献。在提交拉取请求或开启问题之前，请先阅读我们的[贡献指南](link-to-contribution-guidelines)。
+如果您想贡献代码，请参阅我们的[贡献指南](CONTRIBUTING_CN.md)。
+
+同时，请考虑通过在社交媒体、活动和会议上分享 Dify 来支持它。
+
+### 贡献者
+
+<a href="https://github.com/yoyoboot/Yoyo.Abp/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=yoyoboot/Yoyo.Abp" />
+</a>
 
 ## 致谢
 

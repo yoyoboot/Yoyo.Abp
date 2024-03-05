@@ -72,11 +72,23 @@ We understand the importance of being transparent and responsive to the needs of
 
 ## Documentation
 
-For extensive documentation on Yoyo.Abp, visit [documentation](link-to-docs).
+For extensive documentation on Yoyo.Abp, visit [documentation](https://github.com/yoyoboot/OpenYoYoBoot).
 
-## Contributions
+## Star History
 
-We welcome all forms of contributions. Please read our contribution guidelines before submitting a pull request or opening an issue.
+[![Star History Chart](https://api.star-history.com/svg?repos=yoyoboot/yoyo.abp&type=Date)](https://star-history.com/#yoyoboot/yoyo.abp&Date)
+
+## Contributing
+
+For those who'd like to contribute code, see our [Contribution Guide](CONTRIBUTING.md).
+
+At the same time, please consider supporting Dify by sharing it on social media and at events and conferences.
+
+### Contributions
+
+<a href="https://github.com/yoyoboot/Yoyo.Abp/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=yoyoboot/Yoyo.Abp" />
+</a>
 
 ## Acknowledgments
 
