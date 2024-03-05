@@ -1,51 +1,99 @@
-# E-ABP 增强版 ASP.NET Boilerplate
+# Yoyo.Abp
 
-E-ABP 是原始 [ASP.NET Boilerplate](https://github.com/aspnetboilerplate/aspnetboilerplate) 框架的开源分支，该分支引入了灵活的实体主键类型支持。此项增强功能可以让您无缝地使用 `int`、`long`、`Guid` 或 `string` 作为实体的 ID 类型，使得 E-ABP 成为更广泛项目场景下的理想选择。
+<p align="center">
+  <a href="./README.md">English</a> |
+  <a href="./README_CN.md">简体中文</a>
+  
+</p>
 
-## 特点
+[![NuGet Version](https://img.shields.io/nuget/v/Yoyo.Abp)](https://www.nuget.org/packages/Yoyo.Abp)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/Yoyo.Abp?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Yoyo.Abp)
 
-- **主键类型灵活性**：根据项目需求使用 `int`、`long`、`Guid` 或 `string` 类型定义您的实体主键。
-- **向后兼容**：可与现有基于 ABP 的项目无缝集成，无需大规模重构。
-- **扩展功能**：除了 ASP.NET Boilerplate 提供的丰富功能集，E-ABP 在此基础上扩展了更多功能支持。
+Welcome to the `Yoyo.Abp` repository! This project is derived from the [ASP.NET Boilerplate](https://github.com/aspnetboilerplate/aspnetboilerplate) framework and has been improved, mainly by updating the default type of entity primary keys from `int` to `string`. We are excited to announce the launch of the [Yoyo.Abp](https://github.com/YoYoBoot/Yoyo.Abp) project, a major update that not only enhances the flexibility and extensibility of the system, but also inherits the power and ease of use of the original `ABP` framework.
 
-## 开始使用
+This project is not being rolled out at the drop of a hat, we have already used it in a number of internal and commercial projects, so you are not a guinea pig, we have tailored this to our own needs and believe that the entire development community will benefit from this change.
 
-要开始使用 E-ABP，请按照以下步骤操作：
+By utilizing the `string` type primary key, our projects have been able to adapt to a wider range of business scenarios, making it easy to implement seamless interoperability across multiple systems. This change also guarantees the uniqueness of our data across databases and services, providing a solid foundation for potential horizontal scaling in the future, and demonstrating resilience and adaptability to a wide range of development challenges.
 
-1. 克隆仓库：
-   ```bash
-   git clone https://github.com/yoyoboot/yoyo.abp.git
-   ```
-2. 浏览 `examples` 目录，了解如何应用主键定制。
+Please visit our GitHub repository [Yoyo.Abp](https://github.com/YoYoBoot/Yoyo.Abp) for more details and stay tuned for project updates. Don't forget to star and follow our repository to receive real-time updates!
 
-3. 通过替换 ABP NuGet 包为 E-ABP 包来将 E-ABP 集成到您的项目中（即将提供说明）。
+We sincerely welcome any valuable comments and suggestions and look forward to hearing your feedback.
+Join the YoYoBoot journey together and let's contribute to the development, further optimization and innovation of this project. 🚀🌟
 
-## 文档
+## Features
 
-要了解关于 Enhanced ASP.NET Boilerplate 的详尽文档，请访问[文档](link-to-docs)。
+- **Primary Key Type Flexibility**: You can flexibly choose `int`, `long`, `guid` or `string` type to define the primary key of an entity according to your project requirements.
+- **Backwards Compatibility**: Our entity framework can be seamlessly integrated into existing ABP-based projects without the need for major refactoring.
+- **Custom Entity Framework**: You can customize your own entity framework to support string-based primary keys.
+- **Seamless Integration with Existing ABP Infrastructure**: Our Entity Framework can be seamlessly integrated with existing ABP infrastructure without introducing any conflicts or issues.
+- **Enhanced Flexibility for Complex Deployment Scenarios**: Our Entity Framework provides more flexibility to cope with complex deployment scenarios and meet project requirements.
 
-## 贡献
+## Extended Resources - Examples
 
-我们欢迎各种形式的贡献。在提交拉取请求或开启问题之前，请先阅读我们的[贡献指南](link-to-contribution-guidelines)。
+In addition to our Yoyo.Abp project, we are excited to share a template project [OpenYoYoBoot](https://github.com/YoYoBoot/OpenYoYoBoot) based on front-end and back-end separation with Yoyo.Abp, which is an out-of-the-box solution to help people quickly start and deployment of modern web applications. We highly recommend you to try this project to experience its well-designed and excellent performance, which perfectly combines the innovative features of the front-end with the powerful back-end architecture of Yoyo.Abp.
 
-## 支持
+Thank you to the community for working together to make these projects a quality resource that is widely used. We look forward to your participation in taking the Yoyo.Abp and OpenYoYoBoot projects to the next level.
 
-如果您在使用 E-ABP 过程中需要帮助或有任何疑问，请在[此处](link-to-issues)开启一个问题。
+## Why this project?
 
-## 许可证
+We have developed too many projects based on the ABP framework, which is very good, but not perfect, especially in the case of entities Primary key types are important features for identifying unique records in databases and applications. In many cases, the default integer type (e.g. `int` or `long`) is used as the primary key. However, there are specific scenarios where using the `string` type as a primary key may provide additional benefits. The following are some of the possible advantages of switching an entity's primary key type from `int` to `string` and some of the potential disadvantages of using `int` as a primary key:
 
-本项目基于 MIT 许可证授权 - 详情请查看 [LICENSE](LICENSE) 文件。
+### Benefits of using `string` as a primary key
 
-## 致谢
+1. **Global uniqueness**: The `string` type can represent a GUID (globally unique identifier), which provides a simple global uniqueness solution for records across databases in a distributed system.
+2. **Flexibility and Extensibility**: `string` primary keys can hold more than just numbers, and can be embedded in a specific format or schema, such as a date, classification code, or other business logic.
+3. **Readability**: `string` type primary keys, especially those containing certain meaningful words or abbreviations, can improve record recognition and readability.
+4. **Avoid self-incrementing performance issues**: In highly concurrent situations, self-incrementing `int` primary keys can be a performance bottleneck, especially in distributed databases. A `string` primary key (e.g. a pre-generated GUID) can alleviate this problem.
+5. **Integration Friendly**: Using a `string` type primary key makes it easier to integrate with external systems that already use `string` as an identifier.
 
-感谢 [ASP.NET Boilerplate](https://github.com/aspnetboilerplate/aspnetboilerplate) 的创建者和贡献者提供了坚实的基础架构。
+### Potential disadvantages of `int` as a primary key
 
-## 扩展资源
+1. **Limitations**: The `int` type provides a limited range of values and there is a risk of overflow in large systems or in situations where large data sets are required.
+2. **No support for complex encodings**: The `int` type cannot contain any information other than numbers, so it does not support things like date encodings or other complex formats.
+3. **Limitations in distributed systems**: In a distributed database environment, additional policies are required to ensure that `int` primary keys are globally unique, which can lead to complex implementations and performance losses.
+4. **Self-augmentation issues**: Self-augmenting primary keys of type `int` may lead to locking and contention during concurrent inserts, affecting performance.
+5. **Migration and Scaling Difficulties**: As business grows, there may be a need to migrate from `int` to a wider range of data types, which introduces additional workload and complexity.
 
-除了我们的 E-ABP 项目，我们还兴奋地分享了一个基于 Vue 3 和 yoyo.abp 的模板项目 [OpenYoYoBoot](https://github.com/yoyoboot/OpenYoYoBoot)，这是一个开箱即用的解决方案，可以帮助大家快速启动和部署现代 Web 应用程序。我们强烈推荐您尝试这个项目来体验其精心设计和优秀性能，它完美地结合了 Vue 3 的创新特性和 yoyo.abp 的强大后端架构。
+In other words, choosing the appropriate primary key type needs to be based on application scenarios, performance requirements, maintainability, and future scalability. The enhanced ASP.NET Boilerplate Framework in the form of Yoyo.Abp provides additional freedom and adaptability in architectural choices by providing flexibility in entity primary key types to better adapt to the changing needs of software development.
 
-感谢社区的朋友们的共同努力，让这些项目成为广泛使用的优质资源。我们期待您的参与，一起把 E-ABP 和 OpenYoYoBoot 项目推向更高的发展层次。
+## Project update notes
 
---- 
+Every open source project is immensely worried about the subsequent lack of maintenance and updates, and we are no exception. In order to maintain the vitality and stability of our project, we are committed to regularly reviewing and merging updates and enhancements from the original source code repository to ensure that the latest features, security fixes, and performance improvements have been introduced into our project. This commitment is intended to provide our users and contributors with the most up-to-date, secure, and optimally performing experience and to ensure that discrepancies with the upstream source code repositories are minimized in a timely manner.
 
-请根据实际情况调整链接和内容，确保所有的信息都是准确和实用的。上面的示例中，我默认使用了`link-to-docs`和`link-to-contribution-guidelines`作为占位符，请您替换成相应的实际链接。
+In order to better achieve this goal, the following are implementation details:
+
+1. we will regularly monitor the original repository for updates through the appropriate channels.
+2. we will perform the necessary review and testing work in 1-2 weeks when an update occurs in the original repository.
+3. we will minimize localization specific changes to simplify the merging process with the original repository.
+4. we will prioritize the merge operation if we find a critical update or security vulnerability fix.
+5. We welcome the participation of community members, especially in helping to identify important upstream changes and testing the merge process.
+
+We understand the importance of being transparent and responsive to the needs of the community and will endeavor to maintain good communication with the community and share update plans and progress. We also welcome feedback and suggestions from community members to help us better manage and maintain the program.
+
+## Documentation
+
+For extensive documentation on Yoyo.Abp, visit [documentation](https://github.com/yoyoboot/OpenYoYoBoot).
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=yoyoboot/yoyo.abp&type=Date)](https://star-history.com/#yoyoboot/yoyo.abp&Date)
+
+## Contributing
+
+For those who'd like to contribute code, see our [Contribution Guide](CONTRIBUTING.md).
+
+At the same time, please consider supporting Dify by sharing it on social media and at events and conferences.
+
+### Contributions
+
+<a href="https://github.com/yoyoboot/Yoyo.Abp/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=yoyoboot/Yoyo.Abp" />
+</a>
+
+## Acknowledgments
+
+Thanks to the creators and contributors of [ASP.NET Boilerplate](https://github.com/aspnetboilerplate/aspnetboilerplate) for providing a solid infrastructure.
+
+## License
+
+This project is licensed under the MIT license - see the [LICENSE](LICENSE.md) file for details.
