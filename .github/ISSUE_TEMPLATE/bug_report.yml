@@ -8,25 +8,25 @@ body:
       label: Self Checks
       description: "To make sure we get to you in time, please check the following :)"
       options:
-        - label: I have searched for existing issues [search for existing issues](https://github.com/langgenius/dify/issues), including closed ones.
+        - label: I have searched for existing issues [search for existing issues](https://github.com/yoyoboot/Yoyo.Abp/issues), including closed ones.
           required: true
-        - label: I confirm that I am using English to submit this report (我已阅读并同意 [Language Policy](https://github.com/langgenius/dify/issues/1542)).
+        - label: I confirm that I am using English to submit this report (我已阅读并同意 [Language Policy](https://github.com/yoyoboot/Yoyo.Abp/issues)).
           required: true
         - label: "Pleas do not modify this template :) and fill in all the required fields."
           required: true
 
   - type: input
     attributes:
-      label: Dify version
-      placeholder: 0.3.21
-      description: See about section in Dify console
+      label: Yoyo.Abp version
+      placeholder: 7.3.0
+      description: See about section in Version.cs file
     validations:
       required: true
 
   - type: dropdown
     attributes:
       label: Cloud or Self Hosted
-      description: How / Where was Dify installed from?
+      description: How / Where was Yoyo.Abp installed from?
       multiple: true
       options:
         - Cloud
