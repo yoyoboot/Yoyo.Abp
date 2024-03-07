@@ -26,13 +26,13 @@ jobs:
         with:
           dotnet-version: 6.0.x    
       # 注释掉缓存
-      # - name: Cache NuGet packages
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.nuget/packages
-      #     key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
       - name: Restore dependencies
         run: dotnet restore
       - name: Build with dotnet
@@ -41,6 +41,8 @@ jobs:
         shell: pwsh
         working-directory: ./nupkg
         run: ./pack.ps1
+        env:
+          IS_PRODUCTION: false
       - name: Push Nuget Package
         working-directory: ./nupkg
         run: ./pack_push.ps1
