@@ -38,9 +38,6 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release    
       - name: Pack with powershell
-        if: ${{ github.ref_type == 'branch' }}
-        env:
-          IS_PRODUCTION: false
         shell: pwsh
         working-directory: ./nupkg
         run: ./pack.ps1
