@@ -9,7 +9,7 @@ on:
 
 env:
   IS_PRODUCTION: true
-  TAG: ${{ github.ref }}
+  TAG: ${{ github.ref_name }} # 获取当前分支名或tag名
   DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   ALIYUN_DOCKERHUB: ${{ vars.ALIYUN_DOCKERHUB }}
@@ -18,16 +18,17 @@ env:
 
 jobs:
   prod-check:
-    if: ${{ github.ref_name == 'dev-ci-cd-github' }}
     runs-on: windows-latest
     steps:
-      - name: Check if production
-        id: check
+      - name: Check if production        
+        if: ${{ github.ref_name == 'dev-ci-cd-github' }}
         env:
           IS_PRODUCTION: false
         run: |
           Write-Host ${{env.IS_PRODUCTION}}
           Write-Host ${{env.TAG}}
+
+
 
   build:
     runs-on: windows-latest
