@@ -14,7 +14,10 @@ env:
 
 
 jobs:
-  prod-check:
+
+
+
+  build:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,8 +31,7 @@ jobs:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: |
-            ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-       
-     
+            ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
       - name: set production variable
         if: ${{ github.ref_type == 'branch' }}
         env:
@@ -37,12 +39,6 @@ jobs:
         run: |
           Write-Host ${{env.IS_PRODUCTION}}
           Write-Host ${{env.TAG}}
-
-
-  build:
-    runs-on: windows-latest
-    needs: prod-check    
-    steps:
       - name: Restore dependencies
         run: dotnet restore
       - name: Build with dotnet
