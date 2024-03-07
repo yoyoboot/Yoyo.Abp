@@ -10,24 +10,20 @@ on:
 env:
   IS_PRODUCTION: true
   TAG: ${{ github.ref_name }} # 获取当前分支名或tag名
-  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
-  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-  ALIYUN_DOCKERHUB: ${{ vars.ALIYUN_DOCKERHUB }}
-  ALIYUN_DOCKERHUB_USERNAME: ${{ vars.ALIYUN_DOCKERHUB_USERNAME }}
-  ALIYUN_DOCKERHUB_TOKEN: ${{ secrets.ALIYUN_DOCKERHUB_TOKEN }}
+  NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 jobs:
   prod-check:
     runs-on: windows-latest
     steps:
       - name: Check if production        
-        if: ${{ github.ref_name == 'dev-ci-cd-github' }}
+        if: ${{ github.ref_type == 'branch' }}
         env:
           IS_PRODUCTION: false
         run: |
           Write-Host ${{env.IS_PRODUCTION}}
           Write-Host ${{env.TAG}}
-
 
 
   build:
@@ -59,21 +55,17 @@ jobs:
     runs-on: windows-latest
     needs: build
     steps:
-      - name: Upload NuGet package
-        uses: actions/upload-artifact@v2
-        with:
-          name: nupkg
-          path: nupkg/*.nupkg
+      - name: Push NuGet package
+        working-directory: ./nupkg/dist
+        run: ./pack_push.ps1
+        shell: pwsh
+
 
   deploy-push-github-pkg:
     runs-on: windows-latest
     needs: build
     steps:
-      - name: Upload NuGet package to GitHub Packages
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-      - name: Publish to GitHub Packages
+      - name: Publish to GitHub Nuget Packages      
         run: dotnet nuget push nupkg/*.nupkg --source "github"
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
