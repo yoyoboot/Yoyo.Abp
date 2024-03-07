@@ -4,8 +4,8 @@
 name: windows-dotnet-build-and-test
 
 on:
-  push:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
   pull_request:
     paths:
       - '**/*.cs'
@@ -31,8 +31,6 @@ jobs:
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
           ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
-    - name: Print cache name
-      run: Write-Host ${{ env.CACHE_NAME }}
     - name: Restore
       run: dotnet restore
     - name: Build
