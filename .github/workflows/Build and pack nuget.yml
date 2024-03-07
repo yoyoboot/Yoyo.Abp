@@ -1,8 +1,5 @@
-# 编写github action的脚本 将项目中的代码打包为nuget包。
-#当前已经在根目录下的nupkg/pack.ps1已经编写好了脚本，需要你用powershell来触发这个脚本。
 
-name: Build and pack
-# 触发方式为main分支和打tag的时候触发
+name: Build and pack nuget
 on:
   push:
     branches:
@@ -19,10 +16,21 @@ jobs:
           uses: actions/setup-dotnet@v3
           with:
             dotnet-version: 6.0.x    
+        - name: Cache NuGet packages
+          uses: actions/cache@v3
+          with:
+           path: ~/.nuget/packages
+           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+           restore-keys: |
+            ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
         - name: Restore dependencies
           run: dotnet restore
         - name: Build with dotnet
           run: dotnet build --configuration Release    
         - name: Pack with powershell
-          run: |
-            powershell -File .\nupkg\pack.ps1
+          shell: pwsh
+          working-directory: ./nupkg
+          run: ./pack.ps1
+
+        
+
