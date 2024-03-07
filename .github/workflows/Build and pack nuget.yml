@@ -21,7 +21,7 @@ env:
 
 jobs:
   prod-check:
-      if: ${{ github.ref == 'refs/heads/main/dev-ci-cd-github' }}
+    if: ${{ github.ref == 'refs/heads/main/dev-ci-cd-github' }}
     runs-on: windows-latest
     steps:
       - name: Check if production
