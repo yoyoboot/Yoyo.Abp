@@ -1,3 +1,4 @@
+
 name: Build and pack nuget
 on:
   push:
@@ -7,74 +8,75 @@ on:
     tags:
       - '*' # 触发所有tag
 
+## 配置环境变量信息
 env:
-  IS_PRODUCTION: true
-  TAG: ${{ github.ref }}
-
+  IS_PRODUCTION: true # 是生产环境
+  # 获取github的tag的变量命令
+  TAG: ${{ github.ref }} # 当前分支或tag
+  DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  ALIYUN_DOCKERHUB: ${{ vars.ALIYUN_DOCKERHUB }}
+  ALIYUN_DOCKERHUB_USERNAME: ${{ vars.ALIYUN_DOCKERHUB_USERNAME }}
+  ALIYUN_DOCKERHUB_TOKEN: ${{ secrets.ALIYUN_DOCKERHUB_TOKEN }}      
 
 jobs:
   prod-check:
+      if: ${{ github.ref == 'refs/heads/main/dev-ci-cd-github' }}
     runs-on: windows-latest
     steps:
-      - name: set_production_env
-        run: |
-          if ("${{ github.ref }}" -eq "refs/heads/main/dev-ci-cd-github") {
-            # Set IS_PRODUCTION to false since it's not the main production branch
-            $Env:IS_PRODUCTION = "false"
-          } else {
-            # Set IS_PRODUCTION to true since it's the main production branch
-            $Env:IS_PRODUCTION = "true"
-          }
-          Write-Host "IS_PRODUCTION: " $Env:IS_PRODUCTION
-        shell: pwsh
-      
-
-
-
-  build:
-    runs-on: windows-latest
-    needs: prod-check    
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x    
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Build with dotnet
-        run: dotnet build --configuration Release    
-      - name: Pack with powershell
-        shell: pwsh
-        working-directory: ./nupkg
-        run: ./pack.ps1
-
-  deploy-push-nuget:
-    runs-on: windows-latest
-    needs: build
-    steps:
-      - name: Upload NuGet package
-        uses: actions/upload-artifact@v2
-        with:
-          name: nupkg
-          path: nupkg/*.nupkg
-
-  deploy-push-github-pkg:
-    runs-on: windows-latest
-    needs: build
-    steps:
-      - name: Upload NuGet package to GitHub Packages
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-      - name: Publish to GitHub Packages
-        run: dotnet nuget push nupkg/*.nupkg --source "github"
+      - name: Check if production
+        run: Write-Host ${{env.IS_PRODUCTION}}
+        run: ${{env.IS_PRODUCTION}}:false
         env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IS_PRODUCTION: false
+        run: Write-Host ${{env.IS_PRODUCTION}}
+        run: Write-Host ${{env.TAG}}
+        
+
+
+    build:
+        runs-on: windows-latest
+        needs: prod-check    
+        steps:
+        - uses: actions/checkout@v4
+        - name: Setup dotnet
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: 6.0.x    
+        - name: Cache NuGet packages
+          uses: actions/cache@v3
+          with:
+           path: ~/.nuget/packages
+           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+           restore-keys: |
+            ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
+        - name: Restore dependencies
+          run: dotnet restore
+        - name: Build with dotnet
+          run: dotnet build --configuration Release    
+        - name: Pack with powershell
+          shell: pwsh
+          working-directory: ./nupkg
+          run: ./pack.ps1
+     deploy-push-nuget:
+        runs-on: windows-latest
+        needs: build
+        steps:
+        - name: Upload NuGet package
+          uses: actions/upload-artifact@v2
+          with:
+            name: nupkg
+            path: nupkg/*.nupkg
+      deploy-push-github-pkg:
+        runs-on: windows-latest
+        needs: build
+        steps:
+        - name: Upload NuGet package to GitHub Packages
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: 6.0.x
+        - name: Publish to GitHub Packages
+          run: dotnet nuget push nupkg/*.nupkg --source "github"
+          env:
+            NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
