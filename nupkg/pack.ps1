@@ -4,6 +4,15 @@ $version = "1.0.0"
 # 是否为发布
 $isProduction = $env:IS_PRODUCTION
 
+# 打印环境变量 然后将它的颜色设置为蓝色 然后暂停 以便查看
+Write-Host "TAG: $env:TAG" -ForegroundColor Blue
+
+Write-Host "IS_PRODUCTION: $isProduction" -ForegroundColor Blue
+
+# 设置输入任意键继续的命令
+Read-Host -Prompt "Press Enter to continue"
+
+
 # 发布模式，从环境变量读取
 if ($isProduction -eq $True) {
     $version = $env:TAG
