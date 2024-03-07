@@ -21,11 +21,13 @@ jobs:
     if: ${{ github.ref == 'dev-ci-cd-github' }}
     runs-on: windows-latest
     steps:
-      env:
-        IS_PRODUCTION: false
-      run: |
-        Write-Host ${{env.IS_PRODUCTION}}
-        Write-Host ${{env.TAG}}
+      - name: Check if production
+        id: check
+        env:
+          IS_PRODUCTION: false
+        run: |
+          Write-Host ${{env.IS_PRODUCTION}}
+          Write-Host ${{env.TAG}}
 
   build:
     runs-on: windows-latest
