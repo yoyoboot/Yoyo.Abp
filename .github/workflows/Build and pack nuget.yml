@@ -46,9 +46,10 @@ jobs:
         working-directory: ./nupkg
         run: ./pack_push.ps1
         shell: pwsh
-      - name: Push to GitHub Packages
-        run: dotnet nuget push nupkg/*.nupkg --source "github"
-        working-directory: ./nupkg/dist
+      - name: Push to GitHub Nuget Packages
+        working-directory: ./nupkg
+        run: ./pack_push.ps1
+        shell: pwsh
         env:
           NUGET_SOURCE: https://nuget.pkg.github.com/yoyoboot/index.json
           NUGET_SOURCE_APIKEY: ${{ secrets.CICD_PACKAGE_GITHUB_TOKEN }}
