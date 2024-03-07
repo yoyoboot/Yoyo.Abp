@@ -17,7 +17,20 @@ jobs:
   prod-check:
     runs-on: windows-latest
     steps:
-      - name: Check if production        
+      - uses: actions/checkout@v4
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x    
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-       
+     
+      - name: set production variable
         if: ${{ github.ref_type == 'branch' }}
         env:
           IS_PRODUCTION: false
@@ -30,18 +43,6 @@ jobs:
     runs-on: windows-latest
     needs: prod-check    
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x    
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
       - name: Restore dependencies
         run: dotnet restore
       - name: Build with dotnet
