@@ -1,0 +1,28 @@
+# 编写github action的脚本 将项目中的代码打包为nuget包。
+#当前已经在根目录下的nupkg/pack.ps1已经编写好了脚本，需要你用powershell来触发这个脚本。
+
+name: Build and pack
+# 触发方式为main分支和打tag的时候触发
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*' # 触发所有tag
+jobs:
+    build:
+        runs-on: windows-latest
+    
+        steps:
+        - uses: actions/checkout@v4
+        - name: Setup .NET Core
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: 6.0.x    
+        - name: Restore dependencies
+          run: dotnet restore
+        - name: Build with dotnet
+          run: dotnet build --configuration Release    
+        - name: Pack with powershell
+          run: |
+            powershell -File .\nupkg\pack.ps1
