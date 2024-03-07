@@ -16,6 +16,8 @@ if ($isProduction -eq $True) {
     Write-Host "TAG: $env:TAG" -ForegroundColor Blue
 
     $version = $env:TAG
+    Write-Host "version: $version" 
+
 }
 
 # Paths
