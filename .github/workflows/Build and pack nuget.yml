@@ -20,10 +20,10 @@ env:
   ALIYUN_DOCKERHUB_TOKEN: ${{ secrets.ALIYUN_DOCKERHUB_TOKEN }}      
 
 jobs:
-  prod-check:
-    if: ${{ github.ref == 'dev-ci-cd-github' }}
-    runs-on: windows-latest
-    steps:
+    prod-check:
+      if: ${{ github.ref == 'dev-ci-cd-github' }}
+      runs-on: windows-latest
+      steps:
         env:
           IS_PRODUCTION: false
         run: |
