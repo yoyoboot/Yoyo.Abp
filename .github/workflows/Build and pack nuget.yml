@@ -37,7 +37,7 @@ jobs:
         env:
           IS_PRODUCTION: false
         run: |
-          Write-Host ${{env.IS_PRODUCTION}}
+          Write-Host "IS_PRODUCTION: ${{env.IS_PRODUCTION}}" 
           Write-Host ${{env.TAG}}
       - name: Restore dependencies
         run: dotnet restore
