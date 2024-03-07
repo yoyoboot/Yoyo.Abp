@@ -30,11 +30,9 @@ jobs:
         path: ~/.nuget/packages
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
-          ${{ runner.os }}-build-${{ env.CACHE_NAME }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
+          ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
     - name: Print cache name
-      run: echo ${{ env.CACHE_NAME }}
+      run: Write-Host ${{ env.CACHE_NAME }}
     - name: Restore
       run: dotnet restore
     - name: Build
