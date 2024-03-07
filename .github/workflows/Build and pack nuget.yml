@@ -25,13 +25,14 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.x    
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
+      # 注释掉缓存
+      # - name: Cache NuGet packages
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.nuget/packages
+      #     key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
       - name: Restore dependencies
         run: dotnet restore
       - name: Build with dotnet
@@ -43,22 +44,17 @@ jobs:
         shell: pwsh
         working-directory: ./nupkg
         run: ./pack.ps1
-
-  deploy-push-nuget:
-    runs-on: windows-latest
-    needs: build
-    steps:
-      - name: Push NuGet package
+      - name: Push Nuget Package
         working-directory: ./nupkg
         run: ./pack_push.ps1
         shell: pwsh
-
-
-  deploy-push-github-pkg:
-    runs-on: windows-latest
-    needs: build
-    steps:
-      - name: Publish to GitHub Nuget Packages      
+      - name: Push to GitHub Packages
         run: dotnet nuget push nupkg/*.nupkg --source "github"
+        working-directory: ./nupkg/dist
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+
+ 
