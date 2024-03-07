@@ -50,8 +50,8 @@ jobs:
         run: dotnet nuget push nupkg/*.nupkg --source "github"
         working-directory: ./nupkg/dist
         env:
-          NUGET_SOURCE: https://nuget.pkg.github.com/yoyocms/index.json
-          NUGET_SOURCE_APIKEY: ${{ secrets.GITHUB_TOKEN }}
+          NUGET_SOURCE: https://nuget.pkg.github.com/yoyoboot/index.json
+          NUGET_SOURCE_APIKEY: ${{ secrets.CICD_PACKAGE_GITHUB_TOKEN }}
 
 
 
