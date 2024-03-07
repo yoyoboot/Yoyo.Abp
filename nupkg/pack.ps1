@@ -9,8 +9,7 @@ Write-Host "TAG: $env:TAG" -ForegroundColor Blue
 
 Write-Host "IS_PRODUCTION: $isProduction" -ForegroundColor Blue
 
-# 设置输入任意键继续的命令
-Read-Host -Prompt "Press Enter to continue"
+
 
 
 # 发布模式，从环境变量读取
