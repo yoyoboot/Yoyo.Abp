@@ -7,6 +7,8 @@
 
 [![NuGet Version](https://img.shields.io/nuget/v/Yoyo.Abp)](https://www.nuget.org/packages/Yoyo.Abp)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/Yoyo.Abp?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Yoyo.Abp)
+![GitHub last commit](https://img.shields.io/github/last-commit/yoyoboot/yoyo.abp)
+![GitHub Release Date](https://img.shields.io/github/release-date/yoyoboot/yoyo.abp)
 
 Welcome to the `Yoyo.Abp` repository! This project is derived from the [ASP.NET Boilerplate](https://github.com/aspnetboilerplate/aspnetboilerplate) framework and has been improved, mainly by updating the default type of entity primary keys from `int` to `string`. We are excited to announce the launch of the [Yoyo.Abp](https://github.com/YoYoBoot/Yoyo.Abp) project, a major update that not only enhances the flexibility and extensibility of the system, but also inherits the power and ease of use of the original `ABP` framework.
 

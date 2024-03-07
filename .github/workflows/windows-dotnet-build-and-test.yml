@@ -4,8 +4,8 @@
 name: windows-dotnet-build-and-test
 
 on:
-  # push:
-  #   branches: [ "main" ]
+  push:
+    branches: [ "main" ]
   pull_request:
     paths:
       - '**/*.cs'
@@ -19,11 +19,22 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
+    - uses: actions/checkout@v4
+    - name: Setup dotnet
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
+    - users: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+    # 打印restore-keys的变量
+    - name: Print restore-keys
+      run: echo ${{ env.cache-name }}
     - name: Restore dependencies
       run: dotnet restore
     - name: Build

@@ -9,6 +9,8 @@
 
 [![NuGet Version](https://img.shields.io/nuget/v/Yoyo.Abp)](https://www.nuget.org/packages/Yoyo.Abp)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/Yoyo.Abp?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Yoyo.Abp)
+![GitHub last commit](https://img.shields.io/github/last-commit/yoyoboot/yoyo.abp)
+![GitHub Release Date](https://img.shields.io/github/release-date/yoyoboot/yoyo.abp)
 
 欢迎光临 `Yoyo.Abp` 仓库！这个项目源自 [ASP.NET Boilerplate](https://github.com/aspnetboilerplate/aspnetboilerplate) 框架，并进行了改良，主要是将实体主键的默认类型由 `int` 更新为 `string`。我们兴奋地宣布 [Yoyo.Abp](https://github.com/YoYoBoot/Yoyo.Abp) 项目的推出，此项主旨更新不仅增强了系统的灵活性和扩展性，同时继承了原始 `ABP` 框架的强大功能与易用性。
 
