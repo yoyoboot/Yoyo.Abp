@@ -14,17 +14,30 @@ env:
 
 jobs:
   prod-check:
-    if: ${{ github.ref == 'refs/heads/main/dev-ci-cd-github' }}
     runs-on: windows-latest
     steps:
+      - id: set_production_env
+        run: |
+          if ("${{ github.ref }}" -eq "refs/heads/main/dev-ci-cd-github") {
+            # Set IS_PRODUCTION to false since it's not the main production branch
+            $Env:IS_PRODUCTION = "false"
+          } else {
+            # Set IS_PRODUCTION to true since it's the main production branch
+            $Env:IS_PRODUCTION = "true"
+          }
+          Write-Host "IS_PRODUCTION: " $Env:IS_PRODUCTION
+        shell: pwsh
+      
+      # The subsequent steps can now rely on the IS_PRODUCTION environment variable
       - name: Check if production
         run: |
-          Write-Host ${{env.IS_PRODUCTION}}
-          ${{env.IS_PRODUCTION}}:false
-          env:
-            IS_PRODUCTION: false
-          Write-Host ${{env.IS_PRODUCTION}}
-          Write-Host ${{env.TAG}}
+          # Now you can use the IS_PRODUCTION value set in the previous step
+          Write-Host "IS_PRODUCTION: " $Env:IS_PRODUCTION
+          Write-Host "TAG: " $Env:TAG
+        shell: pwsh
+        env:
+          TAG: ${{ github.ref }} # Set TAG to the git reference that triggered the workflow
+
 
   build:
     runs-on: windows-latest
