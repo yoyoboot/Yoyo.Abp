@@ -4,7 +4,6 @@ using Abp.ZeroCore.SampleApp.Core;
 using Abp.ZeroCore.SampleApp.Core.BookStore;
 using Abp.ZeroCore.SampleApp.Core.EntityHistory;
 using Abp.ZeroCore.SampleApp.Core.Shop;
-
 using Microsoft.EntityFrameworkCore;
 
 namespace Abp.ZeroCore.SampleApp.EntityFramework
