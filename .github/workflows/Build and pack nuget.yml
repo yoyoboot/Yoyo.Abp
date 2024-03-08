@@ -1,36 +1,57 @@
-
 name: Build and pack nuget
 on:
   push:
-    branches:
-      - main
     tags:
-      - '*' # 触发所有tag
+      - '[0-9]+(\.[0-9]+)*([-\.]\S+)?' # 触发tag，正则匹配 1.0.0 或 1.0.0-rc.1 或 1.0.0-rc.1+build.1 等
+
+env:
+  IS_PRODUCTION: true
+  TAG: ${{ github.ref_name }} # 获取当前分支名或tag名
+  # TAG: 1.0.0  # 获取当前分支名或tag名
+  NUGET_SOURCE: https://api.nuget.org/v3/index.json
+  NUGET_SOURCE_APIKEY: ${{ secrets.NUGET_TOKEN_YOYOBOOT }}
+
+
+
 jobs:
-    build:
-        runs-on: windows-latest
-    
-        steps:
-        - uses: actions/checkout@v4
-        - name: Setup dotnet
-          uses: actions/setup-dotnet@v3
-          with:
-            dotnet-version: 6.0.x    
-        - name: Cache NuGet packages
-          uses: actions/cache@v3
-          with:
-           path: ~/.nuget/packages
-           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-           restore-keys: |
+
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x    
+      # 注释掉缓存
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
             ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
-        - name: Restore dependencies
-          run: dotnet restore
-        - name: Build with dotnet
-          run: dotnet build --configuration Release    
-        - name: Pack with powershell
-          shell: pwsh
-          working-directory: ./nupkg
-          run: ./pack.ps1
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build with dotnet
+        run: dotnet build --configuration Release    
+      - name: Pack with powershell
+        shell: pwsh
+        working-directory: ./nupkg
+        run: ./pack.ps1
+      - name: Push Nuget Package
+        working-directory: ./nupkg
+        run: ./pack_push.ps1
+        shell: pwsh
+      - name: Push to GitHub Nuget Packages
+        working-directory: ./nupkg
+        run: ./pack_push.ps1
+        shell: pwsh
+        env:
+          NUGET_SOURCE: https://nuget.pkg.github.com/yoyoboot/index.json
+          NUGET_SOURCE_APIKEY: ${{ secrets.CICD_PACKAGE_GITHUB_TOKEN }}
 
-        
 
+
+
+ 
