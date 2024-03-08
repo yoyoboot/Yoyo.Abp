@@ -19,21 +19,27 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-    - name: Cache NuGet packages
-      uses: actions/cache@v3
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
-    - name: Restore
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      # 拉取代码
+      - uses: actions/checkout@v4
+      # 配置dotnet环境
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      # 缓存nuget
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
+      # 还原依赖
+      - name: Restore
+        run: dotnet restore
+      # 以默认形式编译
+      - name: Build
+        run: dotnet build --no-restore
+      # 执行单元测试
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
