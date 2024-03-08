@@ -11,19 +11,19 @@ env:
   NUGET_SOURCE: https://api.nuget.org/v3/index.json
   NUGET_SOURCE_APIKEY: ${{ secrets.NUGET_TOKEN_YOYOBOOT }}
 
-
-
 jobs:
 
   build:
     runs-on: windows-latest
     steps:
+      # 拉取代码
       - uses: actions/checkout@v4
+      # 配置dotnet环境
       - name: Setup dotnet
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.x    
-      # 注释掉缓存
+          dotnet-version: 6.0.x
+      # 缓存nuget
       - name: Cache NuGet packages
         uses: actions/cache@v3
         with:
@@ -31,18 +31,23 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: |
             ${{ runner.os }}-build-nuget-${{ env.CACHE_NAME }}-
+      # 还原依赖
       - name: Restore dependencies
         run: dotnet restore
+      # 以Release形式编译
       - name: Build with dotnet
-        run: dotnet build --configuration Release    
+        run: dotnet build --configuration Release
+      # 打包为nupkg
       - name: Pack with powershell
         shell: pwsh
         working-directory: ./nupkg
         run: ./pack.ps1
+      # 推送到nuget.org
       - name: Push Nuget Package
         working-directory: ./nupkg
         run: ./pack_push.ps1
         shell: pwsh
+      # 推送到github nuget
       - name: Push to GitHub Nuget Packages
         working-directory: ./nupkg
         run: ./pack_push.ps1
@@ -50,8 +55,3 @@ jobs:
         env:
           NUGET_SOURCE: https://nuget.pkg.github.com/yoyoboot/index.json
           NUGET_SOURCE_APIKEY: ${{ secrets.CICD_PACKAGE_GITHUB_TOKEN }}
-
-
-
-
- 
