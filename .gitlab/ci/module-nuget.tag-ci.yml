@@ -10,6 +10,14 @@ pre_packs:
   image:
     name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
     entrypoint: [ "" ]
+  artifacts:
+    # 产物
+    name: "BasicFramework-$CI_COMMIT_REF_NAME"
+    when: on_success # 成功时生成
+    expire_in: 1 day # 一天自动清除
+    paths:
+      # 路径
+      - ./nupkg/dist/
   script:
     - cd nupkg
     - pwsh ./pack.ps1
@@ -29,7 +37,6 @@ push_gitlab:
     entrypoint: [ "" ]
   script:
     - cd nupkg
-    - pwsh ./pack.ps1
     - export NUGET_GITLAB_SOURCE="${gitlab_52abp_nuget_source}"
     - export NUGET_GITLAB_USER="${gitlab_52abp_nuget_user}"
     - export NUGET_GITLAB_TOKEN="${gitlab_52abp_nuget_token}"
@@ -54,7 +61,6 @@ push_nexus:
     entrypoint: [ "" ]
   script:
     - cd nupkg
-    - pwsh ./pack.ps1
     - export NUGET_SOURCE="${nexus_nuget}"
     - export NUGET_SOURCE_APIKEY="${nexus_nuget_token}"
     - pwsh ./pack_push.ps1
@@ -73,7 +79,6 @@ push_nuget:
     entrypoint: [ "" ]
   script:
     - cd nupkg
-    - pwsh ./pack.ps1
     - export NUGET_SOURCE="${nuget}"
-    - export NUGET_SOURCE_APIKEY="${nuget_token}"
+    - export NUGET_SOURCE_APIKEY="${nuget_token_yoyoboot}"
     - pwsh ./pack_push.ps1

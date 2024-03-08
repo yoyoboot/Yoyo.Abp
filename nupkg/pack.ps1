@@ -4,9 +4,20 @@ $version = "1.0.0"
 # 是否为发布
 $isProduction = $env:IS_PRODUCTION
 
+
+
+Write-Host "IS_PRODUCTION: $isProduction" -ForegroundColor Blue
+
+
+
+
 # 发布模式，从环境变量读取
 if ($isProduction -eq $True) {
+    Write-Host "TAG: $env:TAG" -ForegroundColor Blue
+
     $version = $env:TAG
+    Write-Host "version: $version" 
+
 }
 
 # Paths
