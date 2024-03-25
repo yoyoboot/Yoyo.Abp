@@ -1,11 +1,9 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: windows-dotnet-build-and-test
+name: "build and test"
 
 on:
-  # push:
-  #   branches: [ "main" ]
   pull_request:
     paths:
       - '**/*.cs'
