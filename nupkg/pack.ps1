@@ -1,7 +1,7 @@
-# å…¨å±€é€šç”¨çš„é…ç½®å˜é‡ä¿¡æ¯
+# È«¾ÖÍ¨ÓÃµÄÅäÖÃ±äÁ¿ĞÅÏ¢
 $version = "1.0.0"
 
-# æ˜¯å¦ä¸ºå‘å¸ƒ
+# ÊÇ·ñÎª·¢²¼
 $isProduction = $env:IS_PRODUCTION
 
 
@@ -11,7 +11,7 @@ Write-Host "IS_PRODUCTION: $isProduction" -ForegroundColor Blue
 
 
 
-# å‘å¸ƒæ¨¡å¼ï¼Œä»ç¯å¢ƒå˜é‡è¯»å–
+# ·¢²¼Ä£Ê½£¬´Ó»·¾³±äÁ¿¶ÁÈ¡
 if ($isProduction -eq $True) {
     Write-Host "TAG: $env:TAG" -ForegroundColor Blue
 
@@ -35,6 +35,9 @@ $projects = (
     "Abp.AspNetCore.TestBase",
     "Abp.AspNetCore.PerRequestRedisCache",
     "Abp.AutoMapper",
+    "Abp.BlobStoring",
+    "Abp.BlobStoring.Azure",
+    "Abp.BlobStoring.FileSystem",
     "Abp.Castle.Log4Net",
     "Abp.Dapper",
     "Abp.EntityFramework",
@@ -46,6 +49,7 @@ $projects = (
     "Abp.FluentValidation",
     "Abp.HangFire",
     "Abp.HangFire.AspNetCore",
+    "Abp.HtmlSanitizer",
     "Abp.MailKit",
     "Abp.MemoryDb",
     "Abp.MongoDB",
