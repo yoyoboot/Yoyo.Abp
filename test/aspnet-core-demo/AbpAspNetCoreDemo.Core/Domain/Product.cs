@@ -1,11 +1,11 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities.Auditing;
 
 namespace AbpAspNetCoreDemo.Core.Domain
 {
     [Table("AppProducts")]
-    public class Product : FullAuditedEntity<long>
+    public class Product : FullAuditedEntity<int>
     {
         [Required]
         [StringLength(200)]

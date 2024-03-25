@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,9 +14,9 @@ namespace AbpAspNetCoreDemo.Core.Application
 {
     public class ProductAppService : ApplicationService
     {
-        private readonly IRepository<Product, long> _productRepository;
+        private readonly IRepository<Product, int> _productRepository;
 
-        public ProductAppService(IRepository<Product, long> productRepository)
+        public ProductAppService(IRepository<Product,int> productRepository)
         {
             _productRepository = productRepository;
         }
@@ -26,7 +26,7 @@ namespace AbpAspNetCoreDemo.Core.Application
             return ObjectMapper.Map<List<ProductDto>>(await _productRepository.GetAllListAsync());
         }
         
-        public long CreateProduct(ProductCreateInput input)
+        public int CreateProduct(ProductCreateInput input)
         {
             var product = ObjectMapper.Map<Product>(input);
             return _productRepository.InsertAndGetId(product);

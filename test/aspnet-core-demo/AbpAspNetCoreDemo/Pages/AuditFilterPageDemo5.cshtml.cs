@@ -1,4 +1,4 @@
-using Abp.AspNetCore.Mvc.RazorPages;
+﻿using Abp.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AbpAspNetCoreDemo.Pages
