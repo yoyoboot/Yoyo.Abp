@@ -4,6 +4,12 @@
 name: "build and test"
 
 on:
+  push:
+    paths:
+      - '**/*.cs'
+      - '**/*.cshtml'
+      - '**/*.csproj'
+      - '**/*.razor'
   pull_request:
     paths:
       - '**/*.cs'
