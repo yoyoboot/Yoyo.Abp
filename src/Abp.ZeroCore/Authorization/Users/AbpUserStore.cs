@@ -72,6 +72,7 @@ namespace Abp.Authorization.Users
         private readonly IRepository<UserPermissionSetting, string> _userPermissionSettingRepository;
         private readonly IRepository<UserOrganizationUnit, string> _userOrganizationUnitRepository;
         private readonly IRepository<OrganizationUnitRole, string> _organizationUnitRoleRepository;
+        private readonly IRepository<UserToken, string> _userTokenRepository;
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
@@ -84,7 +85,8 @@ namespace Abp.Authorization.Users
             IRepository<UserClaim, string> userClaimRepository,
             IRepository<UserPermissionSetting, string> userPermissionSettingRepository,
             IRepository<UserOrganizationUnit, string> userOrganizationUnitRepository,
-            IRepository<OrganizationUnitRole, string> organizationUnitRoleRepository)
+            IRepository<OrganizationUnitRole, string> organizationUnitRoleRepository,
+            IRepository<UserToken, string> userTokenRepository)
         {
             _unitOfWorkManager = unitOfWorkManager;
             UserRepository = userRepository;
@@ -95,6 +97,7 @@ namespace Abp.Authorization.Users
             _userPermissionSettingRepository = userPermissionSettingRepository;
             _userOrganizationUnitRepository = userOrganizationUnitRepository;
             _organizationUnitRoleRepository = organizationUnitRoleRepository;
+            _userTokenRepository = userTokenRepository;
 
             AbpSession = NullAbpSession.Instance;
             ErrorDescriber = new IdentityErrorDescriber();
@@ -2439,7 +2442,7 @@ namespace Abp.Authorization.Users
         /// <param name="name">The name of the token.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public void RemoveToken(
+        public virtual void RemoveToken(
             TUser user,
             string loginProvider,
             string name,
@@ -2482,7 +2485,7 @@ namespace Abp.Authorization.Users
         /// <param name="name">The name of the token.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public string GetToken(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        public virtual string GetToken(TUser user, string loginProvider, string name, CancellationToken cancellationToken)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -2664,9 +2667,9 @@ namespace Abp.Authorization.Users
         public virtual async Task<string> GetUserNameFromDatabaseAsync(string userId)
         {
             using (var uow = _unitOfWorkManager.Begin(new UnitOfWorkOptions
-            {
-                Scope = TransactionScopeOption.Suppress
-            }))
+                   {
+                       Scope = TransactionScopeOption.Suppress
+                   }))
             {
                 var user = await UserRepository.GetAsync(userId);
                 await uow.CompleteAsync();
@@ -2674,12 +2677,12 @@ namespace Abp.Authorization.Users
             }
         }
 
-        public string GetUserNameFromDatabase(string userId)
+        public virtual string GetUserNameFromDatabase(string userId)
         {
             using (var uow = _unitOfWorkManager.Begin(new UnitOfWorkOptions
-            {
-                Scope = TransactionScopeOption.Suppress
-            }))
+                   {
+                       Scope = TransactionScopeOption.Suppress
+                   }))
             {
                 var user = UserRepository.Get(userId);
                 uow.Complete();
@@ -2864,6 +2867,46 @@ namespace Abp.Authorization.Users
                 Check.NotNull(user, nameof(user));
                 UserRepository.EnsureCollectionLoaded(user, u => u.Tokens, cancellationToken);
                 user.Tokens.Add(new UserToken(user, TokenValidityKeyProvider, tokenValidityKey, null, expireDate));
+            });
+        }
+
+        public virtual async Task AddTokenValidityKeyAsync(
+            UserIdentifier user,
+            string tokenValidityKey,
+            DateTime expireDate,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await _userTokenRepository.InsertAsync(
+                    new UserToken(
+                        user,
+                        TokenValidityKeyProvider,
+                        tokenValidityKey,
+                        null,
+                        expireDate
+                    ));
+            });
+        }
+
+        public virtual void AddTokenValidityKey(
+            UserIdentifier user,
+            string tokenValidityKey,
+            DateTime expireDate,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            _unitOfWorkManager.WithUnitOfWork(() =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                _userTokenRepository.Insert(
+                    new UserToken(
+                        user,
+                        TokenValidityKeyProvider,
+                        tokenValidityKey,
+                        null,
+                        expireDate
+                    ));
             });
         }
 

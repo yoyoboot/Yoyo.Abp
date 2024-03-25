@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -8,7 +8,9 @@ using Abp.AspNetCore.Mvc.Antiforgery;
 using Abp.AspNetCore.Mvc.Extensions;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Dependency;
+using Abp.HtmlSanitizer;
 using Abp.Json;
+using Abp.Json.SystemTextJson;
 using Abp.PlugIns;
 using AbpAspNetCoreDemo.Controllers;
 using AbpAspNetCoreDemo.Core.Domain;
@@ -18,12 +20,12 @@ using Castle.MicroKernel.ModelBuilder.Inspectors;
 using Castle.MicroKernel.SubSystems.Conversion;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OData.ModelBuilder;
-using Newtonsoft.Json.Serialization;
 
 namespace AbpAspNetCoreDemo
 {
@@ -60,21 +62,27 @@ namespace AbpAspNetCoreDemo
             services.AddMvc(options =>
             {
                 options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
-            }).AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ContractResolver = new AbpMvcContractResolver(IocManager.Value)
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                };
+                options.AddAbpHtmlSanitizer();
             }).AddRazorRuntimeCompilation().AddOData(opts =>
             {
                 var builder = new ODataConventionModelBuilder();
                 builder.EntitySet<Product>("Products").EntityType.Expand().Filter().OrderBy().Page().Select();
                 builder.EntitySet<Product>("ProductsDto").EntityType.Expand().Filter().OrderBy().Page().Select();
                 var edmModel = builder.GetEdmModel();
-                
+
                 opts.AddRouteComponents("odata", edmModel);
             });
+
+            services.Configure<JsonOptions>(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new CultureInvariantDecimalJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new CultureInvariantNullableDecimalJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new CultureInvariantDoubleJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new CultureInvariantNullableDoubleJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new Abp.Json.SystemTextJson.DateOnlyJsonConverter());
+            });
+
+            services.Configure<MvcOptions>(x => x.AddAbpHtmlSanitizer());
 
             //Configure Abp and Dependency Injection. Should be called last.
             return services.AddAbp<AbpAspNetCoreDemoModule>(options =>
@@ -82,13 +90,29 @@ namespace AbpAspNetCoreDemo
                 options.IocManager = IocManager.Value ?? new IocManager();
 
                 string plugDllInPath = "";
+
+                var currentDirectory = _env.ContentRootPath;
+                for (var i = 0; i < 10; i++)
+                {
+                    var parentDirectory = new DirectoryInfo(currentDirectory).Parent;
+                    if (parentDirectory == null)
+                    {
+                        break;
+                    }
+
+                    if (parentDirectory.Name == "test")
+                    {
 #if DEBUG
-                plugDllInPath = Path.Combine(_env.ContentRootPath,
-                    @"..\AbpAspNetCoreDemo.PlugIn\bin\Debug\net6.0\AbpAspNetCoreDemo.PlugIn.dll");
+                        plugDllInPath = Path.Combine(parentDirectory.FullName, "aspnet-core-demo", "AbpAspNetCoreDemo.PlugIn", "bin", "Debug", "net8.0", "AbpAspNetCoreDemo.PlugIn.dll");
 #else
-                plugDllInPath = Path.Combine(_env.ContentRootPath,
-                    @"..\AbpAspNetCoreDemo.PlugIn\bin\Release\net6.0\AbpAspNetCoreDemo.PlugIn.dll");
+                        plugDllInPath = Path.Combine(parentDirectory.FullName, "aspnet-core-demo", "AbpAspNetCoreDemo.PlugIn", "bin", "Release", "net8.0", "AbpAspNetCoreDemo.PlugIn.dll");
 #endif
+                        break;
+                    }
+
+                    currentDirectory = parentDirectory.FullName;
+                }
+
                 if (!File.Exists(plugDllInPath))
                 {
                     throw new FileNotFoundException("There is no plugin dll file in the given path.", plugDllInPath);

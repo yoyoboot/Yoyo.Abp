@@ -19,14 +19,14 @@
         return $.Deferred(function ($dfd) {
             $.ajax(options)
                 .done(function (data, textStatus, jqXHR) {
-                    if (data.__wrapper) {
+                    if (data.__abp) {
                         abp.ajax.handleResponse(data, userOptions, $dfd, jqXHR);
                     } else {
                         $dfd.resolve(data);
                         userOptions.success && userOptions.success(data);
                     }
                 }).fail(function (jqXHR) {
-                    if (jqXHR.responseJSON && jqXHR.responseJSON.__wrapper) {
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.__abp) {
                         abp.ajax.handleResponse(jqXHR.responseJSON, userOptions, $dfd, jqXHR);
                     } else {
                         abp.ajax.handleNonAbpErrorResponse(jqXHR, userOptions, $dfd);
@@ -59,7 +59,7 @@
 
         defaultError404: {
             message: 'Resource not found!',
-            details: 'The resource requested could not found on the server.'
+            details: 'The resource requested could not be found on the server.'
         },
 
         logError: function (error) {

@@ -208,10 +208,9 @@ namespace Abp.ZeroCore.SampleApp.Core
         public SecurityStampValidator(
             IOptions<SecurityStampValidatorOptions> options,
             SignInManager signInManager,
-            ISystemClock systemClock,
             ILoggerFactory loggerFactory,
             IUnitOfWorkManager unitOfWorkManager)
-            : base(options, signInManager, systemClock, loggerFactory, unitOfWorkManager)
+            : base(options, signInManager, loggerFactory, unitOfWorkManager)
         {
         }
     }
@@ -253,7 +252,8 @@ namespace Abp.ZeroCore.SampleApp.Core
             IRepository<UserClaim, string> userClaimRepository,
             IRepository<UserPermissionSetting, string> userPermissionSettingRepository,
             IRepository<UserOrganizationUnit, string> userOrganizationUnitRepository,
-            IRepository<OrganizationUnitRole, string> organizationUnitRoleRepository
+            IRepository<OrganizationUnitRole, string> organizationUnitRoleRepository,
+            IRepository<UserToken, string> userTokenRepository
             ) : base(
             unitOfWorkManager,
             userRepository,
@@ -263,7 +263,8 @@ namespace Abp.ZeroCore.SampleApp.Core
             userClaimRepository,
             userPermissionSettingRepository,
             userOrganizationUnitRepository,
-            organizationUnitRoleRepository)
+            organizationUnitRoleRepository,
+            userTokenRepository)
         {
         }
     }
