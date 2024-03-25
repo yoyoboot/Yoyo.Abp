@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -26,6 +27,22 @@ namespace Abp.Reflection.Extensions
                             && x.Args.Length == pGenericArgumentsCount
                 ).Select(x => x.Method)
                 .First();
+        }
+
+        /// <summary>
+        /// Determines whether an instance of this type can be assigned to
+        /// an instance of the <paramref name="targetType"></paramref>.
+        ///
+        /// Internally uses <see cref="Type.IsAssignableFrom"/> (as reverse).
+        /// </summary>
+        /// <param name="type">this type</param>
+        /// <param name="targetType">Target type</param>
+        public static bool IsAssignableTo([NotNull] this Type type, [NotNull] Type targetType)
+        {
+            Check.NotNull(type, nameof(type));
+            Check.NotNull(targetType, nameof(targetType));
+
+            return targetType.IsAssignableFrom(type);
         }
     }
 }
