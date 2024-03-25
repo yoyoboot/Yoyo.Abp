@@ -1,13 +1,13 @@
-name: Build and pack nuget
+name: "pack and publish"
+
 on:
   push:
     tags:
-      - '[0-9]+(\.[0-9]+)*([-\.]\S+)?' # 触发tag，正则匹配 1.0.0 或 1.0.0-rc.1 或 1.0.0-rc.1+build.1 等
+      - '*'
 
 env:
   IS_PRODUCTION: true
   TAG: ${{ github.ref_name }} # 获取当前分支名或tag名
-  # TAG: 1.0.0  # 获取当前分支名或tag名
   NUGET_SOURCE: https://api.nuget.org/v3/index.json
   NUGET_SOURCE_APIKEY: ${{ secrets.NUGET_TOKEN_YOYOBOOT }}
 
@@ -44,14 +44,14 @@ jobs:
         run: ./pack.ps1
       # 推送到nuget.org
       - name: Push Nuget Package
+        shell: pwsh
         working-directory: ./nupkg
         run: ./pack_push.ps1
-        shell: pwsh
       # 推送到github nuget
       - name: Push to GitHub Nuget Packages
+        shell: pwsh
         working-directory: ./nupkg
         run: ./pack_push.ps1
-        shell: pwsh
         env:
           NUGET_SOURCE: https://nuget.pkg.github.com/yoyoboot/index.json
           NUGET_SOURCE_APIKEY: ${{ secrets.CICD_PACKAGE_GITHUB_TOKEN }}
