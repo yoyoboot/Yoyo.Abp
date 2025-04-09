@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abp.Application.Services.Dto;
@@ -15,12 +15,12 @@ namespace Abp.Notifications
         /// <summary>
         /// TenantId.
         /// </summary>
-        public string TenantId { get; set; }
+        public int? TenantId { get; set; }
 
         /// <summary>
         /// User Id.
         /// </summary>
-        public string UserId { get; set; }
+        public long UserId { get; set; }
 
         /// <summary>
         /// Current state of the user notification.

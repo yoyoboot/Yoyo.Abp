@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -32,7 +32,7 @@ namespace Abp.Authorization
         protected IUnitOfWorkManager UnitOfWorkManager { get; }
         protected AbpUserManager<TRole, TUser> UserManager { get; }
         protected ISettingManager SettingManager { get; }
-        protected IRepository<UserLoginAttempt, string> UserLoginAttemptRepository { get; }
+        protected IRepository<UserLoginAttempt, long> UserLoginAttemptRepository { get; }
         protected IUserManagementConfig UserManagementConfig { get; }
         protected IIocResolver IocResolver { get; }
         protected AbpRoleManager<TRole, TUser> RoleManager { get; }
@@ -47,7 +47,7 @@ namespace Abp.Authorization
             IRepository<TTenant> tenantRepository,
             IUnitOfWorkManager unitOfWorkManager,
             ISettingManager settingManager,
-            IRepository<UserLoginAttempt, string> userLoginAttemptRepository,
+            IRepository<UserLoginAttempt, long> userLoginAttemptRepository,
             IUserManagementConfig userManagementConfig,
             IIocResolver iocResolver,
             IPasswordHasher<TUser> passwordHasher,
@@ -108,7 +108,7 @@ namespace Abp.Authorization
                 }
             }
 
-            string tenantId = tenant == null ? null : tenant.Id;
+            int? tenantId = tenant == null ? (int?) null : tenant.Id;
             using (UnitOfWorkManager.Current.SetTenantId(tenantId))
             {
                 var user = await UserManager.FindAsync(tenantId, login);
@@ -181,7 +181,7 @@ namespace Abp.Authorization
                 }
             }
 
-            var tenantId = tenant == null ? null : tenant.Id;
+            var tenantId = tenant == null ? (int?) null : tenant.Id;
             using (UnitOfWorkManager.Current.SetTenantId(tenantId))
             {
                 await UserManager.InitializeOptionsAsync(tenantId);
@@ -256,7 +256,7 @@ namespace Abp.Authorization
         {
             using (var uow = UnitOfWorkManager.Begin(TransactionScopeOption.Suppress))
             {
-                var tenantId = loginResult.Tenant != null ? loginResult.Tenant.Id : null;
+                var tenantId = loginResult.Tenant != null ? loginResult.Tenant.Id : (int?) null;
                 using (UnitOfWorkManager.Current.SetTenantId(tenantId))
                 {
                     var loginAttempt = new UserLoginAttempt
@@ -264,7 +264,7 @@ namespace Abp.Authorization
                         TenantId = tenantId,
                         TenancyName = tenancyName,
 
-                        UserId = loginResult.User != null ? loginResult.User.Id : null,
+                        UserId = loginResult.User != null ? loginResult.User.Id : (long?) null,
                         UserNameOrEmailAddress = userNameOrEmailAddress,
 
                         Result = loginResult.Result,
@@ -287,7 +287,7 @@ namespace Abp.Authorization
         {
             using (var uow = UnitOfWorkManager.Begin(TransactionScopeOption.Suppress))
             {
-                var tenantId = loginResult.Tenant != null ? loginResult.Tenant.Id : null;
+                var tenantId = loginResult.Tenant != null ? loginResult.Tenant.Id : (int?) null;
                 using (UnitOfWorkManager.Current.SetTenantId(tenantId))
                 {
                     var loginAttempt = new UserLoginAttempt
@@ -295,7 +295,7 @@ namespace Abp.Authorization
                         TenantId = tenantId,
                         TenancyName = tenancyName,
 
-                        UserId = loginResult.User != null ? loginResult.User.Id : null,
+                        UserId = loginResult.User != null ? loginResult.User.Id : (long?) null,
                         UserNameOrEmailAddress = userNameOrEmailAddress,
 
                         Result = loginResult.Result,
@@ -313,7 +313,7 @@ namespace Abp.Authorization
             }
         }
 
-        protected virtual async Task<bool> TryLockOutAsync(string tenantId, string userId)
+        protected virtual async Task<bool> TryLockOutAsync(int? tenantId, long userId)
         {
             using (var uow = UnitOfWorkManager.Begin(TransactionScopeOption.Suppress))
             {
@@ -349,7 +349,7 @@ namespace Abp.Authorization
                 {
                     if (await source.Object.TryAuthenticateAsync(userNameOrEmailAddress, plainPassword, tenant))
                     {
-                        var tenantId = tenant == null ? null : tenant.Id;
+                        var tenantId = tenant == null ? (int?) null : tenant.Id;
                         using (UnitOfWorkManager.Current.SetTenantId(tenantId))
                         {
                             var user = await UserManager.FindByNameOrEmailAsync(tenantId, userNameOrEmailAddress);
@@ -422,13 +422,13 @@ namespace Abp.Authorization
             return tenant;
         }
 
-        protected virtual async Task<bool> IsEmailConfirmationRequiredForLoginAsync(string tenantId)
+        protected virtual async Task<bool> IsEmailConfirmationRequiredForLoginAsync(int? tenantId)
         {
-            if (tenantId.HasValue())
+            if (tenantId.HasValue)
             {
                 return await SettingManager.GetSettingValueForTenantAsync<bool>(
                     AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin,
-                    tenantId
+                    tenantId.Value
                 );
             }
 
@@ -437,13 +437,13 @@ namespace Abp.Authorization
             );
         }
 
-        protected virtual bool IsEmailConfirmationRequiredForLogin(string tenantId)
+        protected virtual bool IsEmailConfirmationRequiredForLogin(int? tenantId)
         {
-            if (tenantId.HasValue())
+            if (tenantId.HasValue)
             {
                 return SettingManager.GetSettingValueForTenant<bool>(
                     AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin, 
-                    tenantId
+                    tenantId.Value
                 );
             }
 
@@ -452,12 +452,12 @@ namespace Abp.Authorization
             );
         }
 
-        protected virtual Task<bool> IsPhoneConfirmationRequiredForLoginAsync(string tenantId)
+        protected virtual Task<bool> IsPhoneConfirmationRequiredForLoginAsync(int? tenantId)
         {
             return Task.FromResult(false);
         }
 
-        protected virtual bool IsPhoneConfirmationRequiredForLogin(string tenantId)
+        protected virtual bool IsPhoneConfirmationRequiredForLogin(int? tenantId)
         {
             return false;
         }

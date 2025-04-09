@@ -1,4 +1,4 @@
-namespace Abp.Notifications
+﻿namespace Abp.Notifications
 {
     /// <summary>
     /// Represents state of a <see cref="UserNotification"/>.

@@ -1,4 +1,4 @@
-using Quartz;
+﻿using Quartz;
 using Quartz.Impl;
 
 namespace Abp.Quartz.Configuration

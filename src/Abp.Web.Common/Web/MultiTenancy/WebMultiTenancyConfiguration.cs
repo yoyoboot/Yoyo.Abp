@@ -1,4 +1,4 @@
-namespace Abp.Web.MultiTenancy
+﻿namespace Abp.Web.MultiTenancy
 {
     public class WebMultiTenancyConfiguration : IWebMultiTenancyConfiguration
     {

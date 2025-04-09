@@ -1,4 +1,4 @@
-namespace Abp.BackgroundJobs
+﻿namespace Abp.BackgroundJobs
 {
     /// <summary>
     /// Defines interface of a background job.

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Abp.Domain.Entities;
 
@@ -11,11 +11,11 @@ namespace Abp.EntityHistory
         /// </summary>
         public static async Task<EntityHistorySnapshot> GetSnapshotAsync<TEntity>(
             this IEntitySnapshotManager entitySnapshotManager, 
-            string id, 
+            int id, 
             DateTime snapshotTime)
-            where TEntity : class, IEntity<string>
+            where TEntity : class, IEntity<int>
         {
-            return await entitySnapshotManager.GetSnapshotAsync<TEntity, string>(id, snapshotTime);
+            return await entitySnapshotManager.GetSnapshotAsync<TEntity, int>(id, snapshotTime);
         }
     }
 }

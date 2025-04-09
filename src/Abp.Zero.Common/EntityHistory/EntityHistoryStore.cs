@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -10,14 +10,14 @@ namespace Abp.EntityHistory
     /// </summary>
     public class EntityHistoryStore : IEntityHistoryStore, ITransientDependency
     {
-        private readonly IRepository<EntityChangeSet, string> _changeSetRepository;
+        private readonly IRepository<EntityChangeSet, long> _changeSetRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         /// <summary>
         /// Creates a new <see cref="EntityHistoryStore"/>.
         /// </summary>
         public EntityHistoryStore(
-            IRepository<EntityChangeSet, string> changeSetRepository,
+            IRepository<EntityChangeSet, long> changeSetRepository,
             IUnitOfWorkManager unitOfWorkManager)
         {
             _changeSetRepository = changeSetRepository;

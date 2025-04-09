@@ -1,4 +1,4 @@
-namespace Abp
+﻿namespace Abp
 {
     /// <summary>
     /// Extension methods for <see cref="UserIdentifier"/> and <see cref="IUserIdentifier"/>.

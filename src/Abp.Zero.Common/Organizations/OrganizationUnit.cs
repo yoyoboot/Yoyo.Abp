@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,7 +14,7 @@ namespace Abp.Organizations
     /// Represents an organization unit (OU).
     /// </summary>
     [Table("AbpOrganizationUnits")]
-    public class OrganizationUnit : FullAuditedEntity<string>, IMayHaveTenant
+    public class OrganizationUnit : FullAuditedEntity<long>, IMayHaveTenant
     {
         /// <summary>
         /// Maximum length of the <see cref="DisplayName"/> property.
@@ -39,7 +39,7 @@ namespace Abp.Organizations
         /// <summary>
         /// TenantId of this entity.
         /// </summary>
-        public virtual string TenantId { get; set; }
+        public virtual int? TenantId { get; set; }
 
         /// <summary>
         /// Parent <see cref="OrganizationUnit"/>.
@@ -52,7 +52,7 @@ namespace Abp.Organizations
         /// Parent <see cref="OrganizationUnit"/> Id.
         /// Null, if this OU is root.
         /// </summary>
-        public virtual string ParentId { get; set; }
+        public virtual long? ParentId { get; set; }
 
         /// <summary>
         /// Hierarchical Code of this organization unit.
@@ -90,7 +90,7 @@ namespace Abp.Organizations
         /// <param name="tenantId">Tenant's Id or null for host.</param>
         /// <param name="displayName">Display name.</param>
         /// <param name="parentId">Parent's Id or null if OU is a root.</param>
-        public OrganizationUnit(string tenantId, string displayName, string parentId = null)
+        public OrganizationUnit(int? tenantId, string displayName, long? parentId = null)
         {
             TenantId = tenantId;
             DisplayName = displayName;

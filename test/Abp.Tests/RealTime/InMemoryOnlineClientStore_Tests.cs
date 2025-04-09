@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.RealTime;
 using Shouldly;
 using Xunit;
@@ -21,7 +21,7 @@ namespace Abp.Tests.RealTime
         {
             var connectionId = Guid.NewGuid().ToString("N");
 
-            _store.Add(new OnlineClient(connectionId, "127.0.0.1", "1", "2"));
+            _store.Add(new OnlineClient(connectionId, "127.0.0.1", 1, 2));
             _store.TryGet(connectionId, out IOnlineClient client).ShouldBeTrue();
 
             _store.Contains(connectionId).ShouldBeTrue();
@@ -32,7 +32,7 @@ namespace Abp.Tests.RealTime
             _chatStore.GetAll().Count.ShouldBe(0);
             connectionId = Guid.NewGuid().ToString("N");
 
-            _chatStore.Add(new OnlineClient(connectionId, "127.0.0.1", "1", "2"));
+            _chatStore.Add(new OnlineClient(connectionId, "127.0.0.1", 1, 2));
             _chatStore.GetAll().Count.ShouldBe(1);
         }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.AspNetCore.Mvc.Extensions;
 using Abp.Auditing;
 using Abp.Localization;
@@ -41,7 +41,7 @@ namespace Abp.AspNetCore.Mvc.Controllers
                 }
             );
 
-            if (AbpSession.UserId.HasValue())
+            if (AbpSession.UserId.HasValue)
             {
                 SettingManager.ChangeSettingForUser(
                     AbpSession.ToUserIdentifier(),

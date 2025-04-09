@@ -1,4 +1,4 @@
-namespace Abp.Domain.Uow
+﻿namespace Abp.Domain.Uow
 {
     public class NullUnitOfWorkFilterExecuter : IUnitOfWorkFilterExecuter
     {

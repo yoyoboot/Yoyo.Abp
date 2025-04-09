@@ -1,4 +1,4 @@
-namespace Abp.EntityFramework
+﻿namespace Abp.EntityFramework
 {
     public interface IShouldInitializeDcontext
     {

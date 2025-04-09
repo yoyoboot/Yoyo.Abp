@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
@@ -23,9 +23,9 @@ namespace Abp.Dapper.Filters.Action
 
         public IGuidGenerator GuidGenerator { get; set; }
 
-        protected virtual string GetAuditUserId()
+        protected virtual long? GetAuditUserId()
         {
-            if (AbpSession.UserId.HasValue() && CurrentUnitOfWorkProvider?.Current != null)
+            if (AbpSession.UserId.HasValue && CurrentUnitOfWorkProvider?.Current != null)
             {
                 return AbpSession.UserId;
             }
@@ -48,7 +48,7 @@ namespace Abp.Dapper.Filters.Action
             }
         }
 
-        protected virtual string GetCurrentTenantIdOrNull()
+        protected virtual int? GetCurrentTenantIdOrNull()
         {
             if (CurrentUnitOfWorkProvider?.Current != null)
             {

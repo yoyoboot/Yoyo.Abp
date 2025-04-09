@@ -8,19 +8,19 @@ namespace Abp.Authorization.Users
     /// Represents role record of a user. 
     /// </summary>
     [Table("AbpUserRoles")]
-    public class UserRole : CreationAuditedEntity<string>, IMayHaveTenant
+    public class UserRole : CreationAuditedEntity<long>, IMayHaveTenant
     {
-        public virtual string TenantId { get; set; }
+        public virtual int? TenantId { get; set; }
 
         /// <summary>
         /// User id.
         /// </summary>
-        public virtual string UserId { get; set; }
+        public virtual long UserId { get; set; }
 
         /// <summary>
         /// Role id.
         /// </summary>
-        public virtual string RoleId { get; set; }
+        public virtual int RoleId { get; set; }
 
         /// <summary>
         /// Creates a new <see cref="UserRole"/> object.
@@ -36,7 +36,7 @@ namespace Abp.Authorization.Users
         /// <param name="tenantId">Tenant id</param>
         /// <param name="userId">User id</param>
         /// <param name="roleId">Role id</param>
-        public UserRole(string tenantId, string userId, string roleId)
+        public UserRole(int? tenantId, long userId, int roleId)
         {
             TenantId = tenantId;
             UserId = userId;

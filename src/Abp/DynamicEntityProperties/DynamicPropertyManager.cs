@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Transactions;
 using Abp.Dependency;
@@ -36,7 +36,7 @@ namespace Abp.DynamicEntityProperties
             AbpSession = NullAbpSession.Instance;
         }
 
-        public virtual DynamicProperty Get(string id,int? fsTagNone=null)
+        public virtual DynamicProperty Get(int id)
         {
             var tenantId = GetCurrentTenantId();
             var cacheKey = GetCacheKey(id, tenantId);
@@ -44,7 +44,7 @@ namespace Abp.DynamicEntityProperties
             return DynamicPropertyCache.Get(cacheKey, () => _dynamicPropertyStore.Get(id));
         }
 
-        public virtual Task<DynamicProperty> GetAsync(string id,int? fsTagNone=null)
+        public virtual Task<DynamicProperty> GetAsync(int id)
         {
             var tenantId = GetCurrentTenantId();
             var cacheKey = GetCacheKey(id, tenantId);
@@ -144,7 +144,7 @@ namespace Abp.DynamicEntityProperties
             return dynamicProperty;
         }
 
-        public virtual void Delete(string id)
+        public virtual void Delete(int id)
         {
             using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
             {
@@ -158,7 +158,7 @@ namespace Abp.DynamicEntityProperties
             DynamicPropertyCache.Remove(cacheKey);
         }
 
-        public virtual async Task DeleteAsync(string id)
+        public virtual async Task DeleteAsync(int id)
         {
             using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
             {
@@ -172,7 +172,7 @@ namespace Abp.DynamicEntityProperties
             await DynamicPropertyCache.RemoveAsync(cacheKey);
         }
         
-        protected virtual string GetCurrentTenantId()
+        protected virtual int? GetCurrentTenantId()
         {
             if (_unitOfWorkManager.Current != null)
             {
@@ -182,9 +182,9 @@ namespace Abp.DynamicEntityProperties
             return AbpSession.TenantId;
         }
         
-        protected virtual string GetCacheKey(string id, string tenantId)
+        protected virtual string GetCacheKey(int id, int? tenantId)
         {
-            return id + "@" + (tenantId ?? "0");
+            return id + "@" + (tenantId ?? 0);
         }
     }
 }

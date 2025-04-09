@@ -1,4 +1,4 @@
-using Abp.Authorization.Roles;
+﻿using Abp.Authorization.Roles;
 
 namespace Abp.ZeroCore.SampleApp.Core
 {
@@ -9,7 +9,7 @@ namespace Abp.ZeroCore.SampleApp.Core
 
         }
 
-        public Role(string tenantId, string name, string displayName)
+        public Role(int? tenantId, string name, string displayName)
             : base(tenantId, name, displayName)
         {
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,19 +41,19 @@ namespace Abp.Webhooks
             return WebhookSubscriptionsStore.Get(id).ToWebhookSubscription();
         }
 
-        public virtual async Task<List<WebhookSubscription>> GetAllSubscriptionsAsync(string tenantId)
+        public virtual async Task<List<WebhookSubscription>> GetAllSubscriptionsAsync(int? tenantId)
         {
             return (await WebhookSubscriptionsStore.GetAllSubscriptionsAsync(tenantId))
                 .Select(subscriptionInfo => subscriptionInfo.ToWebhookSubscription()).ToList();
         }
 
-        public virtual List<WebhookSubscription> GetAllSubscriptions(string tenantId)
+        public virtual List<WebhookSubscription> GetAllSubscriptions(int? tenantId)
         {
             return WebhookSubscriptionsStore.GetAllSubscriptions(tenantId)
                 .Select(subscriptionInfo => subscriptionInfo.ToWebhookSubscription()).ToList();
         }
 
-        public virtual async Task<List<WebhookSubscription>> GetAllSubscriptionsIfFeaturesGrantedAsync(string tenantId, string webhookName)
+        public virtual async Task<List<WebhookSubscription>> GetAllSubscriptionsIfFeaturesGrantedAsync(int? tenantId, string webhookName)
         {
             if (!await _webhookDefinitionManager.IsAvailableAsync(tenantId, webhookName))
             {
@@ -64,7 +64,7 @@ namespace Abp.Webhooks
                 .Select(subscriptionInfo => subscriptionInfo.ToWebhookSubscription()).ToList();
         }
 
-        public virtual List<WebhookSubscription> GetAllSubscriptionsIfFeaturesGranted(string tenantId, string webhookName)
+        public virtual List<WebhookSubscription> GetAllSubscriptionsIfFeaturesGranted(int? tenantId, string webhookName)
         {
             if (!_webhookDefinitionManager.IsAvailable(tenantId, webhookName))
             {
@@ -75,21 +75,21 @@ namespace Abp.Webhooks
                 .Select(subscriptionInfo => subscriptionInfo.ToWebhookSubscription()).ToList();
         }
 
-        public virtual async Task<List<WebhookSubscription>> GetAllSubscriptionsOfTenantsAsync(string[] tenantIds)
+        public virtual async Task<List<WebhookSubscription>> GetAllSubscriptionsOfTenantsAsync(int?[] tenantIds)
         {
             return (await WebhookSubscriptionsStore.GetAllSubscriptionsOfTenantsAsync(tenantIds))
                 .Select(subscriptionInfo => subscriptionInfo.ToWebhookSubscription()).ToList();
         }
 
-        public virtual List<WebhookSubscription> GetAllSubscriptionsOfTenants(string[] tenantIds)
+        public virtual List<WebhookSubscription> GetAllSubscriptionsOfTenants(int?[] tenantIds)
         {
             return WebhookSubscriptionsStore.GetAllSubscriptionsOfTenants(tenantIds)
                 .Select(subscriptionInfo => subscriptionInfo.ToWebhookSubscription()).ToList();
         }
 
-        public virtual async Task<List<WebhookSubscription>> GetAllSubscriptionsOfTenantsIfFeaturesGrantedAsync(string[] tenantIds, string webhookName)
+        public virtual async Task<List<WebhookSubscription>> GetAllSubscriptionsOfTenantsIfFeaturesGrantedAsync(int?[] tenantIds, string webhookName)
         {
-            var featureGrantedTenants = new List<string>();
+            var featureGrantedTenants = new List<int?>();
             foreach (var tenantId in tenantIds)
             {
                 if (await _webhookDefinitionManager.IsAvailableAsync(tenantId, webhookName))
@@ -102,9 +102,9 @@ namespace Abp.Webhooks
                 .Select(subscriptionInfo => subscriptionInfo.ToWebhookSubscription()).ToList();
         }
 
-        public virtual List<WebhookSubscription> GetAllSubscriptionsOfTenantsIfFeaturesGranted(string[] tenantIds, string webhookName)
+        public virtual List<WebhookSubscription> GetAllSubscriptionsOfTenantsIfFeaturesGranted(int?[] tenantIds, string webhookName)
         {
-            var featureGrantedTenants = new List<string>();
+            var featureGrantedTenants = new List<int?>();
             foreach (var tenantId in tenantIds)
             {
                 if (_webhookDefinitionManager.IsAvailable(tenantId, webhookName))
@@ -117,7 +117,7 @@ namespace Abp.Webhooks
                 .Select(subscriptionInfo => subscriptionInfo.ToWebhookSubscription()).ToList();
         }
 
-        public virtual async Task<bool> IsSubscribedAsync(string tenantId, string webhookName)
+        public virtual async Task<bool> IsSubscribedAsync(int? tenantId, string webhookName)
         {
             if (!await _webhookDefinitionManager.IsAvailableAsync(tenantId, webhookName))
             {
@@ -127,7 +127,7 @@ namespace Abp.Webhooks
             return await WebhookSubscriptionsStore.IsSubscribedAsync(tenantId, webhookName);
         }
 
-        public virtual bool IsSubscribed(string tenantId, string webhookName)
+        public virtual bool IsSubscribed(int? tenantId, string webhookName)
         {
             if (!_webhookDefinitionManager.IsAvailable(tenantId, webhookName))
             {
@@ -241,7 +241,7 @@ namespace Abp.Webhooks
             }
         }
 
-        protected virtual async Task CheckPermissionsAsync(string tenantId, string webhookName)
+        protected virtual async Task CheckPermissionsAsync(int? tenantId, string webhookName)
         {
             if (!await _webhookDefinitionManager.IsAvailableAsync(tenantId, webhookName))
             {
@@ -262,7 +262,7 @@ namespace Abp.Webhooks
             }
         }
 
-        protected virtual void CheckPermissions(string tenantId, string webhookName)
+        protected virtual void CheckPermissions(int? tenantId, string webhookName)
         {
             if (!_webhookDefinitionManager.IsAvailable(tenantId, webhookName))
             {

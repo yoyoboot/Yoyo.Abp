@@ -1,4 +1,4 @@
-namespace Abp.Web.Models
+﻿namespace Abp.Web.Models
 {
     public abstract class AjaxResponseBase
     {

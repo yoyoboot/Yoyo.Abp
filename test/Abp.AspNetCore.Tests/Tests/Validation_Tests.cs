@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -92,7 +92,7 @@ namespace Abp.AspNetCore.Tests
                 GetUrl<ValidationTestController>(
                     nameof(ValidationTestController.GetJsonValueWithEnum)
                 ),
-                new StringContent("{ \"value\": \"asd\"}", Encoding.UTF8, "application/json"),
+                new StringContent("{ \"value\": \"asd\" }", Encoding.UTF8, "application/json"),
                 HttpStatusCode.BadRequest
             );
 
@@ -113,7 +113,7 @@ namespace Abp.AspNetCore.Tests
                 GetUrl<ValidationTestController>(
                     nameof(ValidationTestController.GetJsonValueWithValidatableObject)
                 ),
-                new StringContent("{ \"value\": -1}", Encoding.UTF8, "application/json"),
+                new StringContent("{ \"value\": -1 }", Encoding.UTF8, "application/json"),
                 HttpStatusCode.BadRequest
             );
 
@@ -135,7 +135,7 @@ namespace Abp.AspNetCore.Tests
                 GetUrl<ValidationTestController>(
                     nameof(ValidationTestController.GetJsonValueWithCustomValidate)
                 ),
-                new StringContent("{ \"value\": \"asd\"}", Encoding.UTF8, "application/json"),
+                new StringContent("{ \"value\": \"asd\" }", Encoding.UTF8, "application/json"),
                 HttpStatusCode.BadRequest
             );
 
@@ -157,7 +157,7 @@ namespace Abp.AspNetCore.Tests
                 GetUrl<ValidationTestController>(
                     nameof(ValidationTestController.GetJsonValueWithCombinedValidators)
                 ),
-                new StringContent("{ \"value\": -1}", Encoding.UTF8, "application/json"),
+                new StringContent("{ \"value\": -1 }", Encoding.UTF8, "application/json"),
                 HttpStatusCode.BadRequest
             );
 

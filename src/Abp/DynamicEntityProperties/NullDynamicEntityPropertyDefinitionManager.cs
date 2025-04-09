@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Abp.Domain.Entities;
 using Abp.UI.Inputs;
 
@@ -32,7 +32,7 @@ namespace Abp.DynamicEntityProperties
             return false;
         }
 
-        public void AddEntity<TEntity>() where TEntity : IEntity<string>
+        public void AddEntity<TEntity>() where TEntity : IEntity<int>
         {
 
         }
@@ -56,7 +56,7 @@ namespace Abp.DynamicEntityProperties
             return false;
         }
 
-        public bool ContainsEntity<TEntity>() where TEntity : IEntity<string>
+        public bool ContainsEntity<TEntity>() where TEntity : IEntity<int>
         {
             return false;
         }

@@ -19,7 +19,7 @@ namespace Abp.AspNetCore.MultiTenancy
             _multiTenancyConfig = multiTenancyConfig;
         }
 
-        public string ResolveTenantId()
+        public int? ResolveTenantId()
         {
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext == null)
@@ -33,7 +33,7 @@ namespace Abp.AspNetCore.MultiTenancy
                 return null;
             }
 
-            return tenantIdValue.HasValue() ? tenantIdValue : null;
+            return int.TryParse(tenantIdValue, out var tenantId) ? tenantId : (int?) null;
         }
     }
 }

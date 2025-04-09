@@ -27,9 +27,9 @@ namespace Abp.MultiTenancy
             _unitOfWorkManager = unitOfWorkManager;
         }
 
-        public virtual TenantCacheItem Get(string tenantId,int? fsTagNone=null)
+        public virtual TenantCacheItem Get(int tenantId)
         {
-            var cacheItem = GetOrNull(tenantId,null);
+            var cacheItem = GetOrNull(tenantId);
 
             if (cacheItem == null)
             {
@@ -65,10 +65,10 @@ namespace Abp.MultiTenancy
                 return null;
             }
 
-            return Get(tenantId,null);
+            return Get(tenantId.Value);
         }
 
-        public TenantCacheItem GetOrNull(string tenantId,int? fsTagNone=null)
+        public TenantCacheItem GetOrNull(int tenantId)
         {
             return _cacheManager
                 .GetTenantCache()
@@ -76,7 +76,7 @@ namespace Abp.MultiTenancy
                     tenantId,
                     () =>
                     {
-                        var tenant = GetTenantOrNull(tenantId,null);
+                        var tenant = GetTenantOrNull(tenantId);
                         if (tenant == null)
                         {
                             return null;
@@ -87,9 +87,9 @@ namespace Abp.MultiTenancy
                 );
         }
 
-        public virtual async Task<TenantCacheItem> GetAsync(string tenantId,int? fsTagNone=null)
+        public virtual async Task<TenantCacheItem> GetAsync(int tenantId)
         {
-            var cacheItem = await GetOrNullAsync(tenantId,null);
+            var cacheItem = await GetOrNullAsync(tenantId);
 
             if (cacheItem == null)
             {
@@ -124,17 +124,17 @@ namespace Abp.MultiTenancy
                 return null;
             }
 
-            return await GetAsync(tenantId,null);
+            return await GetAsync(tenantId.Value);
         }
 
-        public virtual async Task<TenantCacheItem> GetOrNullAsync(string tenantId,int? fsTagNone=null)
+        public virtual async Task<TenantCacheItem> GetOrNullAsync(int tenantId)
         {
             return await _cacheManager
                 .GetTenantCache()
                 .GetAsync(
                     tenantId, async key =>
                     {
-                        var tenant = await GetTenantOrNullAsync(tenantId,null);
+                        var tenant = await GetTenantOrNullAsync(tenantId);
                         if (tenant == null)
                         {
                             return null;
@@ -158,7 +158,7 @@ namespace Abp.MultiTenancy
             };
         }
 
-        protected virtual TTenant GetTenantOrNull(string tenantId,int? fsTagNone=null)
+        protected virtual TTenant GetTenantOrNull(int tenantId)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -180,7 +180,7 @@ namespace Abp.MultiTenancy
             });
         }
 
-        protected virtual async Task<TTenant> GetTenantOrNullAsync(string tenantId,int? fsTagNone=null)
+        protected virtual async Task<TTenant> GetTenantOrNullAsync(int tenantId)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {

@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using Shouldly;
 using System.Collections.Generic;
@@ -81,38 +81,38 @@ namespace Abp.AutoMapper.Tests
         private class MyEntityDto
         {
             [AutoMapKey]
-            public string Id { get; set; }
+            public int Id { get; set; }
         }
 
         private class MyDerivedEntityDto : Abp.Application.Services.Dto.EntityDto
         {
             [AutoMapKey]
-            public new string Id { get; set; }
+            public new int Id { get; set; }
         }
 
         private class MyDualKeyEntityDto
         {
             [AutoMapKey]
-            public string Id { get; set; }
+            public int Id { get; set; }
 
             [AutoMapKey]
-            public string SecondId { get; set; }
+            public int SecondId { get; set; }
         }
 
         private class MyDerivedDualKeyEntityDto : Abp.Application.Services.Dto.EntityDto
         {
             [AutoMapKey]
-            public new string Id { get; set; }
+            public new int Id { get; set; }
 
             [AutoMapKey]
-            public string SecondId { get; set; }
+            public int SecondId { get; set; }
         }
 
         private class MyDualKeyEntity
         {
-           public string Id { get; set; }
+           public int Id { get; set; }
 
-            public string SecondId { get; set; }
+            public int SecondId { get; set; }
         }
 
         private class MyAutoMapKeyClass1 : MyEntityDto
@@ -175,50 +175,50 @@ namespace Abp.AutoMapper.Tests
         {
             var list1 = new List<MyAutoMapKeyClass1>
                         {
-                            new MyAutoMapKeyClass1 { Id = "1", TestProp = "New test value 1"},
-                            new MyAutoMapKeyClass1 { Id = "2", TestProp = "New test value 2"}
+                            new MyAutoMapKeyClass1 { Id = 1, TestProp = "New test value 1"},
+                            new MyAutoMapKeyClass1 { Id = 2, TestProp = "New test value 2"}
                         };
 
             var list2 = new List<MyAutoMapKeyClass2>
                         {
-                            new MyAutoMapKeyClass2 { Id = "1", TestProp = "Test value 1", Value = 5},
-                            new MyAutoMapKeyClass2 { Id = "2", TestProp = "Test value 2", Value = 10}
+                            new MyAutoMapKeyClass2 { Id = 1, TestProp = "Test value 1", Value = 5},
+                            new MyAutoMapKeyClass2 { Id = 2, TestProp = "Test value 2", Value = 10}
                         };
 
             var list3 = new List<MyAutoMapKeyClass3>
                         {
-                            new MyAutoMapKeyClass3 { Id = "1", TestProp = "New test value 1"},
-                            new MyAutoMapKeyClass3 { Id = "2", TestProp = "New test value 2"}
+                            new MyAutoMapKeyClass3 { Id = 1, TestProp = "New test value 1"},
+                            new MyAutoMapKeyClass3 { Id = 2, TestProp = "New test value 2"}
                         };
 
             var list4 = new List<MyAutoMapKeyClass4>
                         {
-                            new MyAutoMapKeyClass4 { Id = "1", TestProp = "Test value 1", Value = 5},
-                            new MyAutoMapKeyClass4 { Id = "2", TestProp = "Test value 2", Value = 10}
+                            new MyAutoMapKeyClass4 { Id = 1, TestProp = "Test value 1", Value = 5},
+                            new MyAutoMapKeyClass4 { Id = 2, TestProp = "Test value 2", Value = 10}
                         };
 
             var list5 = new List<MyAutoMapKeyClass5>
                         {
-                            new MyAutoMapKeyClass5 { Id = "1", SecondId = "2", TestProp = "New test value 1"},
-                            new MyAutoMapKeyClass5 { Id = "2", SecondId = "3", TestProp = "New test value 2"}
+                            new MyAutoMapKeyClass5 { Id = 1, SecondId = 2, TestProp = "New test value 1"},
+                            new MyAutoMapKeyClass5 { Id = 2, SecondId = 3, TestProp = "New test value 2"}
                         };
 
             var list6 = new List<MyAutoMapKeyClass6>
                         {
-                            new MyAutoMapKeyClass6 { Id = "1", SecondId = "2",  TestProp = "Test value 1", Value = 5},
-                            new MyAutoMapKeyClass6 { Id = "2", SecondId = "3",  TestProp = "Test value 2", Value = 10}
+                            new MyAutoMapKeyClass6 { Id = 1, SecondId = 2,  TestProp = "Test value 1", Value = 5},
+                            new MyAutoMapKeyClass6 { Id = 2, SecondId = 3,  TestProp = "Test value 2", Value = 10}
                         };
 
             var list7 = new List<MyAutoMapKeyClass7>
                         {
-                            new MyAutoMapKeyClass7 { Id = "1", SecondId = "2",  TestProp = "New test value 1"},
-                            new MyAutoMapKeyClass7 { Id = "2", SecondId = "3",  TestProp = "New test value 2"}
+                            new MyAutoMapKeyClass7 { Id = 1, SecondId = 2,  TestProp = "New test value 1"},
+                            new MyAutoMapKeyClass7 { Id = 2, SecondId = 3,  TestProp = "New test value 2"}
                         };
 
             var list8 = new List<MyAutoMapKeyClass8>
                         {
-                            new MyAutoMapKeyClass8 { Id = "1", SecondId = "2",  TestProp = "Test value 1", Value = 5},
-                            new MyAutoMapKeyClass8 { Id = "2", SecondId = "3",  TestProp = "Test value 2", Value = 10}
+                            new MyAutoMapKeyClass8 { Id = 1, SecondId = 2,  TestProp = "Test value 1", Value = 5},
+                            new MyAutoMapKeyClass8 { Id = 2, SecondId = 3,  TestProp = "Test value 2", Value = 10}
                         };
 
             _mapper.Map(list1, list2);

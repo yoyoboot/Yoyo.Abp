@@ -1,4 +1,4 @@
-using Abp.Localization;
+﻿using Abp.Localization;
 
 namespace Abp.ZeroCore.SampleApp.Application
 {

@@ -1,4 +1,4 @@
-using Abp.Domain.Entities;
+﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Abp.EntityHistory
 {
     [Table("AbpEntityChangeSets")]
-    public class EntityChangeSet : Entity<string>, IHasCreationTime, IMayHaveTenant, IExtendableObject
+    public class EntityChangeSet : Entity<long>, IHasCreationTime, IMayHaveTenant, IExtendableObject
     {
         /// <summary>
         /// Maximum length of <see cref="BrowserInfo"/> property.
@@ -61,12 +61,12 @@ namespace Abp.EntityHistory
         /// <summary>
         /// ImpersonatorTenantId.
         /// </summary>
-        public virtual string ImpersonatorTenantId { get; set; }
+        public virtual int? ImpersonatorTenantId { get; set; }
 
         /// <summary>
         /// ImpersonatorUserId.
         /// </summary>
-        public virtual string ImpersonatorUserId { get; set; }
+        public virtual long? ImpersonatorUserId { get; set; }
 
         /// <summary>
         /// Reason for this change set.
@@ -77,12 +77,12 @@ namespace Abp.EntityHistory
         /// <summary>
         /// TenantId.
         /// </summary>
-        public virtual string TenantId { get; set; }
+        public virtual int? TenantId { get; set; }
 
         /// <summary>
         /// UserId.
         /// </summary>
-        public virtual string UserId { get; set; }
+        public virtual long? UserId { get; set; }
 
         /// <summary>
         /// Entity changes grouped in this change set.

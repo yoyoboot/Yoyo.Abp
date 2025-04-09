@@ -8,7 +8,7 @@ namespace Abp.Domain.Entities.Auditing
         /// <summary>
         /// Which user deleted this entity?
         /// </summary>
-        string DeleterUserId { get; set; }
+        long? DeleterUserId { get; set; }
     }
 
     /// <summary>
@@ -16,7 +16,7 @@ namespace Abp.Domain.Entities.Auditing
     /// </summary>
     /// <typeparam name="TUser">Type of the user</typeparam>
     public interface IDeletionAudited<TUser> : IDeletionAudited
-        where TUser : IEntity<string>
+        where TUser : IEntity<long>
     {
         /// <summary>
         /// Reference to the deleter user of this entity.

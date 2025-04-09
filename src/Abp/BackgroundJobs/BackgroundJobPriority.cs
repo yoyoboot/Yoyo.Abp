@@ -1,4 +1,4 @@
-namespace Abp.BackgroundJobs
+﻿namespace Abp.BackgroundJobs
 {
     /// <summary>
     /// Priority of a background job.

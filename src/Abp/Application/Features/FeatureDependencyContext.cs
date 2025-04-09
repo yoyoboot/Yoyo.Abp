@@ -7,7 +7,7 @@ namespace Abp.Application.Features
     /// </summary>
     public class FeatureDependencyContext : IFeatureDependencyContext, ITransientDependency
     {
-        public string TenantId { get; set; }
+        public int? TenantId { get; set; }
 
         /// <inheritdoc/>
         public IIocResolver IocResolver { get; private set; }

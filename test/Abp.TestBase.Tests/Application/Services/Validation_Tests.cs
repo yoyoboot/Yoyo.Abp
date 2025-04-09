@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services;
@@ -148,7 +148,7 @@ namespace Abp.TestBase.Tests.Application.Services
         [Fact]
         public void Should_Stop_Recursive_Validation_In_A_Constant_Depth()
         {
-            _myAppService.MyMethod8(new MyClassWithRecursiveReference { Value = 42 }).Result.ShouldBe(42);
+            _myAppService.MyMethod8(new MyClassWithRecursiveReference { Value = "42" }).Result.ShouldBe(42);
         }
 
         [Fact]
@@ -329,7 +329,7 @@ namespace Abp.TestBase.Tests.Application.Services
             public MyClassWithRecursiveReference Reference { get; }
 
             [Required]
-            public int Value { get; set; }
+            public string Value { get; set; }
 
             public MyClassWithRecursiveReference()
             {

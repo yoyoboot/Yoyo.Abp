@@ -30,13 +30,13 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework.Seed.Host
                 _context.SaveChanges();
             }
 
-            if (defaultEdition.Id.HasValue())
+            if (defaultEdition.Id > 0)
             {
                 CreateFeatureIfNotExists(defaultEdition.Id, AppFeatures.SimpleBooleanFeature, true);
             }
         }
 
-        private void CreateFeatureIfNotExists(string editionId, string featureName, bool isEnabled)
+        private void CreateFeatureIfNotExists(int editionId, string featureName, bool isEnabled)
         {
             var defaultEditionChatFeature = _context.EditionFeatureSettings
                                                         .FirstOrDefault(ef => ef.EditionId == editionId && ef.Name == featureName);

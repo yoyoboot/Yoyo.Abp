@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data.SQLite;
@@ -22,8 +22,8 @@ namespace Abp.Dapper.Tests
 
             Resolve<IAbpStartupConfiguration>().DefaultNameOrConnectionString = "Data Source=:memory:";
 
-            AbpSession.UserId = "1";
-            AbpSession.TenantId = "1";
+            AbpSession.UserId = 1;
+            AbpSession.TenantId = 1;
         }
 
         protected override void PreInitialize()

@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using Abp.EntityFrameworkCore.Tests.Domain;
 
 namespace Abp.EntityFrameworkCore.Tests.Ef
 {
-    public class TicketListItemRepository : SupportRepositoryBase<TicketListItem,int>
+    public class TicketListItemRepository : SupportRepositoryBase<TicketListItem>
     {
         private IQueryable<TicketListItem> View => GetContext().TicketListItems;
 

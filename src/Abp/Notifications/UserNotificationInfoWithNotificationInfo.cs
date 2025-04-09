@@ -1,4 +1,4 @@
-namespace Abp.Notifications
+﻿namespace Abp.Notifications
 {
     /// <summary>
     /// A class contains a <see cref="UserNotificationInfo"/> and related <see cref="NotificationInfo"/>.

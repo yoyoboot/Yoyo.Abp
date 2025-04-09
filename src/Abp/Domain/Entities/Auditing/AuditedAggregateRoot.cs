@@ -7,7 +7,7 @@ namespace Abp.Domain.Entities.Auditing
     /// A shortcut of <see cref="AuditedAggregateRoot{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
     /// </summary>
     [Serializable]
-    public abstract class AuditedAggregateRoot : AuditedAggregateRoot<string>
+    public abstract class AuditedAggregateRoot : AuditedAggregateRoot<int>
     {
 
     }
@@ -27,7 +27,7 @@ namespace Abp.Domain.Entities.Auditing
         /// <summary>
         /// Last modifier user of this entity.
         /// </summary>
-        public virtual string LastModifierUserId { get; set; }
+        public virtual long? LastModifierUserId { get; set; }
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ namespace Abp.Domain.Entities.Auditing
     /// <typeparam name="TUser">Type of the user</typeparam>
     [Serializable]
     public abstract class AuditedAggregateRoot<TPrimaryKey, TUser> : AuditedAggregateRoot<TPrimaryKey>, IAudited<TUser>
-        where TUser : IEntity<string>
+        where TUser : IEntity<long>
     {
         /// <summary>
         /// Reference to the creator user of this entity.

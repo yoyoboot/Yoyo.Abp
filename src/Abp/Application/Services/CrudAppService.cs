@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
@@ -6,11 +6,11 @@ using Abp.Domain.Repositories;
 namespace Abp.Application.Services
 {
     public abstract class CrudAppService<TEntity, TEntityDto>
-        : CrudAppService<TEntity, TEntityDto, string>
-        where TEntity : class, IEntity<string>
-        where TEntityDto : IEntityDto<string>
+        : CrudAppService<TEntity, TEntityDto, int>
+        where TEntity : class, IEntity<int>
+        where TEntityDto : IEntityDto<int>
     {
-        protected CrudAppService(IRepository<TEntity, string> repository)
+        protected CrudAppService(IRepository<TEntity, int> repository)
             : base(repository)
         {
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Abp.Dependency;
@@ -119,7 +119,7 @@ namespace Abp.BackgroundJobs
                 throw new ArgumentException($"The jobId '{jobId}' should be a number.", nameof(jobId));
             }
 
-            var jobInfo = await _store.GetAsync(jobId);
+            var jobInfo = await _store.GetAsync(finalJobId);
 
             await _store.DeleteAsync(jobInfo);
             return true;
@@ -132,7 +132,7 @@ namespace Abp.BackgroundJobs
                 throw new ArgumentException($"The jobId '{jobId}' should be a number.", nameof(jobId));
             }
 
-            var jobInfo = _store.Get(jobId);
+            var jobInfo = _store.Get(finalJobId);
 
             _store.Delete(jobInfo);
             return true;

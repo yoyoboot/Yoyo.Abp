@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -41,11 +41,11 @@ namespace Abp.ZeroCore.SampleApp.Core
             IPermissionManager permissionManager,
             IUnitOfWorkManager unitOfWorkManager,
             ICacheManager cacheManager,
-            IRepository<OrganizationUnit, string> organizationUnitRepository,
-            IRepository<UserOrganizationUnit, string> userOrganizationUnitRepository,
+            IRepository<OrganizationUnit, long> organizationUnitRepository,
+            IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
             IOrganizationUnitSettings organizationUnitSettings,
             ISettingManager settingManager,
-            IRepository<UserLogin, string> userLoginRepository) : base(
+            IRepository<UserLogin, long> userLoginRepository) : base(
             roleManager,
             userStore,
             optionsAccessor,
@@ -73,7 +73,7 @@ namespace Abp.ZeroCore.SampleApp.Core
     {
         public TenantManager(
             IRepository<Tenant> tenantRepository,
-            IRepository<TenantFeatureSetting, string> tenantFeatureRepository,
+            IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
             EditionManager editionManager,
             IAbpZeroFeatureValueStore featureValueStore) :
             base(
@@ -113,8 +113,8 @@ namespace Abp.ZeroCore.SampleApp.Core
             ICacheManager cacheManager,
             IUnitOfWorkManager unitOfWorkManager,
             IRoleManagementConfig roleManagementConfig,
-            IRepository<OrganizationUnit, string> organizationUnitRepository,
-            IRepository<OrganizationUnitRole, string> organizationUnitRoleRepository
+            IRepository<OrganizationUnit, long> organizationUnitRepository,
+            IRepository<OrganizationUnitRole, long> organizationUnitRoleRepository
         ) : base(
             store,
             roleValidators,
@@ -139,7 +139,7 @@ namespace Abp.ZeroCore.SampleApp.Core
             IRepository<Tenant> tenantRepository,
             IUnitOfWorkManager unitOfWorkManager,
             ISettingManager settingManager,
-            IRepository<UserLoginAttempt, string> userLoginAttemptRepository,
+            IRepository<UserLoginAttempt, long> userLoginAttemptRepository,
             IUserManagementConfig userManagementConfig,
             IIocResolver iocResolver,
             IPasswordHasher<User> passwordHasher,
@@ -172,9 +172,9 @@ namespace Abp.ZeroCore.SampleApp.Core
     public class FeatureValueStore : AbpFeatureValueStore<Tenant, User>
     {
         public FeatureValueStore(ICacheManager cacheManager,
-            IRepository<TenantFeatureSetting, string> tenantFeatureRepository,
+            IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
             IRepository<Tenant> tenantRepository,
-            IRepository<EditionFeatureSetting, string> editionFeatureRepository,
+            IRepository<EditionFeatureSetting, long> editionFeatureRepository,
             IFeatureManager featureManager,
             IUnitOfWorkManager unitOfWorkManager)
             : base(
@@ -194,7 +194,7 @@ namespace Abp.ZeroCore.SampleApp.Core
         public RoleStore(
             IUnitOfWorkManager unitOfWorkManager,
             IRepository<Role> roleRepository,
-            IRepository<RolePermissionSetting, string> rolePermissionSettingRepository
+            IRepository<RolePermissionSetting, long> rolePermissionSettingRepository
         ) : base(
             unitOfWorkManager,
             roleRepository,
@@ -246,14 +246,14 @@ namespace Abp.ZeroCore.SampleApp.Core
     {
         public UserStore(
             IUnitOfWorkManager unitOfWorkManager,
-            IRepository<User, string> userRepository,
+            IRepository<User, long> userRepository,
             IRepository<Role> roleRepository,
-            IRepository<UserRole, string> userRoleRepository,
-            IRepository<UserLogin, string> userLoginRepository,
-            IRepository<UserClaim, string> userClaimRepository,
-            IRepository<UserPermissionSetting, string> userPermissionSettingRepository,
-            IRepository<UserOrganizationUnit, string> userOrganizationUnitRepository,
-            IRepository<OrganizationUnitRole, string> organizationUnitRoleRepository
+            IRepository<UserRole, long> userRoleRepository,
+            IRepository<UserLogin, long> userLoginRepository,
+            IRepository<UserClaim, long> userClaimRepository,
+            IRepository<UserPermissionSetting, long> userPermissionSettingRepository,
+            IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
+            IRepository<OrganizationUnitRole, long> organizationUnitRoleRepository
             ) : base(
             unitOfWorkManager,
             userRepository,

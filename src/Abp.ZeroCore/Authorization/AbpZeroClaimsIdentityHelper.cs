@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Security.Claims;
 using Abp.Runtime.Security;
 
@@ -6,7 +6,7 @@ namespace Abp.Authorization
 {
     internal static class AbpZeroClaimsIdentityHelper
     {
-        public static string GetTenantId(ClaimsPrincipal principal)
+        public static int? GetTenantId(ClaimsPrincipal principal)
         {
             var tenantIdOrNull = principal?.FindFirstValue(AbpClaimTypes.TenantId);
             if (tenantIdOrNull == null)
@@ -14,7 +14,7 @@ namespace Abp.Authorization
                 return null;
             }
 
-            return tenantIdOrNull;
+            return Convert.ToInt32(tenantIdOrNull);
         }
     }
 }

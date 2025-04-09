@@ -15,7 +15,7 @@ namespace Abp.Notifications
         /// <summary>
         /// Tenant id of the subscribed user.
         /// </summary>
-        public virtual string TenantId { get; set; }
+        public virtual int? TenantId { get; set; }
 
         /// <summary>
         /// Unique notification name.
@@ -66,7 +66,7 @@ namespace Abp.Notifications
             
         }
 
-        public TenantNotificationInfo(Guid id, string tenantId, NotificationInfo notification)
+        public TenantNotificationInfo(Guid id, int? tenantId, NotificationInfo notification)
         {
             Id = id;
             TenantId = tenantId;

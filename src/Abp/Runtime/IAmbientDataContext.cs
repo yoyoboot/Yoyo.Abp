@@ -1,4 +1,4 @@
-namespace Abp.Runtime
+﻿namespace Abp.Runtime
 {
     public interface IAmbientDataContext
     {

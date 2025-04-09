@@ -1,4 +1,4 @@
-using Abp.Web.Results.Filters;
+﻿using Abp.Web.Results.Filters;
 using System;
 
 namespace Abp.AspNetCore.OData.ResultWrapping

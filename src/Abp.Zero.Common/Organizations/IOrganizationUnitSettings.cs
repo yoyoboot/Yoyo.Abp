@@ -18,14 +18,14 @@ namespace Abp.Organizations
         /// Returns value for given tenant.
         /// </summary>
         /// <param name="tenantId">The tenant Id or null for the host.</param>
-        Task<int> GetMaxUserMembershipCountAsync(string tenantId);
+        Task<int> GetMaxUserMembershipCountAsync(int? tenantId);
 
         /// <summary>
         /// Gets Maximum allowed organization unit membership count for a user.
         /// Returns value for given tenant.
         /// </summary>
         /// <param name="tenantId">The tenant Id or null for the host.</param>
-        int GetMaxUserMembershipCount(string tenantId);
+        int GetMaxUserMembershipCount(int? tenantId);
 
         /// <summary>
         /// Sets Maximum allowed organization unit membership count for a user.
@@ -33,7 +33,7 @@ namespace Abp.Organizations
         /// <param name="tenantId">The tenant Id or null for the host.</param>
         /// <param name="value">Setting value.</param>
         /// <returns></returns>
-        Task SetMaxUserMembershipCountAsync(string tenantId, int value);
+        Task SetMaxUserMembershipCountAsync(int? tenantId, int value);
 
         /// <summary>
         /// Sets Maximum allowed organization unit membership count for a user.
@@ -41,6 +41,6 @@ namespace Abp.Organizations
         /// <param name="tenantId">The tenant Id or null for the host.</param>
         /// <param name="value">Setting value.</param>
         /// <returns></returns>
-        void SetMaxUserMembershipCount(string tenantId, int value);
+        void SetMaxUserMembershipCount(int? tenantId, int value);
     }
 }

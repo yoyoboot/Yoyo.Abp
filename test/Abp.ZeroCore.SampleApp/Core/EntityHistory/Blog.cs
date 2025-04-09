@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Abp.Auditing;
 using Abp.Domain.Entities;
@@ -7,7 +7,7 @@ using Abp.Domain.Entities.Auditing;
 namespace Abp.ZeroCore.SampleApp.Core.EntityHistory
 {
     [Audited]
-    public class Blog : AggregateRoot<int>, IHasCreationTime
+    public class Blog : AggregateRoot, IHasCreationTime
     {
         // EF property mapped directly to a field
         private string _name;

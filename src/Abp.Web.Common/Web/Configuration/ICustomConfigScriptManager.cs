@@ -1,4 +1,4 @@
-namespace Abp.Web.Configuration
+﻿namespace Abp.Web.Configuration
 {
     /// <summary>
     /// Used to create client scripts for custom config.

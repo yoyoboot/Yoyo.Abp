@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -20,7 +20,7 @@ namespace Abp.Webhooks
         Task<Guid> InsertAndGetIdWebhookSendAttemptAsync(WebhookSenderArgs webhookSenderArgs);
 
         Task StoreResponseOnWebhookSendAttemptAsync(
-            Guid webhookSendAttemptId, string tenantId,
+            Guid webhookSendAttemptId, int? tenantId,
             HttpStatusCode? statusCode, string content);
     }
 }

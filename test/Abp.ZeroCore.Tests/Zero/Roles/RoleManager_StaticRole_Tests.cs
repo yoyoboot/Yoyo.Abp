@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.Configuration.Startup;
 using Abp.Domain.Uow;
 using Abp.MultiTenancy;
@@ -70,8 +70,8 @@ namespace Abp.Zero.Roles
             var adminRole = await _roleManager.GetRoleByNameAsync("admin");
             
             //Default granted permissions
-            (await _roleManager.IsGrantedAsync(adminRole.Id, "Permission1",null)).ShouldBe(false);
-            (await _roleManager.IsGrantedAsync(adminRole.Id, "Permission2",null)).ShouldBe(false);
+            (await _roleManager.IsGrantedAsync(adminRole.Id, "Permission1")).ShouldBe(false);
+            (await _roleManager.IsGrantedAsync(adminRole.Id, "Permission2")).ShouldBe(false);
         }
     }
 }

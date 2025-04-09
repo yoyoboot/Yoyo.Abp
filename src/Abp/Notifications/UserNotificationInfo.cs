@@ -1,12 +1,12 @@
+﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
+using Abp.Extensions;
+using Abp.Timing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using Abp.Domain.Entities;
-using Abp.Domain.Entities.Auditing;
-using Abp.Extensions;
-using Abp.Timing;
 
 namespace Abp.Notifications
 {
@@ -17,15 +17,17 @@ namespace Abp.Notifications
     [Table("AbpUserNotifications")]
     public class UserNotificationInfo : Entity<Guid>, IHasCreationTime, IMayHaveTenant
     {
+        public const int MaxTargetNotifiersLength = 1024;
+        
         /// <summary>
         /// Tenant Id.
         /// </summary>
-        public virtual string TenantId { get; set; }
+        public virtual int? TenantId { get; set; }
 
         /// <summary>
         /// User Id.
         /// </summary>
-        public virtual string UserId { get; set; }
+        public virtual long UserId { get; set; }
 
         /// <summary>
         /// Notification Id.
@@ -43,10 +45,11 @@ namespace Abp.Notifications
         /// <summary>
         /// which realtime notifiers should handle this notification
         /// </summary>
-        public string TargetNotifiers { get; set; }
+        [StringLength(MaxTargetNotifiersLength)]
+        public virtual string TargetNotifiers { get; set; }
 
         [NotMapped]
-        public List<string> TargetNotifiersList => TargetNotifiers.IsNullOrWhiteSpace()
+        public virtual List<string> TargetNotifiersList => TargetNotifiers.IsNullOrWhiteSpace()
             ? new List<string>()
             : TargetNotifiers.Split(NotificationInfo.NotificationTargetSeparator).ToList();
 
@@ -65,7 +68,7 @@ namespace Abp.Notifications
             CreationTime = Clock.Now;
         }
 
-        public void SetTargetNotifiers(List<string> list)
+        public virtual void SetTargetNotifiers(List<string> list)
         {
             TargetNotifiers = string.Join(NotificationInfo.NotificationTargetSeparator.ToString(), list);
         }

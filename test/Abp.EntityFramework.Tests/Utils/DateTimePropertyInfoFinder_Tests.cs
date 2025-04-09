@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Abp.EntityFramework.Utils;
 using System.Linq;

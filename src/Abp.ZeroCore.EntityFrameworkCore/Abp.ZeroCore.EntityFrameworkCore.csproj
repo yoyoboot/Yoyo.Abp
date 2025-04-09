@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
   <Import Project="..\..\configureawait.props" />
@@ -7,10 +7,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>Abp</RootNamespace>
-    <AssemblyName>Yoyo.Abp.ZeroCore.EntityFrameworkCore</AssemblyName>
-    <PackageId>Yoyo.Abp.ZeroCore.EntityFrameworkCore</PackageId>
+    <AssemblyName>Abp.ZeroCore.EntityFrameworkCore</AssemblyName>
+    <PackageId>Abp.ZeroCore.EntityFrameworkCore</PackageId>
     <PackageTags>asp.net;asp.net mvc;boilerplate;application framework;web framework;framework;domain driven design;multitenancy;user management;role management;identity;entity framework core</PackageTags>
-    <Description>Yoyo.Abp.ZeroCore.EntityFrameworkCore</Description>
+    <Description>Abp.ZeroCore.EntityFrameworkCore</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Fody" Version="6.6.0">
+    <PackageReference Update="Fody" Version="6.6.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

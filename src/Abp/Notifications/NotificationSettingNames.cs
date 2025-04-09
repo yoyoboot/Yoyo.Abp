@@ -1,4 +1,4 @@
-namespace Abp.Notifications
+﻿namespace Abp.Notifications
 {
     /// <summary>
     /// Pre-defined setting names for notification system.

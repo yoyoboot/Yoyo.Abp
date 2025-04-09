@@ -1,4 +1,4 @@
-using Castle.Facilities.Logging;
+﻿using Castle.Facilities.Logging;
 
 namespace Abp.Castle.Logging.Log4Net
 {

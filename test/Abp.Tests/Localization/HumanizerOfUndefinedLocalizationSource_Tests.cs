@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Abp.Configuration.Startup;
 using Abp.Dependency;
 using Abp.Localization;

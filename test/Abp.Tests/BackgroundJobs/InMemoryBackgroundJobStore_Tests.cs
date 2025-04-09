@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.BackgroundJobs;
 using Abp.Timing;
 using Shouldly;
@@ -28,7 +28,7 @@ namespace Abp.Tests.BackgroundJobs
             await _store.InsertAsync(jobInfo);
             (await _store.GetWaitingJobsAsync(1000)).Count.ShouldBe(1);
 
-            var jobInfoFromStore = await _store.GetAsync("1");
+            var jobInfoFromStore = await _store.GetAsync(1);
             jobInfoFromStore.ShouldNotBeNull();
             jobInfoFromStore.JobType.ShouldBeSameAs(jobInfo.JobType);
             jobInfoFromStore.JobArgs.ShouldBeSameAs(jobInfo.JobArgs);

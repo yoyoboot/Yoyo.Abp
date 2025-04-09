@@ -1,4 +1,4 @@
-namespace Abp.Domain.Entities
+﻿namespace Abp.Domain.Entities
 {
     /// <summary>
     /// Implement this interface for an entity which may optionally have TenantId.
@@ -8,6 +8,6 @@ namespace Abp.Domain.Entities
         /// <summary>
         /// TenantId of this entity.
         /// </summary>
-        string TenantId { get; set; }
+        int? TenantId { get; set; }
     }
 }

@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 
 namespace Abp.EntityFrameworkCore.Dapper.Tests.Domain
 {
-    public class Blog : AggregateRoot<int>, IHasCreationTime
+    public class Blog : AggregateRoot, IHasCreationTime
     {
         public Blog()
         {

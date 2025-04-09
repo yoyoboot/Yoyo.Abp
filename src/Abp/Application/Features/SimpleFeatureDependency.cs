@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Abp.Application.Features
 {
@@ -46,16 +46,16 @@ namespace Abp.Application.Features
         /// <inheritdoc/>
         public Task<bool> IsSatisfiedAsync(IFeatureDependencyContext context)
         {
-            return context.TenantId.HasValue()
-                ? context.FeatureChecker.IsEnabledAsync(context.TenantId, RequiresAll, Features)
+            return context.TenantId.HasValue
+                ? context.FeatureChecker.IsEnabledAsync(context.TenantId.Value, RequiresAll, Features)
                 : context.FeatureChecker.IsEnabledAsync(RequiresAll, Features);
         }
 
         /// <inheritdoc/>
         public bool IsSatisfied(IFeatureDependencyContext context)
         {
-            return context.TenantId.HasValue()
-                ? context.FeatureChecker.IsEnabled(context.TenantId, RequiresAll, Features)
+            return context.TenantId.HasValue
+                ? context.FeatureChecker.IsEnabled(context.TenantId.Value, RequiresAll, Features)
                 : context.FeatureChecker.IsEnabled(RequiresAll, Features);
         }
     }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace Abp.Webhooks
@@ -21,12 +21,12 @@ namespace Abp.Webhooks
             return default;
         }
 
-        public Task<WebhookEvent> GetAsync(string tenantId, Guid id)
+        public Task<WebhookEvent> GetAsync(int? tenantId, Guid id)
         {
             return Task.FromResult<WebhookEvent>(default);
         }
 
-        public WebhookEvent Get(string tenantId, Guid id)
+        public WebhookEvent Get(int? tenantId, Guid id)
         {
             return default;
         }

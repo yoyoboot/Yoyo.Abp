@@ -21,19 +21,19 @@ namespace Abp.Authorization.Roles
 
         public void HandleEvent(EntityChangedEventData<RolePermissionSetting> eventData)
         {
-            var cacheKey = eventData.Entity.RoleId + "@" + (eventData.Entity.TenantId ?? "0");
+            var cacheKey = eventData.Entity.RoleId + "@" + (eventData.Entity.TenantId ?? 0);
             _cacheManager.GetRolePermissionCache().Remove(cacheKey);
         }
 
         public void HandleEvent(EntityChangedEventData<OrganizationUnitRole> eventData)
         {
-            var cacheKey = eventData.Entity.RoleId + "@" + (eventData.Entity.TenantId ?? "0");
+            var cacheKey = eventData.Entity.RoleId + "@" + (eventData.Entity.TenantId ?? 0);
             _cacheManager.GetRolePermissionCache().Remove(cacheKey);
         }
 
         public void HandleEvent(EntityDeletedEventData<AbpRoleBase> eventData)
         {
-            var cacheKey = eventData.Entity.Id + "@" + (eventData.Entity.TenantId ?? "0");
+            var cacheKey = eventData.Entity.Id + "@" + (eventData.Entity.TenantId ?? 0);
             _cacheManager.GetRolePermissionCache().Remove(cacheKey);
         }
     }

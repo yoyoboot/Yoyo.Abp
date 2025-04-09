@@ -1,4 +1,4 @@
-using Abp.Authorization;
+﻿using Abp.Authorization;
 using Abp.Localization;
 
 namespace Abp.Web.Common.Tests

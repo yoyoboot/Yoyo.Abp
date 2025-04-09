@@ -1,4 +1,4 @@
-namespace Abp.MemoryDb.Configuration
+﻿namespace Abp.MemoryDb.Configuration
 {
     internal class AbpMemoryDbModuleConfiguration : IAbpMemoryDbModuleConfiguration
     {

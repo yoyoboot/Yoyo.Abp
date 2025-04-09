@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Dependency;
 using Abp.Runtime.Session;
@@ -18,7 +18,7 @@ namespace Abp.Configuration
         {
             var abpSession = scope.Resolve<IAbpSession>();
 
-            if (!abpSession.UserId.HasValue())
+            if (!abpSession.UserId.HasValue)
             {
                 return false;
             }

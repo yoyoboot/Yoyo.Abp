@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,8 +15,8 @@ namespace Abp.EntityFrameworkCore.Dapper.Tests.Tests
 {
     public class Repository_Tests : AbpEfCoreDapperTestApplicationBase
     {
-        private readonly IDapperRepository<Blog,int> _blogDapperRepository;
-        private readonly IRepository<Blog,int> _blogRepository;
+        private readonly IDapperRepository<Blog> _blogDapperRepository;
+        private readonly IRepository<Blog> _blogRepository;
         private readonly IDapperRepository<Post, Guid> _postDapperRepository;
         private readonly IRepository<Post, Guid> _postRepository;
         private readonly IRepository<Comment, long> _commentRepository;
@@ -26,9 +26,9 @@ namespace Abp.EntityFrameworkCore.Dapper.Tests.Tests
         public Repository_Tests()
         {
             _uowManager = Resolve<IUnitOfWorkManager>();
-            _blogRepository = Resolve<IRepository<Blog,int>>();
+            _blogRepository = Resolve<IRepository<Blog>>();
             _postRepository = Resolve<IRepository<Post, Guid>>();
-            _blogDapperRepository = Resolve<IDapperRepository<Blog,int>>();
+            _blogDapperRepository = Resolve<IDapperRepository<Blog>>();
             _postDapperRepository = Resolve<IDapperRepository<Post, Guid>>();
             _commentRepository = Resolve<IRepository<Comment, long>>();
             _commentDapperRepository = Resolve<IDapperRepository<Comment, long>>();

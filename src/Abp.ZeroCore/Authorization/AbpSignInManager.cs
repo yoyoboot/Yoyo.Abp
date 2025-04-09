@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Abp.Authorization.Roles;
@@ -119,9 +119,9 @@ namespace Abp.Authorization
 
             identity.AddClaim(new Claim(ClaimTypes.Name, user.Id.ToString()));
 
-            if (user.TenantId.HasValue())
+            if (user.TenantId.HasValue)
             {
-                identity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId));
+                identity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.Value.ToString()));
             }
 
             if (loginProvider != null)
@@ -138,9 +138,9 @@ namespace Abp.Authorization
 
             rememberBrowserIdentity.AddClaim(new Claim(ClaimTypes.Name, user.Id.ToString()));
 
-            if (user.TenantId.HasValue())
+            if (user.TenantId.HasValue)
             {
-                rememberBrowserIdentity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId));
+                rememberBrowserIdentity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.Value.ToString()));
             }
 
             if (UserManager.SupportsUserSecurityStamp)
@@ -152,7 +152,7 @@ namespace Abp.Authorization
             return new ClaimsPrincipal(rememberBrowserIdentity);
         }
 
-        public async Task<string> GetVerifiedTenantIdAsync()
+        public async Task<int?> GetVerifiedTenantIdAsync()
         {
             var result = await Context.AuthenticateAsync(IdentityConstants.TwoFactorUserIdScheme);
 
@@ -181,11 +181,11 @@ namespace Abp.Authorization
                 new AuthenticationProperties { IsPersistent = true });
         }
 
-        private bool IsTrue(string settingName, string tenantId)
+        private bool IsTrue(string settingName, int? tenantId)
         {
             return tenantId == null
                 ? _settingManager.GetSettingValueForApplication<bool>(settingName)
-                : _settingManager.GetSettingValueForTenant<bool>(settingName, tenantId);
+                : _settingManager.GetSettingValueForTenant<bool>(settingName, tenantId.Value);
         }
     }
 }

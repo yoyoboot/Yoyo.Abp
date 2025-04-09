@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -75,7 +75,7 @@ namespace Abp.EntityFrameworkCore
         /// </summary>
         public virtual bool SuppressAutoSetTenantId { get; set; }
 
-        protected virtual string CurrentTenantId => GetCurrentTenantIdOrNull();
+        protected virtual int? CurrentTenantId => GetCurrentTenantIdOrNull();
 
         protected virtual bool IsSoftDeleteFilterEnabled => CurrentUnitOfWorkProvider?.Current?.IsFilterEnabled(AbpDataFilters.SoftDelete) == true;
 
@@ -267,7 +267,7 @@ namespace Abp.EntityFrameworkCore
             return changeReport;
         }
 
-        protected virtual void ApplyAbpConcepts(EntityEntry entry, string userId, EntityChangeReport changeReport)
+        protected virtual void ApplyAbpConcepts(EntityEntry entry, long? userId, EntityChangeReport changeReport)
         {
             switch (entry.State)
             {
@@ -285,7 +285,7 @@ namespace Abp.EntityFrameworkCore
             AddDomainEvents(changeReport.DomainEvents, entry.Entity);
         }
 
-        protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, string userId, EntityChangeReport changeReport)
+        protected virtual void ApplyAbpConceptsForAddedEntity(EntityEntry entry, long? userId, EntityChangeReport changeReport)
         {
             CheckAndSetId(entry);
             CheckAndSetMustHaveTenantIdProperty(entry.Entity);
@@ -294,7 +294,7 @@ namespace Abp.EntityFrameworkCore
             changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Created));
         }
 
-        protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry, string userId, EntityChangeReport changeReport)
+        protected virtual void ApplyAbpConceptsForModifiedEntity(EntityEntry entry, long? userId, EntityChangeReport changeReport)
         {
             SetModificationAuditProperties(entry.Entity, userId);
             if (entry.Entity is ISoftDelete && entry.Entity.As<ISoftDelete>().IsDeleted)
@@ -308,7 +308,7 @@ namespace Abp.EntityFrameworkCore
             }
         }
 
-        protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry, string userId, EntityChangeReport changeReport)
+        protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry, long? userId, EntityChangeReport changeReport)
         {
             if (IsHardDeleteEntity(entry))
             {
@@ -397,16 +397,16 @@ namespace Abp.EntityFrameworkCore
             var entity = entityAsObj.As<IMustHaveTenant>();
 
             //Don't set if it's already set
-            if (entity.TenantId.HasValue())
+            if (entity.TenantId != 0)
             {
                 return;
             }
 
             var currentTenantId = GetCurrentTenantIdOrNull();
 
-            if (currentTenantId.HasValue())
+            if (currentTenantId != null)
             {
-                entity.TenantId = currentTenantId;
+                entity.TenantId = currentTenantId.Value;
             }
             else
             {
@@ -436,7 +436,7 @@ namespace Abp.EntityFrameworkCore
             var entity = entityAsObj.As<IMayHaveTenant>();
 
             //Don't set if it's already set
-            if (entity.TenantId.HasValue())
+            if (entity.TenantId != null)
             {
                 return;
             }
@@ -444,7 +444,7 @@ namespace Abp.EntityFrameworkCore
             entity.TenantId = GetCurrentTenantIdOrNull();
         }
 
-        protected virtual void SetCreationAuditProperties(object entityAsObj, string userId)
+        protected virtual void SetCreationAuditProperties(object entityAsObj, long? userId)
         {
             EntityAuditingHelper.SetCreationAuditProperties(
                 MultiTenancyConfig,
@@ -455,7 +455,7 @@ namespace Abp.EntityFrameworkCore
             );
         }
 
-        protected virtual void SetModificationAuditProperties(object entityAsObj, string userId)
+        protected virtual void SetModificationAuditProperties(object entityAsObj, long? userId)
         {
             EntityAuditingHelper.SetModificationAuditProperties(
                 MultiTenancyConfig,
@@ -478,7 +478,7 @@ namespace Abp.EntityFrameworkCore
             entry.Entity.As<ISoftDelete>().IsDeleted = true;
         }
 
-        protected virtual void SetDeletionAuditProperties(object entityAsObj, string userId)
+        protected virtual void SetDeletionAuditProperties(object entityAsObj, long? userId)
         {
             EntityAuditingHelper.SetDeletionAuditProperties(
                 MultiTenancyConfig,
@@ -489,9 +489,9 @@ namespace Abp.EntityFrameworkCore
             );
         }
 
-        protected virtual string GetAuditUserId()
+        protected virtual long? GetAuditUserId()
         {
-            if (AbpSession.UserId.HasValue() &&
+            if (AbpSession.UserId.HasValue &&
                 CurrentUnitOfWorkProvider != null &&
                 CurrentUnitOfWorkProvider.Current != null &&
                 CurrentUnitOfWorkProvider.Current.GetTenantId() == AbpSession.TenantId)
@@ -502,7 +502,7 @@ namespace Abp.EntityFrameworkCore
             return null;
         }
 
-        protected virtual string GetCurrentTenantIdOrNull()
+        protected virtual int? GetCurrentTenantIdOrNull()
         {
             if (CurrentUnitOfWorkProvider != null &&
                 CurrentUnitOfWorkProvider.Current != null)

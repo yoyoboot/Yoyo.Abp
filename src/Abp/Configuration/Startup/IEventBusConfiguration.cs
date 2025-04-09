@@ -1,4 +1,4 @@
-using Abp.Dependency;
+﻿using Abp.Dependency;
 using Abp.Events.Bus;
 
 namespace Abp.Configuration.Startup

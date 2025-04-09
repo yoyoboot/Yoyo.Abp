@@ -1,4 +1,4 @@
-namespace Abp.Authorization.Roles
+﻿namespace Abp.Authorization.Roles
 {
     /// <summary>
     /// Used to store setting for a permission for a role.
@@ -8,6 +8,6 @@ namespace Abp.Authorization.Roles
         /// <summary>
         /// Role id.
         /// </summary>
-        public virtual string RoleId { get; set; }
+        public virtual int RoleId { get; set; }
     }
 }

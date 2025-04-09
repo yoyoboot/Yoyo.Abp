@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using Abp.AspNetCore;
 using Abp.AspNetCore.Configuration;
@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace AbpAspNetCoreDemo
 {
@@ -50,6 +51,11 @@ namespace AbpAspNetCoreDemo
                 endpoints.MapRazorPages();
             });
 
+            Configuration.Caching.MemoryCacheOptions = new MemoryCacheOptions
+            {
+                SizeLimit = 2048
+            };
+            
             ConfigurationAction.Value?.Invoke(Configuration);
         }
 

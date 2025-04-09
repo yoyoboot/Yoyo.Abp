@@ -1,4 +1,4 @@
-using Abp.Json;
+﻿using Abp.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +27,10 @@ namespace Abp.Runtime.Caching
 
         public static AbpCacheData Deserialize(string serializedCacheData) => serializedCacheData.FromJsonString<AbpCacheData>();
 
-        public static AbpCacheData Serialize(object obj)
+        public static AbpCacheData Serialize(object obj, bool withAssemblyName = true)
         {
             return new AbpCacheData(
-                SerializeType(obj.GetType()).ToString(),
+                SerializeType(obj.GetType(), withAssemblyName).ToString(),
                 obj.ToJsonString());
         }
 

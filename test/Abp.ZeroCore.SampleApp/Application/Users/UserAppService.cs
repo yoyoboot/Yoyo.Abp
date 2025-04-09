@@ -4,9 +4,9 @@ using Abp.ZeroCore.SampleApp.Core;
 
 namespace Abp.ZeroCore.SampleApp.Application.Users
 {
-    public class UserAppService : AsyncCrudAppService<User, UserDto, string>, IUserAppService
+    public class UserAppService : AsyncCrudAppService<User, UserDto, long>, IUserAppService
     {
-        public UserAppService(IRepository<User, string> repository) 
+        public UserAppService(IRepository<User, long> repository) 
             : base(repository)
         {
             

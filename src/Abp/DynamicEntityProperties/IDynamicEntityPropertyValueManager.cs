@@ -1,13 +1,13 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Abp.DynamicEntityProperties
 {
     public interface IDynamicEntityPropertyValueManager
     {
-        DynamicEntityPropertyValue Get(string id);
+        DynamicEntityPropertyValue Get(long id);
 
-        Task<DynamicEntityPropertyValue> GetAsync(string id);
+        Task<DynamicEntityPropertyValue> GetAsync(long id);
 
         void Add(DynamicEntityPropertyValue dynamicEntityPropertyValue);
 
@@ -17,28 +17,28 @@ namespace Abp.DynamicEntityProperties
 
         Task UpdateAsync(DynamicEntityPropertyValue dynamicEntityPropertyValue);
 
-        void Delete(string id);
+        void Delete(long id);
 
-        Task DeleteAsync(string id);
+        Task DeleteAsync(long id);
 
-        List<DynamicEntityPropertyValue> GetValues(string dynamicEntityPropertyId, string entityId);
+        List<DynamicEntityPropertyValue> GetValues(int dynamicEntityPropertyId, string entityId);
 
-        Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string dynamicEntityPropertyId, string entityId);
+        Task<List<DynamicEntityPropertyValue>> GetValuesAsync(int dynamicEntityPropertyId, string entityId);
 
-        List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId,int? fsTagNone=null);
+        List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId);
 
-        Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId,int? fsTagNone=null);
+        Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId);
 
-        List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, string dynamicPropertyId);
+        List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, int dynamicPropertyId);
 
-        Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId, string dynamicPropertyId);
+        Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId, int dynamicPropertyId);
 
-        List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, string propertyName,int? fsTagNone=null);
+        List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, string propertyName);
 
-        Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId, string propertyName,int? fsTagNone=null);
+        Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId, string propertyName);
 
-        void CleanValues(string dynamicEntityPropertyId, string entityId);
+        void CleanValues(int dynamicEntityPropertyId, string entityId);
 
-        Task CleanValuesAsync(string dynamicEntityPropertyId, string entityId);
+        Task CleanValuesAsync(int dynamicEntityPropertyId, string entityId);
     }
 }

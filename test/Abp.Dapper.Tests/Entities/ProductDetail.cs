@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Abp.Domain.Entities;
@@ -7,7 +7,7 @@ using Abp.Domain.Entities.Auditing;
 namespace Abp.Dapper.Tests.Entities
 {
     [Table("ProductDetails")]
-    public class ProductDetail : FullAuditedEntity<int>, IMustHaveTenant
+    public class ProductDetail : FullAuditedEntity, IMustHaveTenant
     {
         protected ProductDetail()
         {
@@ -21,6 +21,6 @@ namespace Abp.Dapper.Tests.Entities
         [Required]
         public string Gender { get; set; }
 
-        public string TenantId { get; set; }
+        public int TenantId { get; set; }
     }
 }

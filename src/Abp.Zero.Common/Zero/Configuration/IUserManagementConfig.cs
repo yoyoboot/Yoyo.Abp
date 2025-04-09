@@ -1,4 +1,4 @@
-using Abp.Collections;
+﻿using Abp.Collections;
 
 namespace Abp.Zero.Configuration
 {

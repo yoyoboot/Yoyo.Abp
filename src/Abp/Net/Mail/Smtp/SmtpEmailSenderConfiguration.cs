@@ -1,4 +1,4 @@
-using Abp.Configuration;
+﻿using Abp.Configuration;
 using Abp.Dependency;
 
 namespace Abp.Net.Mail.Smtp

@@ -1,4 +1,4 @@
-using Abp.Dependency;
+﻿using Abp.Dependency;
 using Abp.Domain.Entities;
 
 namespace Abp.Dapper.Filters.Action

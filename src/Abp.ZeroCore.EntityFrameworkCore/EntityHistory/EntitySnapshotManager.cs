@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
@@ -12,7 +12,7 @@ namespace Abp.EntityHistory
 {
     public class EntitySnapshotManager : EntitySnapshotManagerBase
     {
-        public EntitySnapshotManager(IRepository<EntityChange, string> entityChangeRepository)
+        public EntitySnapshotManager(IRepository<EntityChange, long> entityChangeRepository)
             : base(entityChangeRepository)
         {
         }

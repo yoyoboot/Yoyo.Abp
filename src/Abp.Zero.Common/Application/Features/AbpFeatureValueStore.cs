@@ -30,9 +30,9 @@ namespace Abp.Application.Features
         where TUser : AbpUserBase
     {
         private readonly ICacheManager _cacheManager;
-        private readonly IRepository<TenantFeatureSetting, string> _tenantFeatureRepository;
+        private readonly IRepository<TenantFeatureSetting, long> _tenantFeatureRepository;
         private readonly IRepository<TTenant> _tenantRepository;
-        private readonly IRepository<EditionFeatureSetting, string> _editionFeatureRepository;
+        private readonly IRepository<EditionFeatureSetting, long> _editionFeatureRepository;
         private readonly IFeatureManager _featureManager;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
@@ -44,9 +44,9 @@ namespace Abp.Application.Features
         /// </summary>
         public AbpFeatureValueStore(
             ICacheManager cacheManager,
-            IRepository<TenantFeatureSetting, string> tenantFeatureRepository,
+            IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
             IRepository<TTenant> tenantRepository,
-            IRepository<EditionFeatureSetting, string> editionFeatureRepository,
+            IRepository<EditionFeatureSetting, long> editionFeatureRepository,
             IFeatureManager featureManager,
             IUnitOfWorkManager unitOfWorkManager)
         {
@@ -62,30 +62,30 @@ namespace Abp.Application.Features
         }
 
         /// <inheritdoc/>
-        public virtual Task<string> GetValueOrNullAsync(string tenantId, Feature feature)
+        public virtual Task<string> GetValueOrNullAsync(int tenantId, Feature feature)
         {
             return GetValueOrNullAsync(tenantId, feature.Name);
         }
 
         /// <inheritdoc/>
-        public virtual string GetValueOrNull(string tenantId, Feature feature)
+        public virtual string GetValueOrNull(int tenantId, Feature feature)
         {
             return GetValueOrNull(tenantId, feature.Name);
         }
 
-        public virtual async Task<string> GetEditionValueOrNullAsync(string editionId, string featureName)
+        public virtual async Task<string> GetEditionValueOrNullAsync(int editionId, string featureName)
         {
             var cacheItem = await GetEditionFeatureCacheItemAsync(editionId);
             return cacheItem.FeatureValues.GetOrDefault(featureName);
         }
 
-        public virtual string GetEditionValueOrNull(string editionId, string featureName)
+        public virtual string GetEditionValueOrNull(int editionId, string featureName)
         {
             var cacheItem = GetEditionFeatureCacheItem(editionId);
             return cacheItem.FeatureValues.GetOrDefault(featureName);
         }
 
-        public virtual async Task<string> GetValueOrNullAsync(string tenantId, string featureName)
+        public virtual async Task<string> GetValueOrNullAsync(int tenantId, string featureName)
         {
             var cacheItem = await GetTenantFeatureCacheItemAsync(tenantId);
             var value = cacheItem.FeatureValues.GetOrDefault(featureName);
@@ -94,9 +94,9 @@ namespace Abp.Application.Features
                 return value;
             }
 
-            if (cacheItem.EditionId.HasValue())
+            if (cacheItem.EditionId.HasValue)
             {
-                value = await GetEditionValueOrNullAsync(cacheItem.EditionId, featureName);
+                value = await GetEditionValueOrNullAsync(cacheItem.EditionId.Value, featureName);
                 if (value != null)
                 {
                     return value;
@@ -106,7 +106,7 @@ namespace Abp.Application.Features
             return null;
         }
 
-        public virtual string GetValueOrNull(string tenantId, string featureName)
+        public virtual string GetValueOrNull(int tenantId, string featureName)
         {
             var cacheItem = GetTenantFeatureCacheItem(tenantId);
             var value = cacheItem.FeatureValues.GetOrDefault(featureName);
@@ -115,9 +115,9 @@ namespace Abp.Application.Features
                 return value;
             }
 
-            if (cacheItem.EditionId.HasValue())
+            if (cacheItem.EditionId.HasValue)
             {
-                value = GetEditionValueOrNull(cacheItem.EditionId, featureName);
+                value = GetEditionValueOrNull(cacheItem.EditionId.Value, featureName);
                 if (value != null)
                 {
                     return value;
@@ -127,7 +127,7 @@ namespace Abp.Application.Features
             return null;
         }
         
-        public virtual async Task SetEditionFeatureValueAsync(string editionId, string featureName, string value)
+        public virtual async Task SetEditionFeatureValueAsync(int editionId, string featureName, string value)
         {
             await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -170,7 +170,7 @@ namespace Abp.Application.Features
             });
         }
         
-        public virtual void SetEditionFeatureValue(string editionId, string featureName, string value)
+        public virtual void SetEditionFeatureValue(int editionId, string featureName, string value)
         {
             _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -207,7 +207,7 @@ namespace Abp.Application.Features
             });
         }
 
-        protected virtual async Task<TenantFeatureCacheItem> GetTenantFeatureCacheItemAsync(string tenantId)
+        protected virtual async Task<TenantFeatureCacheItem> GetTenantFeatureCacheItemAsync(int tenantId)
         {
             return await _cacheManager.GetTenantFeatureCache().GetAsync(tenantId, async () =>
             {
@@ -243,7 +243,7 @@ namespace Abp.Application.Features
             });
         }
 
-        protected virtual TenantFeatureCacheItem GetTenantFeatureCacheItem(string tenantId)
+        protected virtual TenantFeatureCacheItem GetTenantFeatureCacheItem(int tenantId)
         {
             return _cacheManager.GetTenantFeatureCache().Get(tenantId, () =>
             {
@@ -279,7 +279,7 @@ namespace Abp.Application.Features
             });
         }
 
-        protected virtual async Task<EditionfeatureCacheItem> GetEditionFeatureCacheItemAsync(string editionId)
+        protected virtual async Task<EditionfeatureCacheItem> GetEditionFeatureCacheItemAsync(int editionId)
         {
             return await _cacheManager
                 .GetEditionFeatureCache()
@@ -289,7 +289,7 @@ namespace Abp.Application.Features
                 );
         }
 
-        protected virtual EditionfeatureCacheItem GetEditionFeatureCacheItem(string editionId)
+        protected virtual EditionfeatureCacheItem GetEditionFeatureCacheItem(int editionId)
         {
             return _cacheManager
                 .GetEditionFeatureCache()
@@ -299,7 +299,7 @@ namespace Abp.Application.Features
                 );
         }
 
-        protected virtual async Task<EditionfeatureCacheItem> CreateEditionFeatureCacheItemAsync(string editionId)
+        protected virtual async Task<EditionfeatureCacheItem> CreateEditionFeatureCacheItemAsync(int editionId)
         {
             var newCacheItem = new EditionfeatureCacheItem();
 
@@ -321,7 +321,7 @@ namespace Abp.Application.Features
             return newCacheItem;
         }
 
-        protected virtual EditionfeatureCacheItem CreateEditionFeatureCacheItem(string editionId)
+        protected virtual EditionfeatureCacheItem CreateEditionFeatureCacheItem(int editionId)
         {
             var newCacheItem = new EditionfeatureCacheItem();
 
@@ -360,9 +360,9 @@ namespace Abp.Application.Features
 
         public virtual void HandleEvent(EntityChangingEventData<TenantFeatureSetting> eventData)
         {
-            if (eventData.Entity.TenantId.HasValue())
+            if (eventData.Entity.TenantId.HasValue)
             {
-                _cacheManager.GetTenantFeatureCache().Remove(eventData.Entity.TenantId);
+                _cacheManager.GetTenantFeatureCache().Remove(eventData.Entity.TenantId.Value);
             }
         }
 

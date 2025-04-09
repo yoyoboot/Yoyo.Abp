@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Application.Services.Dto;
 using Abp.Json;
 using Abp.Timing;
@@ -14,10 +14,10 @@ namespace Abp.Tests.Json
         {
             var obj = new MyClass1
             {
-                Id = "42",
+                Id = 42,
                 Value = new MyClass2
                 {
-                    Id = "42"
+                    Id = 42
                 }
             };
 

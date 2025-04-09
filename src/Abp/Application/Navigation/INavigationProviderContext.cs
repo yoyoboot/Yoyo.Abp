@@ -1,4 +1,4 @@
-namespace Abp.Application.Navigation
+﻿namespace Abp.Application.Navigation
 {
     /// <summary>
     /// Provides infrastructure to set navigation.

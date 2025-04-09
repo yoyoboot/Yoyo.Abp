@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
   <Import Project="..\..\configureawait.props" />
@@ -6,15 +6,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>Yoyo.Abp.RedisCache.ProtoBuf</AssemblyName>
-    <PackageId>Yoyo.Abp.RedisCache.ProtoBuf</PackageId>
+    <AssemblyName>Abp.RedisCache.ProtoBuf</AssemblyName>
+    <PackageId>Abp.RedisCache.ProtoBuf</PackageId>
     <PackageTags>asp.net;asp.net mvc;boilerplate;application framework;web framework;framework;domain driven design;Redis;Caching;Protobuf</PackageTags>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RootNamespace>Abp</RootNamespace>
-    <Description>Yoyo.Abp.RedisCache.ProtoBuf</Description>
+    <Description>Abp.RedisCache.ProtoBuf</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,11 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="protobuf-net" Version="3.1.0" />
+    <PackageReference Include="protobuf-net" Version="3.1.22" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Fody" Version="6.6.0">
+    <PackageReference Update="Fody" Version="6.6.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

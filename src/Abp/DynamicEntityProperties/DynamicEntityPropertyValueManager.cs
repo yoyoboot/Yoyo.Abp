@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,7 +27,7 @@ namespace Abp.DynamicEntityProperties
             DynamicEntityPropertyValueStore = NullDynamicEntityPropertyValueStore.Instance;
         }
 
-        private string GetDynamicPropertyId(DynamicEntityPropertyValue dynamicEntityPropertyValue)
+        private int GetDynamicPropertyId(DynamicEntityPropertyValue dynamicEntityPropertyValue)
         {
             if (dynamicEntityPropertyValue.DynamicEntityPropertyId == default)
             {
@@ -45,7 +45,7 @@ namespace Abp.DynamicEntityProperties
             return _dynamicPropertyManager.Get(dynamicEntityProperty.DynamicPropertyId).Id;
         }
 
-        private async Task<string> GetDynamicPropertyIdAsync(DynamicEntityPropertyValue dynamicEntityPropertyValue)
+        private async Task<int> GetDynamicPropertyIdAsync(DynamicEntityPropertyValue dynamicEntityPropertyValue)
         {
             if (dynamicEntityPropertyValue.DynamicEntityPropertyId == default)
             {
@@ -63,14 +63,14 @@ namespace Abp.DynamicEntityProperties
             return (await _dynamicPropertyManager.GetAsync(dynamicEntityProperty.DynamicPropertyId)).Id;
         }
 
-        public virtual DynamicEntityPropertyValue Get(string id)
+        public virtual DynamicEntityPropertyValue Get(long id)
         {
             var value = DynamicEntityPropertyValueStore.Get(id);
             _dynamicPropertyPermissionChecker.CheckPermission(GetDynamicPropertyId(value));
             return value;
         }
 
-        public virtual async Task<DynamicEntityPropertyValue> GetAsync(string id)
+        public virtual async Task<DynamicEntityPropertyValue> GetAsync(long id)
         {
             var value = await DynamicEntityPropertyValueStore.GetAsync(id);
             await _dynamicPropertyPermissionChecker.CheckPermissionAsync(await GetDynamicPropertyIdAsync(value));
@@ -103,7 +103,7 @@ namespace Abp.DynamicEntityProperties
             await DynamicEntityPropertyValueStore.UpdateAsync(dynamicEntityPropertyValue);
         }
 
-        public virtual void Delete(string id)
+        public virtual void Delete(long id)
         {
             var dynamicEntityPropertyValue = Get(id); //Get checks permission, no need to check it again
             if (dynamicEntityPropertyValue == null)
@@ -114,7 +114,7 @@ namespace Abp.DynamicEntityProperties
             DynamicEntityPropertyValueStore.Delete(id);
         }
 
-        public virtual async Task DeleteAsync(string id)
+        public virtual async Task DeleteAsync(long id)
         {
             var dynamicEntityPropertyValue = await GetAsync(id); //Get checks permission, no need to check it again
             if (dynamicEntityPropertyValue == null)
@@ -125,7 +125,7 @@ namespace Abp.DynamicEntityProperties
             await DynamicEntityPropertyValueStore.DeleteAsync(id);
         }
 
-        public List<DynamicEntityPropertyValue> GetValues(string dynamicEntityPropertyId, string entityId)
+        public List<DynamicEntityPropertyValue> GetValues(int dynamicEntityPropertyId, string entityId)
         {
             var dynamicEntityProperty = _dynamicEntityPropertyManager.Get(dynamicEntityPropertyId);
             _dynamicPropertyPermissionChecker.CheckPermission(dynamicEntityProperty.DynamicPropertyId);
@@ -133,7 +133,7 @@ namespace Abp.DynamicEntityProperties
             return DynamicEntityPropertyValueStore.GetValues(dynamicEntityPropertyId, entityId);
         }
 
-        public async Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string dynamicEntityPropertyId, string entityId)
+        public async Task<List<DynamicEntityPropertyValue>> GetValuesAsync(int dynamicEntityPropertyId, string entityId)
         {
             var dynamicEntityProperty = await _dynamicEntityPropertyManager.GetAsync(dynamicEntityPropertyId);
             await _dynamicPropertyPermissionChecker.CheckPermissionAsync(dynamicEntityProperty.DynamicPropertyId);
@@ -141,7 +141,7 @@ namespace Abp.DynamicEntityProperties
             return await DynamicEntityPropertyValueStore.GetValuesAsync(dynamicEntityPropertyId, entityId);
         }
 
-        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId,int? fsTagNone=null)
+        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId)
         {
             return DynamicEntityPropertyValueStore.GetValues(entityFullName, entityId)
                 .Where(value =>
@@ -152,7 +152,7 @@ namespace Abp.DynamicEntityProperties
                 .ToList();
         }
 
-        public async Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId,int? fsTagNone=null)
+        public async Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId)
         {
             var allValues = await DynamicEntityPropertyValueStore.GetValuesAsync(entityFullName, entityId);
             var returnList = new List<DynamicEntityPropertyValue>();
@@ -170,7 +170,7 @@ namespace Abp.DynamicEntityProperties
             return returnList;
         }
 
-        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, string dynamicPropertyId)
+        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, int dynamicPropertyId)
         {
             return DynamicEntityPropertyValueStore.GetValues(entityFullName, entityId, dynamicPropertyId)
                 .Where(value =>
@@ -182,7 +182,7 @@ namespace Abp.DynamicEntityProperties
         }
 
         public async Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId,
-            string dynamicPropertyId)
+            int dynamicPropertyId)
         {
             var allValues =
                 await DynamicEntityPropertyValueStore.GetValuesAsync(entityFullName, entityId, dynamicPropertyId);
@@ -201,7 +201,7 @@ namespace Abp.DynamicEntityProperties
             return returnList;
         }
 
-        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, string propertyName,int? fsTagNone=null)
+        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, string propertyName)
         {
             var dynamicProperty = _dynamicPropertyManager.Get(propertyName);
             if (dynamicProperty == null)
@@ -213,7 +213,7 @@ namespace Abp.DynamicEntityProperties
         }
 
         public async Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId,
-             string propertyName,int? fsTagNone=null)
+            string propertyName)
         {
             var dynamicProperty = await _dynamicPropertyManager.GetAsync(propertyName);
             if (dynamicProperty == null)
@@ -224,7 +224,7 @@ namespace Abp.DynamicEntityProperties
             return await GetValuesAsync(entityFullName, entityId, dynamicProperty.Id);
         }
 
-        public void CleanValues(string dynamicEntityPropertyId, string entityId)
+        public void CleanValues(int dynamicEntityPropertyId, string entityId)
         {
             var dynamicEntityProperty = _dynamicEntityPropertyManager.Get(dynamicEntityPropertyId);
             _dynamicPropertyPermissionChecker.CheckPermission(dynamicEntityProperty.DynamicPropertyId);
@@ -232,7 +232,7 @@ namespace Abp.DynamicEntityProperties
             DynamicEntityPropertyValueStore.CleanValues(dynamicEntityPropertyId, entityId);
         }
 
-        public async Task CleanValuesAsync(string dynamicEntityPropertyId, string entityId)
+        public async Task CleanValuesAsync(int dynamicEntityPropertyId, string entityId)
         {
             var dynamicEntityProperty = await _dynamicEntityPropertyManager.GetAsync(dynamicEntityPropertyId);
             await _dynamicPropertyPermissionChecker.CheckPermissionAsync(dynamicEntityProperty.DynamicPropertyId);

@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Abp.Configuration;
 using Abp.Localization;
 using Abp.Net.Mail;
@@ -24,7 +24,7 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework.Seed.Host
             AddSettingIfNotExists(LocalizationSettingNames.DefaultLanguage, "en");
         }
 
-        private void AddSettingIfNotExists(string name, string value, string tenantId = null)
+        private void AddSettingIfNotExists(string name, string value, int? tenantId = null)
         {
             if (_context.Settings.Any(s => s.Name == name && s.TenantId == tenantId && s.UserId == null))
             {

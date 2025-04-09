@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.EntityFrameworkCore.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Transactions;
 using Abp.Dependency;
 using Abp.Domain.Uow;
@@ -26,7 +26,7 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework.Seed
 
             //Default tenant seed (in host database).
             new DefaultTenantBuilder(context).Create();
-            new TenantRoleAndUserBuilder(context, "1").Create();
+            new TenantRoleAndUserBuilder(context, 1).Create();
         }
 
         private static void WithDbContext<TDbContext>(IIocResolver iocResolver, Action<TDbContext> contextAction)

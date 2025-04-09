@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +36,7 @@ namespace Abp.Web.Authorization
             var allPermissionNames = _permissionManager.GetAllPermissions(false).Select(p => p.Name).ToList();
             var grantedPermissionNames = new List<string>();
 
-            if (AbpSession.UserId.HasValue())
+            if (AbpSession.UserId.HasValue)
             {
                 foreach (var permissionName in allPermissionNames)
                 {

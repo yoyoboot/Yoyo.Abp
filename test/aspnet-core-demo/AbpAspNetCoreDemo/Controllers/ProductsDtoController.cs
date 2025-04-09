@@ -7,9 +7,9 @@ using AbpAspNetCoreDemo.Core.Domain;
 
 namespace AbpAspNetCoreDemo.Controllers
 {
-    public class ProductsDtoController : AbpODataDtoController<Product, ProductDto, ProductCreateInput, long>, ITransientDependency
+    public class ProductsDtoController : AbpODataDtoController<Product, ProductDto, ProductCreateInput>, ITransientDependency
     {
-        public ProductsDtoController(IRepository<Product, long> repository, IObjectMapper objectMapper) : base(repository, objectMapper)
+        public ProductsDtoController(IRepository<Product> repository, IObjectMapper objectMapper) : base(repository, objectMapper)
         {
             GetPermissionName = "GetProductPermission";
             GetAllPermissionName = "GetAllProductsPermission";

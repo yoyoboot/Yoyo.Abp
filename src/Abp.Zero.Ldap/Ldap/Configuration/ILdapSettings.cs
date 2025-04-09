@@ -9,16 +9,16 @@ namespace Abp.Zero.Ldap.Configuration
     /// </summary>
     public interface ILdapSettings
     {
-        Task<bool> GetIsEnabled(string tenantId);
+        Task<bool> GetIsEnabled(int? tenantId);
 
-        Task<ContextType> GetContextType(string tenantId);
+        Task<ContextType> GetContextType(int? tenantId);
 
-        Task<string> GetContainer(string tenantId);
+        Task<string> GetContainer(int? tenantId);
 
-        Task<string> GetDomain(string tenantId);
+        Task<string> GetDomain(int? tenantId);
 
-        Task<string> GetUserName(string tenantId);
+        Task<string> GetUserName(int? tenantId);
 
-        Task<string> GetPassword(string tenantId);
+        Task<string> GetPassword(int? tenantId);
     }
 }

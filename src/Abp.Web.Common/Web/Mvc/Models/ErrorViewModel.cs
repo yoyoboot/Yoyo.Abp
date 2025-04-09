@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Web.Models;
 
 namespace Abp.Web.Mvc.Models

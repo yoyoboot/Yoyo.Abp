@@ -1,4 +1,4 @@
-namespace Abp.Net.Mail
+﻿namespace Abp.Net.Mail
 {
     /// <summary>
     /// Declares names of the settings defined by <see cref="EmailSettingProvider"/>.

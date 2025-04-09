@@ -1,14 +1,14 @@
- CREATE TABLE IF NOT EXISTS Products (
+﻿ CREATE TABLE IF NOT EXISTS Products (
 											Id INTEGER PRIMARY KEY
 										,	Name varchar(100) 
 										,	IsDeleted BOOLEAN
-										,	DeleterUserId NVARCHAR(1024)
+										,	DeleterUserId BIGINT
 										,	DeletionTime DATETIME
 										,	LastModificationTime DATETIME
-										,	LastModifierUserId NVARCHAR(1024)
+										,	LastModifierUserId BIGINT
 										,	CreationTime DATETIME
-										,	CreatorUserId NVARCHAR(1024)
-										,	TenantId NVARCHAR(1024)
+										,	CreatorUserId BIGINT
+										,	TenantId INTEGER NULLABLE
 										, Status BOOLEAN
 									);
 
@@ -16,33 +16,33 @@
 											Id INTEGER PRIMARY KEY
 										,	Gender varchar(100) 
 										,	IsDeleted BOOLEAN
-										,	DeleterUserId NVARCHAR(1024)
+										,	DeleterUserId BIGINT
 										,	DeletionTime DATETIME
 										,	LastModificationTime DATETIME
-										,	LastModifierUserId NVARCHAR(1024)
+										,	LastModifierUserId BIGINT
 										,	CreationTime DATETIME
-										,	CreatorUserId NVARCHAR(1024)
-										,	TenantId NVARCHAR(1024)
+										,	CreatorUserId BIGINT
+										,	TenantId INTEGER
 									);
 
   CREATE TABLE IF NOT EXISTS Person (
 											Id INTEGER PRIMARY KEY
 										,	Name varchar(100) 
-										,	TenantId NVARCHAR(1024)
+										,	TenantId INTEGER
 									);
 
  CREATE TABLE IF NOT EXISTS Goods (
 											Id INTEGER PRIMARY KEY
 										,	Name varchar(100) 
 										,	IsDeleted BOOLEAN
-										,	DeleterUserId NVARCHAR(1024)
+										,	DeleterUserId BIGINT
 										,	DeletionTime DATETIME
 										,	LastModificationTime DATETIME
-										,	LastModifierUserId NVARCHAR(1024)
+										,	LastModifierUserId BIGINT
 										,	CreationTime DATETIME
-										,	CreatorUserId NVARCHAR(1024)
+										,	CreatorUserId BIGINT
 										,	ParentId INTEGER NULLABLE
-										,	TenantId NVARCHAR(1024)
+										,	TenantId INTEGER
 									);
 
  

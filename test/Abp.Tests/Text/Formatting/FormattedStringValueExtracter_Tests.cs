@@ -1,4 +1,4 @@
-using Abp.Text;
+﻿using Abp.Text;
 using Shouldly;
 using Xunit;
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Abp.Notifications;
 using Abp.Runtime.Session;
@@ -68,7 +68,7 @@ namespace Abp.Zero.Notifications
                 var userNotification = userNotifications[0];
                 userNotification.State.ShouldBe(UserNotificationState.Unread);
                 userNotification.TenantId.ShouldBe(AbpSession.TenantId);
-                userNotification.UserId.ShouldBe(AbpSession.UserId);
+                userNotification.UserId.ShouldBe(AbpSession.UserId.Value);
 
                 var notification = userNotification.Notification;
                 notification.CreationTime.ShouldBeInRange(before, after);

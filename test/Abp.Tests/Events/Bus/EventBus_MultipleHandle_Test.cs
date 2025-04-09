@@ -1,4 +1,4 @@
-using Abp.Domain.Entities;
+﻿using Abp.Domain.Entities;
 using Abp.Events.Bus.Entities;
 using Abp.Events.Bus.Handlers;
 using Shouldly;

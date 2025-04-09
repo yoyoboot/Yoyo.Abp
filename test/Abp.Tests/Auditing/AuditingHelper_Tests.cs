@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Auditing;
 using Shouldly;
 using Xunit;

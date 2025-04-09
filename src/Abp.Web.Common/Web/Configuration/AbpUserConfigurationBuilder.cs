@@ -159,7 +159,7 @@ namespace Abp.Web.Configuration
 
             var allFeatures = FeatureManager.GetAll().ToList();
 
-            if (AbpSession.TenantId.HasValue())
+            if (AbpSession.TenantId.HasValue)
             {
                 var currentTenantId = AbpSession.GetTenantId();
                 foreach (var feature in allFeatures)
@@ -192,7 +192,7 @@ namespace Abp.Web.Configuration
             var allPermissionNames = PermissionManager.GetAllPermissions(false).Select(p => p.Name).ToList();
             var grantedPermissionNames = new List<string>();
 
-            if (AbpSession.UserId.HasValue())
+            if (AbpSession.UserId.HasValue)
             {
                 foreach (var permissionName in allPermissionNames)
                 {

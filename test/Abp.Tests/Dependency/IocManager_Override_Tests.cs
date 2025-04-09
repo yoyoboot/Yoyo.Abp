@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Abp.Dependency;
 using Castle.MicroKernel.Registration;
 using Shouldly;

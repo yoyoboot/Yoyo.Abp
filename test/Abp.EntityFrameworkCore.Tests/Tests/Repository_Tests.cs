@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
@@ -12,14 +12,14 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
 {
     public class Repository_Tests : EntityFrameworkCoreModuleTestBase
     {
-        private readonly IRepository<Blog,int> _blogRepository;
+        private readonly IRepository<Blog> _blogRepository;
         private readonly IRepository<Post, Guid> _postRepository;
         private readonly IUnitOfWorkManager _uowManager;
 
         public Repository_Tests()
         {
             _uowManager = Resolve<IUnitOfWorkManager>();
-            _blogRepository = Resolve<IRepository<Blog,int>>();
+            _blogRepository = Resolve<IRepository<Blog>>();
             _postRepository = Resolve<IRepository<Post, Guid>>();
         }
 

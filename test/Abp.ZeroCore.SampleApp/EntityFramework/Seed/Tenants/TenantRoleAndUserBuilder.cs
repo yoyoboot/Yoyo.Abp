@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using Abp.Authorization;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
@@ -13,9 +13,9 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework.Seed.Tenants
     public class TenantRoleAndUserBuilder
     {
         private readonly SampleAppDbContext _context;
-        private readonly string _tenantId;
+        private readonly int _tenantId;
 
-        public TenantRoleAndUserBuilder(SampleAppDbContext context, string tenantId)
+        public TenantRoleAndUserBuilder(SampleAppDbContext context, int tenantId)
         {
             _context = context;
             _tenantId = tenantId;
@@ -87,7 +87,7 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework.Seed.Tenants
             _context.SaveChanges();
 
             //User account of admin user
-            if (_tenantId != "1")
+            if (_tenantId != 1)
             {
                 return;
             }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using Abp.Dependency;
 using Abp.Domain.Entities;
@@ -29,7 +29,7 @@ namespace Abp.EntityFramework
             foreach (EntityTypeInfo entityTypeInfo in _dbContextEntityFinder.GetEntityTypeInfos(_dbContextType))
             {
                 Type primaryKeyType = EntityHelper.GetPrimaryKeyType(entityTypeInfo.EntityType);
-                if (primaryKeyType == typeof(string))
+                if (primaryKeyType == typeof(int))
                 {
                     Type genericRepositoryType = autoRepositoryAttr.RepositoryInterface.MakeGenericType(entityTypeInfo.EntityType);
                     if (!iocManager.IsRegistered(genericRepositoryType))

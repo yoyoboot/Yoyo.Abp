@@ -1,4 +1,4 @@
-using Abp.Domain.Entities;
+﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -24,20 +24,20 @@ namespace Abp.Zero.EntityHistory
 {
     public class SimpleEntityHistory_Test : AbpZeroTestBase
     {
-        private readonly IRepository<Advertisement, int> _advertisementRepository;
-        private readonly IRepository<Blog,int> _blogRepository;
+        private readonly IRepository<Advertisement> _advertisementRepository;
+        private readonly IRepository<Blog> _blogRepository;
         private readonly IRepository<Post, Guid> _postRepository;
-        private readonly IRepository<Comment,int> _commentRepository;
+        private readonly IRepository<Comment> _commentRepository;
         private readonly IRepository<Foo> _fooRepository;
 
         private IEntityHistoryStore _entityHistoryStore;
 
         public SimpleEntityHistory_Test()
         {
-            _advertisementRepository = Resolve<IRepository<Advertisement, int>>();
-            _blogRepository = Resolve<IRepository<Blog,int>>();
+            _advertisementRepository = Resolve<IRepository<Advertisement>>();
+            _blogRepository = Resolve<IRepository<Blog>>();
             _postRepository = Resolve<IRepository<Post, Guid>>();
-            _commentRepository = Resolve<IRepository<Comment,int>>();
+            _commentRepository = Resolve<IRepository<Comment>>();
             _fooRepository = Resolve<IRepository<Foo>>();
 
             Resolve<IEntityHistoryConfiguration>().IsEnabledForAnonymousUsers = true;
@@ -108,9 +108,9 @@ namespace Abp.Zero.EntityHistory
 
             UsingDbContext(context =>
             {
-                context.EntityChanges.Count(e => e.TenantId == "1").ShouldBe(0);
-                context.EntityChangeSets.Count(e => e.TenantId == "1").ShouldBe(0);
-                context.EntityPropertyChanges.Count(e => e.TenantId == "1").ShouldBe(0);
+                context.EntityChanges.Count(e => e.TenantId == 1).ShouldBe(0);
+                context.EntityChangeSets.Count(e => e.TenantId == 1).ShouldBe(0);
+                context.EntityPropertyChanges.Count(e => e.TenantId == 1).ShouldBe(0);
             });
 
             /* Advertisement does not have Audited attribute. */
@@ -125,10 +125,10 @@ namespace Abp.Zero.EntityHistory
 
             UsingDbContext(context =>
             {
-                context.EntityChanges.Count(e => e.TenantId == "1").ShouldBe(1);
-                context.EntityChangeSets.Count(e => e.TenantId == "1").ShouldBe(1);
+                context.EntityChanges.Count(e => e.TenantId == 1).ShouldBe(1);
+                context.EntityChangeSets.Count(e => e.TenantId == 1).ShouldBe(1);
                 context.EntityChangeSets.Single().CreationTime.ShouldBeGreaterThan(justNow);
-                context.EntityPropertyChanges.Count(e => e.TenantId == "1").ShouldBe(1);
+                context.EntityPropertyChanges.Count(e => e.TenantId == 1).ShouldBe(1);
             });
         }
 
@@ -152,7 +152,7 @@ namespace Abp.Zero.EntityHistory
                 var entityChange =
                     s.EntityChanges.Single(ec => ec.EntityTypeFullName == typeof(Advertisement).FullName);
                 entityChange.ChangeType.ShouldBe(EntityChangeType.Updated);
-                entityChange.EntityId.ShouldBe(entityChange.EntityEntry.As<EntityEntry>().Entity.As<IEntity<int>>().Id
+                entityChange.EntityId.ShouldBe(entityChange.EntityEntry.As<EntityEntry>().Entity.As<IEntity>().Id
                     .ToJsonString());
                 entityChange.PropertyChanges.Count.ShouldBe(1);
 
@@ -217,7 +217,7 @@ namespace Abp.Zero.EntityHistory
             _entityHistoryStore.When(x => x.Save(Arg.Any<EntityChangeSet>()))
                 .Do(callback => entityHistoryStore.Save(callback.Arg<EntityChangeSet>()));
 
-            const string tenantId = "1";
+            const int tenantId = 1;
 
             await UsingDbContextAsync(tenantId, async context =>
             {
@@ -276,7 +276,7 @@ namespace Abp.Zero.EntityHistory
 
                 var entityChangeBlog = s.EntityChanges.Single(ec => ec.EntityTypeFullName == typeof(Blog).FullName);
                 entityChangeBlog.ChangeType.ShouldBe(EntityChangeType.Updated);
-                entityChangeBlog.EntityId.ShouldBe(entityChangeBlog.EntityEntry.As<EntityEntry>().Entity.As<IEntity<int>>()
+                entityChangeBlog.EntityId.ShouldBe(entityChangeBlog.EntityEntry.As<EntityEntry>().Entity.As<IEntity>()
                     .Id.ToJsonString(false, false));
                 entityChangeBlog.PropertyChanges.Count.ShouldBe(1);
 
@@ -684,7 +684,7 @@ namespace Abp.Zero.EntityHistory
 
                 var entityChange = s.EntityChanges[0];
                 entityChange.ChangeType.ShouldBe(EntityChangeType.Updated);
-                entityChange.EntityId.ShouldBe(entityChange.EntityEntry.As<EntityEntry>().Entity.As<IEntity<int>>().Id
+                entityChange.EntityId.ShouldBe(entityChange.EntityEntry.As<EntityEntry>().Entity.As<IEntity>().Id
                     .ToJsonString(false, false));
                 entityChange.EntityTypeFullName.ShouldBe(typeof(Blog).FullName);
                 entityChange.PropertyChanges.Count.ShouldBe(0);
@@ -721,9 +721,9 @@ namespace Abp.Zero.EntityHistory
 
             UsingDbContext(context =>
             {
-                context.EntityChanges.Count(e => e.TenantId == "1").ShouldBe(1);
-                context.EntityChangeSets.Count(e => e.TenantId == "1").ShouldBe(1);
-                context.EntityPropertyChanges.Count(e => e.TenantId == "1").ShouldBe(1);
+                context.EntityChanges.Count(e => e.TenantId == 1).ShouldBe(1);
+                context.EntityChangeSets.Count(e => e.TenantId == 1).ShouldBe(1);
+                context.EntityPropertyChanges.Count(e => e.TenantId == 1).ShouldBe(1);
             });
 
             WithUnitOfWork(() =>
@@ -735,9 +735,9 @@ namespace Abp.Zero.EntityHistory
             // Assert
             UsingDbContext(context =>
             {
-                context.EntityChanges.Count(e => e.TenantId == "1").ShouldBe(1);
-                context.EntityChangeSets.Count(e => e.TenantId == "1").ShouldBe(1);
-                context.EntityPropertyChanges.Count(e => e.TenantId == "1").ShouldBe(1);
+                context.EntityChanges.Count(e => e.TenantId == 1).ShouldBe(1);
+                context.EntityChangeSets.Count(e => e.TenantId == 1).ShouldBe(1);
+                context.EntityPropertyChanges.Count(e => e.TenantId == 1).ShouldBe(1);
             });
         }
 

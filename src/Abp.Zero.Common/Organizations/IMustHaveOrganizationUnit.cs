@@ -1,4 +1,4 @@
-namespace Abp.Organizations
+﻿namespace Abp.Organizations
 {
     /// <summary>
     /// This interface is implemented entities those must have an <see cref="OrganizationUnit"/>.
@@ -8,6 +8,6 @@ namespace Abp.Organizations
         /// <summary>
         /// <see cref="OrganizationUnit"/>'s Id which this entity belongs to.
         /// </summary>
-        string OrganizationUnitId { get; set; }
+        long OrganizationUnitId { get; set; }
     }
 }

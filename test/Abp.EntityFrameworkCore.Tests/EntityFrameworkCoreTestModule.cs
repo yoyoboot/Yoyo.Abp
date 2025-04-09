@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Transactions;
 using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore.Tests.Domain;
@@ -37,7 +37,7 @@ namespace Abp.EntityFrameworkCore.Tests
                 );
             });
 
-            Configuration.IocManager.Register<IRepository<TicketListItem,int>, TicketListItemRepository>();
+            Configuration.IocManager.Register<IRepository<TicketListItem>, TicketListItemRepository>();
         }
 
         public override void Initialize()

@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.Runtime.Session;
 
 namespace Abp.Application.Features
@@ -32,7 +32,7 @@ namespace Abp.Application.Features
         /// <param name="tenantId">Tenant's Id</param>
         /// <param name="name">Unique feature name</param>
         /// <returns>Feature's current value</returns>
-        Task<string> GetValueAsync(string tenantId, string name);
+        Task<string> GetValueAsync(int tenantId, string name);
 
         /// <summary>
         /// Gets the value of a feature for a tenant by the feature's name.
@@ -40,7 +40,7 @@ namespace Abp.Application.Features
         /// <param name="tenantId">Tenant's Id</param>
         /// <param name="name">Unique feature name</param>
         /// <returns>Feature's current value</returns>
-        string GetValue(string tenantId, string name);
+        string GetValue(int tenantId, string name);
 
         /// <summary>
         /// Checks if a given feature is enabled.
@@ -71,7 +71,7 @@ namespace Abp.Application.Features
         /// <param name="tenantId">Tenant's Id</param>
         /// <param name="featureName">Unique feature name</param>
         /// <returns>True, if the current feature's value is "true".</returns>
-        Task<bool> IsEnabledAsync(string tenantId, string featureName);
+        Task<bool> IsEnabledAsync(int tenantId, string featureName);
 
         /// <summary>
         /// Checks if a given feature is enabled.
@@ -80,6 +80,6 @@ namespace Abp.Application.Features
         /// <param name="tenantId">Tenant's Id</param>
         /// <param name="featureName">Unique feature name</param>
         /// <returns>True, if the current feature's value is "true".</returns>
-        bool IsEnabled(string tenantId, string featureName);
+        bool IsEnabled(int tenantId, string featureName);
     }
 }

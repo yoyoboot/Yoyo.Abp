@@ -1,4 +1,4 @@
-namespace Abp.MongoDb.Configuration
+﻿namespace Abp.MongoDb.Configuration
 {
     public interface IAbpMongoDbModuleConfiguration
     {

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -49,52 +49,52 @@ namespace Abp.Webhooks
         {
         }
 
-        public Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsAsync(string tenantId)
+        public Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsAsync(int? tenantId)
         {
             return Task.FromResult(new List<WebhookSubscriptionInfo>());
         }
 
-        public List<WebhookSubscriptionInfo> GetAllSubscriptions(string tenantId)
+        public List<WebhookSubscriptionInfo> GetAllSubscriptions(int? tenantId)
         {
             return new List<WebhookSubscriptionInfo>();
         }
 
-        public Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsAsync(string tenantId, string webhookName)
+        public Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsAsync(int? tenantId, string webhookName)
         {
             return Task.FromResult(new List<WebhookSubscriptionInfo>());
         }
 
-        public List<WebhookSubscriptionInfo> GetAllSubscriptions(string tenantId, string webhookName)
+        public List<WebhookSubscriptionInfo> GetAllSubscriptions(int? tenantId, string webhookName)
         {
             return new List<WebhookSubscriptionInfo>();
         }
 
-        public Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsAsync(string[] tenantIds)
+        public Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsAsync(int?[] tenantIds)
         {
             return Task.FromResult(new List<WebhookSubscriptionInfo>());
         }
 
-        public List<WebhookSubscriptionInfo> GetAllSubscriptionsOfTenants(string[] tenantIds)
+        public List<WebhookSubscriptionInfo> GetAllSubscriptionsOfTenants(int?[] tenantIds)
         {
             return new List<WebhookSubscriptionInfo>();
         }
 
-        public Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsAsync(string[] tenantIds, string webhookName)
+        public Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsAsync(int?[] tenantIds, string webhookName)
         {
             return Task.FromResult(new List<WebhookSubscriptionInfo>());
         }
 
-        public List<WebhookSubscriptionInfo> GetAllSubscriptionsOfTenants(string[] tenantIds, string webhookName)
+        public List<WebhookSubscriptionInfo> GetAllSubscriptionsOfTenants(int?[] tenantIds, string webhookName)
         {
             return new List<WebhookSubscriptionInfo>();
         }
 
-        public Task<bool> IsSubscribedAsync(string tenantId, string webhookName)
+        public Task<bool> IsSubscribedAsync(int? tenantId, string webhookName)
         {
             return Task.FromResult(false);
         }
 
-        public bool IsSubscribed(string tenantId, string webhookName)
+        public bool IsSubscribed(int? tenantId, string webhookName)
         {
             return false;
         }

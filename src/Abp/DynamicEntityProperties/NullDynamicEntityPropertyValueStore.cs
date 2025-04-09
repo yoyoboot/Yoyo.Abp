@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Abp.DynamicEntityProperties
@@ -7,12 +7,12 @@ namespace Abp.DynamicEntityProperties
     {
         public static NullDynamicEntityPropertyValueStore Instance = new NullDynamicEntityPropertyValueStore();
 
-        public DynamicEntityPropertyValue Get(string id)
+        public DynamicEntityPropertyValue Get(long id)
         {
             return default;
         }
 
-        public Task<DynamicEntityPropertyValue> GetAsync(string id)
+        public Task<DynamicEntityPropertyValue> GetAsync(long id)
         {
             return Task.FromResult<DynamicEntityPropertyValue>(default);
         }
@@ -35,50 +35,50 @@ namespace Abp.DynamicEntityProperties
             return Task.CompletedTask;
         }
 
-        public void Delete(string id)
+        public void Delete(long id)
         {
         }
 
-        public Task DeleteAsync(string id)
+        public Task DeleteAsync(long id)
         {
             return Task.CompletedTask;
         }
 
-        public List<DynamicEntityPropertyValue> GetValues(string dynamicEntityPropertyId, string entityId)
+        public List<DynamicEntityPropertyValue> GetValues(int dynamicEntityPropertyId, string entityId)
         {
             return new List<DynamicEntityPropertyValue>();
         }
 
-        public Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string dynamicEntityPropertyId, string entityId)
+        public Task<List<DynamicEntityPropertyValue>> GetValuesAsync(int dynamicEntityPropertyId, string entityId)
         {
             return Task.FromResult(new List<DynamicEntityPropertyValue>());
         }
 
-        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId,int? fsTagNone=null)
+        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId)
         {
             return new List<DynamicEntityPropertyValue>();
         }
 
-        public Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId,int? fsTagNone=null)
+        public Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId)
         {
             return Task.FromResult(new List<DynamicEntityPropertyValue>());
         }
 
-        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, string dynamicPropertyId)
+        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, int dynamicPropertyId)
         {
             return new List<DynamicEntityPropertyValue>();
         }
 
-        public Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId, string dynamicPropertyId)
+        public Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId, int dynamicPropertyId)
         {
             return Task.FromResult(new List<DynamicEntityPropertyValue>());
         }
 
-        public void CleanValues(string dynamicEntityPropertyId, string entityId)
+        public void CleanValues(int dynamicEntityPropertyId, string entityId)
         {
         }
 
-        public Task CleanValuesAsync(string dynamicEntityPropertyId, string entityId)
+        public Task CleanValuesAsync(int dynamicEntityPropertyId, string entityId)
         {
             return Task.CompletedTask;
         }

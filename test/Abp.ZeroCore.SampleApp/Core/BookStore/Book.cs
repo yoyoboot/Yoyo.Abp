@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Domain.Entities;
 
 namespace Abp.ZeroCore.SampleApp.Core.BookStore

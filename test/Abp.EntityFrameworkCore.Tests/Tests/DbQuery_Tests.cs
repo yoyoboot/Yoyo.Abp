@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore.Tests.Domain;
 using Shouldly;
@@ -11,7 +11,7 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
         [Fact]
         public async Task DbQuery_Test()
         {
-            var blogViewRepository = Resolve<IRepository<BlogView,int>>();
+            var blogViewRepository = Resolve<IRepository<BlogView>>();
 
             var blogViews = await blogViewRepository.GetAllListAsync();
 

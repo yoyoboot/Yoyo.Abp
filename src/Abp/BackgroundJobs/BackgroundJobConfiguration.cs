@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Configuration.Startup;
 
 namespace Abp.BackgroundJobs

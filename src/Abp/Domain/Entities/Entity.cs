@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Abp.Extensions;
@@ -9,7 +9,7 @@ namespace Abp.Domain.Entities
     /// A shortcut of <see cref="Entity{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
     /// </summary>
     [Serializable]
-    public abstract class Entity : Entity<string>, IEntity
+    public abstract class Entity : Entity<int>, IEntity
     {
 
     }

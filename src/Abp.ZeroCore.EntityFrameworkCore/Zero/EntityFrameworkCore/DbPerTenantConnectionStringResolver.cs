@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.Configuration.Startup;
 using Abp.Domain.Uow;
 using Abp.Extensions;
@@ -54,7 +54,7 @@ namespace Abp.Zero.EntityFrameworkCore
                 return base.GetNameOrConnectionString(args);
             }
 
-            var tenantCacheItem = _tenantCache.Get(args.TenantId,null);
+            var tenantCacheItem = _tenantCache.Get(args.TenantId.Value);
             if (tenantCacheItem.ConnectionString.IsNullOrEmpty())
             {
                 //Tenant has not dedicated database
@@ -83,7 +83,7 @@ namespace Abp.Zero.EntityFrameworkCore
                 return await base.GetNameOrConnectionStringAsync(args);
             }
 
-            var tenantCacheItem = await _tenantCache.GetAsync(args.TenantId,null);
+            var tenantCacheItem = await _tenantCache.GetAsync(args.TenantId.Value);
             if (tenantCacheItem.ConnectionString.IsNullOrEmpty())
             {
                 //Tenant has not dedicated database
@@ -93,7 +93,7 @@ namespace Abp.Zero.EntityFrameworkCore
             return tenantCacheItem.ConnectionString;
         }
 
-        protected virtual string GetCurrentTenantId()
+        protected virtual int? GetCurrentTenantId()
         {
             return _currentUnitOfWorkProvider.Current != null
                 ? _currentUnitOfWorkProvider.Current.GetTenantId()

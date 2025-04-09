@@ -9,7 +9,7 @@ namespace Abp.Domain.Entities.Auditing
         /// <summary>
         /// Id of the creator user of this entity.
         /// </summary>
-        string CreatorUserId { get; set; }
+        long? CreatorUserId { get; set; }
     }
 
     /// <summary>
@@ -17,7 +17,7 @@ namespace Abp.Domain.Entities.Auditing
     /// </summary>
     /// <typeparam name="TUser">Type of the user</typeparam>
     public interface ICreationAudited<TUser> : ICreationAudited
-        where TUser : IEntity<string>
+        where TUser : IEntity<long>
     {
         /// <summary>
         /// Reference to the creator user of this entity.

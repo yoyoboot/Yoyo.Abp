@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using System.Transactions;
 using Abp.BackgroundJobs;
@@ -87,7 +87,7 @@ namespace Abp.Webhooks.BackgroundWorker
             }
         }
 
-        private async Task<bool> TryDeactivateSubscriptionIfReachedMaxConsecutiveFailCount(string tenantId,
+        private async Task<bool> TryDeactivateSubscriptionIfReachedMaxConsecutiveFailCount(int? tenantId,
             Guid subscriptionId)
         {
             if (!_webhooksConfiguration.IsAutomaticSubscriptionDeactivationEnabled)

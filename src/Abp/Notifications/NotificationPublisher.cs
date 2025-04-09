@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace Abp.Notifications
         /// <summary>
         /// Indicates all tenants.
         /// </summary>
-        public static string[] AllTenants => new[] { NotificationInfo.AllTenantIds };
+        public static int[] AllTenants => new[] { NotificationInfo.AllTenantIds.To<int>() };
 
         /// <summary>
         /// Reference to ABP session.
@@ -61,7 +61,7 @@ namespace Abp.Notifications
             NotificationSeverity severity = NotificationSeverity.Info,
             UserIdentifier[] userIds = null,
             UserIdentifier[] excludedUserIds = null,
-            string[] tenantIds = null,
+            int?[] tenantIds = null,
             Type[] targetNotifiers = null)
         {
             using (var uow = UnitOfWorkManager.Begin())
@@ -145,7 +145,7 @@ namespace Abp.Notifications
         /// </summary>
         /// <param name="tenantIds"></param>
         /// <seealso cref="DefaultNotificationDistributer.GetTenantIds"/>
-        private static string GetTenantIdsAsStr(string[] tenantIds)
+        private static string GetTenantIdsAsStr(int?[] tenantIds)
         {
             if (tenantIds.IsNullOrEmpty())
             {

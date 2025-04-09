@@ -1,4 +1,4 @@
-namespace Abp.Web.Security.AntiForgery
+﻿namespace Abp.Web.Security.AntiForgery
 {
     /// <summary>
     /// This interface is internally used by ABP framework and normally should not be used by applications.

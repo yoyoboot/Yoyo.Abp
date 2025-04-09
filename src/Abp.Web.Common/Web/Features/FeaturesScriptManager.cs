@@ -29,7 +29,7 @@ namespace Abp.Web.Features
             var allFeatures = _featureManager.GetAll().ToList();
             var currentValues = new Dictionary<string, string>();
 
-            if (AbpSession.TenantId.HasValue())
+            if (AbpSession.TenantId.HasValue)
             {
                 var currentTenantId = AbpSession.GetTenantId();
                 foreach (var feature in allFeatures)

@@ -1,4 +1,4 @@
-namespace Abp.Web
+﻿namespace Abp.Web
 {
     public static class AbpWebConsts
     {

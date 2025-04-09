@@ -1,4 +1,4 @@
-namespace Abp
+﻿namespace Abp
 {
     public interface IHasErrorCode
     {

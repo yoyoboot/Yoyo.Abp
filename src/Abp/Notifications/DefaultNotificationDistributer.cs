@@ -92,7 +92,7 @@ namespace Abp.Notifications
                 List<NotificationSubscriptionInfo> subscriptions;
 
                 if (tenantIds.IsNullOrEmpty() ||
-                    (tenantIds.Length == 1 && tenantIds[0] == NotificationInfo.AllTenantIds))
+                    (tenantIds.Length == 1 && tenantIds[0] == NotificationInfo.AllTenantIds.To<int>()))
                 {
                     //Get all subscribed users of all tenants
                     subscriptions = await _notificationStore.GetSubscriptionsAsync(
@@ -180,7 +180,7 @@ namespace Abp.Notifications
                     List<NotificationSubscriptionInfo> subscriptions;
 
                     if (tenantIds.IsNullOrEmpty() ||
-                        (tenantIds.Length == 1 && tenantIds[0] == NotificationInfo.AllTenantIds))
+                        (tenantIds.Length == 1 && tenantIds[0] == NotificationInfo.AllTenantIds.To<int>()))
                     {
                         //Get all subscribed users of all tenants
                         subscriptions = _notificationStore.GetSubscriptions(
@@ -243,7 +243,7 @@ namespace Abp.Notifications
             });
         }
 
-        private static string[] GetTenantIds(NotificationInfo notificationInfo)
+        private static int?[] GetTenantIds(NotificationInfo notificationInfo)
         {
             if (notificationInfo.TenantIds.IsNullOrEmpty())
             {
@@ -253,7 +253,7 @@ namespace Abp.Notifications
             return notificationInfo
                 .TenantIds
                 .Split(",")
-                .Select(tenantIdAsStr => tenantIdAsStr == "null" ? null : tenantIdAsStr)
+                .Select(tenantIdAsStr => tenantIdAsStr == "null" ? (int?) null : (int?) tenantIdAsStr.To<int>())
                 .ToArray();
         }
 

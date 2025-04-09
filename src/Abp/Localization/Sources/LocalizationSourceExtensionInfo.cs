@@ -1,4 +1,4 @@
-using Abp.Localization.Dictionaries;
+﻿using Abp.Localization.Dictionaries;
 
 namespace Abp.Localization.Sources
 {

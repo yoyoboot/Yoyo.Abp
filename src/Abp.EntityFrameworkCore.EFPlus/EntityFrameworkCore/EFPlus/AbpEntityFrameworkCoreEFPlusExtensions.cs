@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -60,9 +60,9 @@ namespace Abp.EntityFrameworkCore.EFPlus
             [NotNull] this IRepository<TEntity> repository, 
             [NotNull]Expression<Func<TEntity, bool>> predicate, 
             Action<BatchDelete> batchDeleteBuilder = null)
-            where TEntity : Entity<string>
+            where TEntity : Entity<int>
         {
-            return await repository.BatchDeleteAsync<TEntity, string>(predicate, batchDeleteBuilder);
+            return await repository.BatchDeleteAsync<TEntity, int>(predicate, batchDeleteBuilder);
         }
 
         /// <summary>
@@ -109,9 +109,9 @@ namespace Abp.EntityFrameworkCore.EFPlus
             [NotNull]this IRepository<TEntity> repository, [NotNull]Expression<Func<TEntity, TEntity>> updateExpression,
             [NotNull]Expression<Func<TEntity, bool>> predicate,
             Action<BatchUpdate> batchUpdateBuilder = null)
-            where TEntity : Entity<string>
+            where TEntity : Entity<int>
         {
-            return await repository.BatchUpdateAsync<TEntity, string>(updateExpression, predicate, batchUpdateBuilder);
+            return await repository.BatchUpdateAsync<TEntity, int>(updateExpression, predicate, batchUpdateBuilder);
         }
 
         private static Expression<Func<TEntity, bool>> GetFilterExpressionOrNull<TEntity, TPrimaryKey>(IIocResolver iocResolver)
@@ -161,7 +161,7 @@ namespace Abp.EntityFrameworkCore.EFPlus
             return expression;
         }
 
-        private static string GetCurrentTenantIdOrNull(IIocResolver iocResolver)
+        private static int? GetCurrentTenantIdOrNull(IIocResolver iocResolver)
         {
             using (var scope = iocResolver.CreateScope())
             {

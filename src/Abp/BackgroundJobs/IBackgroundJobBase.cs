@@ -1,4 +1,4 @@
-namespace Abp.BackgroundJobs
+﻿namespace Abp.BackgroundJobs
 {
     /// <summary>
     /// This interface is used to mark background jobs

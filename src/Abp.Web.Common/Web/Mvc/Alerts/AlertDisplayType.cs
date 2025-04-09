@@ -1,4 +1,4 @@
-namespace Abp.Web.Mvc.Alerts
+﻿namespace Abp.Web.Mvc.Alerts
 {
     public class AlertDisplayType
     {

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Timing;
 
 namespace Abp.AspNetCore.App.Models

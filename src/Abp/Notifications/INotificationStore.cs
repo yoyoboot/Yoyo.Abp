@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -72,12 +72,12 @@ namespace Abp.Notifications
         /// <summary>
         /// Gets subscriptions for a notification for specified tenant(s).
         /// </summary>
-        Task<List<NotificationSubscriptionInfo>> GetSubscriptionsAsync(string[] tenantIds, string notificationName, string entityTypeName, string entityId);
+        Task<List<NotificationSubscriptionInfo>> GetSubscriptionsAsync(int?[] tenantIds, string notificationName, string entityTypeName, string entityId);
 
         /// <summary>
         /// Gets subscriptions for a notification for specified tenant(s).
         /// </summary>
-        List<NotificationSubscriptionInfo> GetSubscriptions(string[] tenantIds, string notificationName, string entityTypeName, string entityId);
+        List<NotificationSubscriptionInfo> GetSubscriptions(int?[] tenantIds, string notificationName, string entityTypeName, string entityId);
 
         /// <summary>
         /// Gets subscriptions for a user.
@@ -102,12 +102,12 @@ namespace Abp.Notifications
         /// <summary>
         /// Updates a user notification state.
         /// </summary>
-        Task UpdateUserNotificationStateAsync(string tenantId, Guid userNotificationId, UserNotificationState state);
+        Task UpdateUserNotificationStateAsync(int? tenantId, Guid userNotificationId, UserNotificationState state);
 
         /// <summary>
         /// Updates a user notification state.
         /// </summary>
-        void UpdateUserNotificationState(string tenantId, Guid userNotificationId, UserNotificationState state);
+        void UpdateUserNotificationState(int? tenantId, Guid userNotificationId, UserNotificationState state);
 
         /// <summary>
         /// Updates all notification states for a user.
@@ -122,12 +122,12 @@ namespace Abp.Notifications
         /// <summary>
         /// Deletes a user notification.
         /// </summary>
-        Task DeleteUserNotificationAsync(string tenantId, Guid userNotificationId);
+        Task DeleteUserNotificationAsync(int? tenantId, Guid userNotificationId);
 
         /// <summary>
         /// Deletes a user notification.
         /// </summary>
-        void DeleteUserNotification(string tenantId, Guid userNotificationId);
+        void DeleteUserNotification(int? tenantId, Guid userNotificationId);
 
         /// <summary>
         /// Deletes all notifications of a user.
@@ -184,14 +184,14 @@ namespace Abp.Notifications
         /// </summary>
         /// <param name="tenantId">Tenant Id</param>
         /// <param name="userNotificationId">Skip count.</param>
-        Task<UserNotificationInfoWithNotificationInfo> GetUserNotificationWithNotificationOrNullAsync(string tenantId, Guid userNotificationId);
+        Task<UserNotificationInfoWithNotificationInfo> GetUserNotificationWithNotificationOrNullAsync(int? tenantId, Guid userNotificationId);
 
         /// <summary>
         /// Gets a user notification.
         /// </summary>
         /// <param name="tenantId">Tenant Id</param>
         /// <param name="userNotificationId">Skip count.</param>
-        UserNotificationInfoWithNotificationInfo GetUserNotificationWithNotificationOrNull(string tenantId, Guid userNotificationId);
+        UserNotificationInfoWithNotificationInfo GetUserNotificationWithNotificationOrNull(int? tenantId, Guid userNotificationId);
 
         /// <summary>
         /// Inserts notification for a tenant.

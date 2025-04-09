@@ -1,4 +1,4 @@
-namespace Abp.Notifications
+﻿namespace Abp.Notifications
 {
     /// <summary>
     /// Used as a context while defining notifications.

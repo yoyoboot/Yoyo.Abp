@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -87,7 +87,7 @@ namespace Abp.Webhooks
             }
         }
 
-        public virtual async Task<WebhookSendAttempt> GetAsync(string tenantId, Guid id)
+        public virtual async Task<WebhookSendAttempt> GetAsync(int? tenantId, Guid id)
         {
             WebhookSendAttempt sendAttempt;
 
@@ -104,7 +104,7 @@ namespace Abp.Webhooks
             return sendAttempt;
         }
 
-        public virtual WebhookSendAttempt Get(string tenantId, Guid id)
+        public virtual WebhookSendAttempt Get(int? tenantId, Guid id)
         {
             WebhookSendAttempt sendAttempt;
 
@@ -121,7 +121,7 @@ namespace Abp.Webhooks
             return sendAttempt;
         }
 
-        public virtual async Task<int> GetSendAttemptCountAsync(string tenantId, Guid webhookEventId,
+        public virtual async Task<int> GetSendAttemptCountAsync(int? tenantId, Guid webhookEventId,
             Guid webhookSubscriptionId)
         {
             int sendAttemptCount;
@@ -143,7 +143,7 @@ namespace Abp.Webhooks
             return sendAttemptCount;
         }
 
-        public virtual int GetSendAttemptCount(string tenantId, Guid webhookId, Guid webhookSubscriptionId)
+        public virtual int GetSendAttemptCount(int? tenantId, Guid webhookId, Guid webhookSubscriptionId)
         {
             int sendAttemptCount;
 
@@ -163,7 +163,7 @@ namespace Abp.Webhooks
             return sendAttemptCount;
         }
 
-        public virtual async Task<bool> HasXConsecutiveFailAsync(string tenantId, Guid subscriptionId, int failCount)
+        public virtual async Task<bool> HasXConsecutiveFailAsync(int? tenantId, Guid subscriptionId, int failCount)
         {
             bool result;
 
@@ -194,7 +194,7 @@ namespace Abp.Webhooks
         }
 
         public virtual async Task<IPagedResult<WebhookSendAttempt>> GetAllSendAttemptsBySubscriptionAsPagedListAsync(
-            string tenantId,
+            int? tenantId,
             Guid subscriptionId,
             int maxResultCount,
             int skipCount)
@@ -231,7 +231,7 @@ namespace Abp.Webhooks
             return sendAttempts;
         }
 
-        public virtual IPagedResult<WebhookSendAttempt> GetAllSendAttemptsBySubscriptionAsPagedList(string tenantId,
+        public virtual IPagedResult<WebhookSendAttempt> GetAllSendAttemptsBySubscriptionAsPagedList(int? tenantId,
             Guid subscriptionId, int maxResultCount, int skipCount)
         {
             PagedResultDto<WebhookSendAttempt> sendAttempts;
@@ -266,7 +266,7 @@ namespace Abp.Webhooks
             return sendAttempts;
         }
 
-        public virtual async Task<List<WebhookSendAttempt>> GetAllSendAttemptsByWebhookEventIdAsync(string tenantId,
+        public virtual async Task<List<WebhookSendAttempt>> GetAllSendAttemptsByWebhookEventIdAsync(int? tenantId,
             Guid webhookEventId)
         {
             List<WebhookSendAttempt> sendAttempts;
@@ -288,7 +288,7 @@ namespace Abp.Webhooks
             return sendAttempts;
         }
 
-        public virtual List<WebhookSendAttempt> GetAllSendAttemptsByWebhookEventId(string tenantId, Guid webhookEventId)
+        public virtual List<WebhookSendAttempt> GetAllSendAttemptsByWebhookEventId(int? tenantId, Guid webhookEventId)
         {
             List<WebhookSendAttempt> sendAttempts;
 

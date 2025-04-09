@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,8 +18,8 @@ namespace Abp.Tests.Dependency
         public void Should_Inject_Session_For_ApplicationService()
         {
             var session = Substitute.For<IAbpSession>();
-            session.TenantId.Returns("1");
-            session.UserId.Returns("42");
+            session.TenantId.Returns(1);
+            session.UserId.Returns(42);
 
             LocalIocManager.Register<MyApplicationService>();
             LocalIocManager.IocContainer.Register(
@@ -35,8 +35,8 @@ namespace Abp.Tests.Dependency
             public void TestSession()
             {
                 AbpSession.ShouldNotBe(null);
-                AbpSession.TenantId.ShouldBe("1");
-                AbpSession.UserId.ShouldBe("42");
+                AbpSession.TenantId.ShouldBe(1);
+                AbpSession.UserId.ShouldBe(42);
             }
         }
     }

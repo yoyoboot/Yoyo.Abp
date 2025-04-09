@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Abp.Webhooks
 {
     public class WebhookSenderArgs
     {
-        public string TenantId { get; set; }
+        public int? TenantId { get; set; }
 
         //Webhook information 
 

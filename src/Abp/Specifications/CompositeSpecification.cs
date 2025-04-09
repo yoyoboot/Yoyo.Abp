@@ -1,4 +1,4 @@
-namespace Abp.Specifications
+﻿namespace Abp.Specifications
 {
     /// <summary>
     /// Represents the base class for composite specifications.

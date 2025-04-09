@@ -36,7 +36,7 @@ namespace Abp.Localization
             }
         }
 
-        public string GetString(string tenantId, string name, CultureInfo culture)
+        public string GetString(int? tenantId, string name, CultureInfo culture)
         {
             var value = GetStringOrNull(tenantId, name, culture);
 
@@ -48,7 +48,7 @@ namespace Abp.Localization
             return value;
         }
 
-        public string GetStringOrNull(string tenantId, string name, CultureInfo culture, bool tryDefaults = true)
+        public string GetStringOrNull(int? tenantId, string name, CultureInfo culture, bool tryDefaults = true)
         {
             var cultureName = culture.Name;
             var dictionaries = DictionaryProvider.Dictionaries;
@@ -102,7 +102,7 @@ namespace Abp.Localization
             return strDefault.Value;
         }
 
-        public List<string> GetStrings(string tenantId, List<string> names, CultureInfo culture)
+        public List<string> GetStrings(int? tenantId, List<string> names, CultureInfo culture)
         {
             var value = GetStringsOrNull(tenantId, names, culture);
 
@@ -114,7 +114,7 @@ namespace Abp.Localization
             return value;
         }
 
-        public List<string> GetStringsOrNull(string tenantId, List<string> names, CultureInfo culture, bool tryDefaults = true)
+        public List<string> GetStringsOrNull(int? tenantId, List<string> names, CultureInfo culture, bool tryDefaults = true)
         {
             var cultureName = culture.Name;
             var dictionaries = DictionaryProvider.Dictionaries;

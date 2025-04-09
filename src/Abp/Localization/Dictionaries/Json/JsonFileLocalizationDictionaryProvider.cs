@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using Abp.Localization.Sources;
 
 namespace Abp.Localization.Dictionaries.Json

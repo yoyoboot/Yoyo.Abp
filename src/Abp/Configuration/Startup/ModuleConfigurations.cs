@@ -1,4 +1,4 @@
-namespace Abp.Configuration.Startup
+﻿namespace Abp.Configuration.Startup
 {
     internal class ModuleConfigurations : IModuleConfigurations
     {

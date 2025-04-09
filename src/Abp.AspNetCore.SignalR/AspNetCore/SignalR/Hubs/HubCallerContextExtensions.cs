@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Abp.Runtime.Security;
 using Microsoft.AspNetCore.SignalR;
@@ -7,7 +7,7 @@ namespace Abp.AspNetCore.SignalR.Hubs
 {
     public static class HubCallerContextExtensions
     {
-        public static string GetTenantId(this HubCallerContext context)
+        public static int? GetTenantId(this HubCallerContext context)
         {
             if (context?.User == null)
             {
@@ -20,10 +20,10 @@ namespace Abp.AspNetCore.SignalR.Hubs
                 return null;
             }
 
-            return tenantIdClaim.Value;
+            return Convert.ToInt32(tenantIdClaim.Value);
         }
 
-        public static string GetUserIdOrNull(this HubCallerContext context)
+        public static long? GetUserIdOrNull(this HubCallerContext context)
         {
             if (context?.User == null)
             {
@@ -36,7 +36,7 @@ namespace Abp.AspNetCore.SignalR.Hubs
                 return null;
             }
 
-            return userIdClaim?.Value??string.Empty; var userId = string.Empty;
+            if (!long.TryParse(userIdClaim.Value, out var userId))
             {
                 return null;
             }
@@ -44,7 +44,7 @@ namespace Abp.AspNetCore.SignalR.Hubs
             return userId;
         }
 
-        public static string GetUserId(this HubCallerContext context)
+        public static long GetUserId(this HubCallerContext context)
         {
             var userId = context.GetUserIdOrNull();
             if (userId == null)
@@ -52,10 +52,10 @@ namespace Abp.AspNetCore.SignalR.Hubs
                 throw new AbpException("UserId is null! Probably, user is not logged in.");
             }
 
-            return userId;
+            return userId.Value;
         }
 
-        public static string GetImpersonatorUserId(this HubCallerContext context)
+        public static long? GetImpersonatorUserId(this HubCallerContext context)
         {
             if (context?.User == null)
             {
@@ -68,10 +68,10 @@ namespace Abp.AspNetCore.SignalR.Hubs
                 return null;
             }
 
-            return impersonatorUserIdClaim.Value;
+            return Convert.ToInt64(impersonatorUserIdClaim.Value);
         }
 
-        public static string GetImpersonatorTenantId(this HubCallerContext context)
+        public static long? GetImpersonatorTenantId(this HubCallerContext context)
         {
             if (context?.User == null)
             {
@@ -84,7 +84,7 @@ namespace Abp.AspNetCore.SignalR.Hubs
                 return null;
             }
 
-            return impersonatorTenantIdClaim.Value;
+            return Convert.ToInt32(impersonatorTenantIdClaim.Value);
         }
 
         public static UserIdentifier ToUserIdentifier(this HubCallerContext context)

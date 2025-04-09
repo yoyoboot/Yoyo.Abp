@@ -1,4 +1,4 @@
-namespace Abp.Threading.BackgroundWorkers
+﻿namespace Abp.Threading.BackgroundWorkers
 {
     /// <summary>
     /// Used to manage background workers.

@@ -36,7 +36,7 @@ namespace Abp.MultiTenancy
             Logger = NullLogger.Instance;
         }
 
-        public string ResolveTenantId()
+        public int? ResolveTenantId()
         {
             if (!_multiTenancy.Resolvers.Any())
             {
@@ -63,18 +63,18 @@ namespace Abp.MultiTenancy
             }
         }
 
-        public Task<string> ResolveTenantIdAsync()
+        public Task<int?> ResolveTenantIdAsync()
         {
             return Task.FromResult(ResolveTenantId());
         }
 
-        private string GetTenantIdFromContributors()
+        private int? GetTenantIdFromContributors()
         {
             foreach (var resolverType in _multiTenancy.Resolvers)
             {
                 using (var resolver = _iocResolver.ResolveAsDisposable<ITenantResolveContributor>(resolverType))
                 {
-                    string tenantId;
+                    int? tenantId;
 
                     try
                     {
@@ -91,7 +91,7 @@ namespace Abp.MultiTenancy
                         continue;
                     }
 
-                    if (_tenantStore.FindById(tenantId) == null)
+                    if (_tenantStore.Find(tenantId.Value) == null)
                     {
                         continue;
                     }

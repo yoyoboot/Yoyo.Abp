@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities;
 
@@ -8,7 +8,7 @@ namespace Abp.Authorization.Users
     /// Used to store a User Login for external Login services.
     /// </summary>
     [Table("AbpUserLogins")]
-    public class UserLogin : Entity<string>, IMayHaveTenant
+    public class UserLogin : Entity<long>, IMayHaveTenant
     {
         /// <summary>
         /// Maximum length of <see cref="LoginProvider"/> property.
@@ -20,12 +20,12 @@ namespace Abp.Authorization.Users
         /// </summary>
         public const int MaxProviderKeyLength = 256;
 
-        public virtual string TenantId { get; set; }
+        public virtual int? TenantId { get; set; }
 
         /// <summary>
         /// Id of the User.
         /// </summary>
-        public virtual string UserId { get; set; }
+        public virtual long UserId { get; set; }
 
         /// <summary>
         /// Login Provider.
@@ -46,7 +46,7 @@ namespace Abp.Authorization.Users
             
         }
 
-        public UserLogin(string tenantId, string userId, string loginProvider, string providerKey)
+        public UserLogin(int? tenantId, long userId, string loginProvider, string providerKey)
         {
             TenantId = tenantId;
             UserId = userId;

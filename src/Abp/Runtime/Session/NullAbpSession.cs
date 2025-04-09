@@ -1,4 +1,4 @@
-using Abp.Configuration.Startup;
+﻿using Abp.Configuration.Startup;
 using Abp.MultiTenancy;
 using Abp.Runtime.Remoting;
 
@@ -15,16 +15,16 @@ namespace Abp.Runtime.Session
         public static NullAbpSession Instance { get; } = new NullAbpSession();
 
         /// <inheritdoc/>
-        public override string UserId => null;
+        public override long? UserId => null;
 
         /// <inheritdoc/>
-        public override string TenantId => null;
+        public override int? TenantId => null;
 
         public override MultiTenancySides MultiTenancySide => MultiTenancySides.Tenant;
 
-        public override string ImpersonatorUserId => null;
+        public override long? ImpersonatorUserId => null;
 
-        public override string ImpersonatorTenantId => null;
+        public override int? ImpersonatorTenantId => null;
 
         private NullAbpSession() 
             : base(

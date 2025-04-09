@@ -1,4 +1,4 @@
-namespace Abp.MultiTenancy
+﻿namespace Abp.MultiTenancy
 {
     public interface IAbpZeroDbMigrator
     {

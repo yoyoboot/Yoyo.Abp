@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Abp.Localization.Dictionaries;
 
 namespace Abp.Tests.Localization

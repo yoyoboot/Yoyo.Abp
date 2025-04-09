@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Application.Editions;
 
 namespace Abp.Application.Features
@@ -23,7 +23,7 @@ namespace Abp.Application.Features
         /// <value>
         /// The edition Id.
         /// </value>
-        public virtual string EditionId { get; set; }
+        public virtual int EditionId { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EditionFeatureSetting"/> class.
@@ -39,7 +39,7 @@ namespace Abp.Application.Features
         /// <param name="editionId">The edition Id.</param>
         /// <param name="name">Feature name.</param>
         /// <param name="value">Feature value.</param>
-        public EditionFeatureSetting(string editionId, string name, string value)
+        public EditionFeatureSetting(int editionId, string name, string value)
             :base(name, value)
         {
             EditionId = editionId;

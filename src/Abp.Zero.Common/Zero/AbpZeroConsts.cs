@@ -1,4 +1,4 @@
-namespace Abp.Zero
+﻿namespace Abp.Zero
 {
     public class AbpZeroConsts
     {

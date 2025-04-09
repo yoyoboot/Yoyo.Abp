@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Configuration.Startup;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
@@ -18,7 +18,7 @@ namespace Abp.Dapper.Filters.Action
 
         public void ExecuteFilter<TEntity, TPrimaryKey>(TEntity entity) where TEntity : class, IEntity<TPrimaryKey>
         {
-            string userId = GetAuditUserId();
+            long? userId = GetAuditUserId();
 
             CheckAndSetId(entity);
 
@@ -34,7 +34,7 @@ namespace Abp.Dapper.Filters.Action
             CheckAndSetMustHaveTenantIdProperty(entity);
             CheckAndSetMayHaveTenantIdProperty(entity);
 
-            if (userId.HasValue() && entity is ICreationAudited)
+            if (userId.HasValue && entity is ICreationAudited)
             {
                 var record = entity as ICreationAudited;
                 if (record.CreatorUserId == null)
@@ -78,16 +78,16 @@ namespace Abp.Dapper.Filters.Action
             var entity = entityAsObj.As<IMustHaveTenant>();
 
             //Don't set if it's already set
-            if (entity.TenantId.HasValue())
+            if (entity.TenantId != 0)
             {
                 return;
             }
 
-            var currentTenantId = GetCurrentTenantIdOrNull();
+            int? currentTenantId = GetCurrentTenantIdOrNull();
 
-            if (currentTenantId.HasValue())
+            if (currentTenantId != null)
             {
-                entity.TenantId = currentTenantId;
+                entity.TenantId = currentTenantId.Value;
             }
             else
             {
@@ -106,7 +106,7 @@ namespace Abp.Dapper.Filters.Action
             var entity = entityAsObj.As<IMayHaveTenant>();
 
             //Don't set if it's already set
-            if (entity.TenantId.HasValue())
+            if (entity.TenantId != null)
             {
                 return;
             }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,7 +12,7 @@ namespace Abp.Authorization.Roles
     /// Base class for role.
     /// </summary>
     [Table("AbpRoles")]
-    public abstract class AbpRoleBase : FullAuditedEntity<string>, IMayHaveTenant
+    public abstract class AbpRoleBase : FullAuditedEntity<int>, IMayHaveTenant
     {
         /// <summary>
         /// Maximum length of the <see cref="DisplayName"/> property.
@@ -27,7 +27,7 @@ namespace Abp.Authorization.Roles
         /// <summary>
         /// Tenant's Id, if this role is a tenant-level role. Null, if not.
         /// </summary>
-        public virtual string TenantId { get; set; }
+        public virtual int? TenantId { get; set; }
 
         /// <summary>
         /// Unique name of this role.
@@ -66,14 +66,14 @@ namespace Abp.Authorization.Roles
             Name = Guid.NewGuid().ToString("N");
         }
 
-        protected AbpRoleBase(string tenantId, string displayName)
+        protected AbpRoleBase(int? tenantId, string displayName)
             : this()
         {
             TenantId = tenantId;
             DisplayName = displayName;
         }
 
-        protected AbpRoleBase(string tenantId, string name, string displayName)
+        protected AbpRoleBase(int? tenantId, string name, string displayName)
             : this(tenantId, displayName)
         {
             Name = name;

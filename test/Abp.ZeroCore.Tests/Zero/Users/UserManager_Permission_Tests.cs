@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Authorization.Users;
@@ -33,7 +33,7 @@ namespace Abp.Zero.Users
         {
             Resolve<IMultiTenancyConfig>().IsEnabled = true;
 
-            var defaultTenantId = "1";
+            var defaultTenantId = 1;
             var user = UsingDbContext(defaultTenantId, context =>
             {
                 return context.Users.Single(f => f.TenantId == defaultTenantId && f.UserName == AbpUserBase.AdminUserName);
@@ -63,7 +63,7 @@ namespace Abp.Zero.Users
             Resolve<IMultiTenancyConfig>().IsEnabled = true;
 
             // Arrange
-            var defaultTenantId = "1";
+            var defaultTenantId = 1;
             var organizationUnit = UsingDbContext(defaultTenantId, context =>
             {
                 return context.OrganizationUnits.Single(ou => ou.TenantId == defaultTenantId && ou.DisplayName == "OU1");

@@ -12,25 +12,25 @@ namespace Abp.Localization
         /// Gets list of all languages available to given tenant (or null for host)
         /// </summary>
         /// <param name="tenantId">TenantId or null for host</param>
-        Task<IReadOnlyList<ApplicationLanguage>> GetLanguagesAsync(string tenantId);
+        Task<IReadOnlyList<ApplicationLanguage>> GetLanguagesAsync(int? tenantId);
 
         /// <summary>
         /// Gets list of all active languages available to given tenant (or null for host)
         /// </summary>
         /// <param name="tenantId">TenantId or null for host</param>
-        Task<IReadOnlyList<ApplicationLanguage>> GetActiveLanguagesAsync(string tenantId);
+        Task<IReadOnlyList<ApplicationLanguage>> GetActiveLanguagesAsync(int? tenantId);
 
         /// <summary>
         /// Gets list of all languages available to given tenant (or null for host)
         /// </summary>
         /// <param name="tenantId">TenantId or null for host</param>
-        IReadOnlyList<ApplicationLanguage> GetLanguages(string tenantId);
+        IReadOnlyList<ApplicationLanguage> GetLanguages(int? tenantId);
 
         /// <summary>
         /// Gets list of all active languages available to given tenant (or null for host)
         /// </summary>
         /// <param name="tenantId">TenantId or null for host</param>
-        IReadOnlyList<ApplicationLanguage> GetActiveLanguages(string tenantId);
+        IReadOnlyList<ApplicationLanguage> GetActiveLanguages(int? tenantId);
 
         /// <summary>
         /// Adds a new language.
@@ -49,53 +49,53 @@ namespace Abp.Localization
         /// </summary>
         /// <param name="tenantId">Tenant Id or null for host.</param>
         /// <param name="languageName">Name of the language.</param>
-        Task RemoveAsync(string tenantId, string languageName);
+        Task RemoveAsync(int? tenantId, string languageName);
 
         /// <summary>
         /// Deletes a language.
         /// </summary>
         /// <param name="tenantId">Tenant Id or null for host.</param>
         /// <param name="languageName">Name of the language.</param>
-        void Remove(string tenantId, string languageName);
+        void Remove(int? tenantId, string languageName);
 
         /// <summary>
         /// Updates a language.
         /// </summary>
         /// <param name="tenantId">Tenant Id or null for host.</param>
         /// <param name="language">The language to be updated</param>
-        Task UpdateAsync(string tenantId, ApplicationLanguage language);
+        Task UpdateAsync(int? tenantId, ApplicationLanguage language);
 
         /// <summary>
         /// Updates a language.
         /// </summary>
         /// <param name="tenantId">Tenant Id or null for host.</param>
         /// <param name="language">The language to be updated</param>
-        void Update(string tenantId, ApplicationLanguage language);
+        void Update(int? tenantId, ApplicationLanguage language);
 
         /// <summary>
         /// Gets the default language or null for a tenant or the host.
         /// </summary>
         /// <param name="tenantId">Tenant Id of null for host</param>
-        Task<ApplicationLanguage> GetDefaultLanguageOrNullAsync(string tenantId);
+        Task<ApplicationLanguage> GetDefaultLanguageOrNullAsync(int? tenantId);
 
         /// <summary>
         /// Gets the default language or null for a tenant or the host.
         /// </summary>
         /// <param name="tenantId">Tenant Id of null for host</param>
-        ApplicationLanguage GetDefaultLanguageOrNull(string tenantId);
+        ApplicationLanguage GetDefaultLanguageOrNull(int? tenantId);
 
         /// <summary>
         /// Sets the default language for a tenant or the host.
         /// </summary>
         /// <param name="tenantId">Tenant Id of null for host</param>
         /// <param name="languageName">Name of the language.</param>
-        Task SetDefaultLanguageAsync(string tenantId, string languageName);
+        Task SetDefaultLanguageAsync(int? tenantId, string languageName);
 
         /// <summary>
         /// Sets the default language for a tenant or the host.
         /// </summary>
         /// <param name="tenantId">Tenant Id of null for host</param>
         /// <param name="languageName">Name of the language.</param>
-        void SetDefaultLanguage(string tenantId, string languageName);
+        void SetDefaultLanguage(int? tenantId, string languageName);
     }
 }

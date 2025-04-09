@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
@@ -48,7 +48,7 @@ namespace Abp.Webhooks
             });
         }
 
-        public virtual async Task<WebhookEvent> GetAsync(string tenantId, Guid id)
+        public virtual async Task<WebhookEvent> GetAsync(int? tenantId, Guid id)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -59,7 +59,7 @@ namespace Abp.Webhooks
             });
         }
 
-        public virtual WebhookEvent Get(string tenantId, Guid id)
+        public virtual WebhookEvent Get(int? tenantId, Guid id)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {

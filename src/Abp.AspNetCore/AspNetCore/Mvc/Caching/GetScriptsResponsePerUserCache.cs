@@ -1,4 +1,4 @@
-namespace Abp.AspNetCore.Mvc.Caching
+﻿namespace Abp.AspNetCore.Mvc.Caching
 {
     public class GetScriptsResponsePerUserCache
     {

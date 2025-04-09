@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Domain.Entities;
 using Abp.Extensions;
 using Newtonsoft.Json;

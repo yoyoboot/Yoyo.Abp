@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services;
@@ -39,14 +39,14 @@ namespace Abp.Webhooks
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
         }
 
-        public virtual async Task PublishAsync(string webhookName, object data, string tenantId,
+        public virtual async Task PublishAsync(string webhookName, object data, int? tenantId,
             bool sendExactSameData = false, WebhookHeader headers = null)
         {
             var subscriptions = await _webhookSubscriptionManager.GetAllSubscriptionsIfFeaturesGrantedAsync(tenantId, webhookName);
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
         }
 
-        public virtual async Task PublishAsync(string[] tenantIds, string webhookName, object data,
+        public virtual async Task PublishAsync(int?[] tenantIds, string webhookName, object data,
             bool sendExactSameData = false, WebhookHeader headers = null)
         {
             var subscriptions = await _webhookSubscriptionManager.GetAllSubscriptionsOfTenantsIfFeaturesGrantedAsync(tenantIds, webhookName);
@@ -112,13 +112,13 @@ namespace Abp.Webhooks
             Publish(webhookName, data, subscriptions, sendExactSameData, headers);
         }
 
-        public virtual void Publish(string webhookName, object data, string tenantId, bool sendExactSameData = false, WebhookHeader headers = null)
+        public virtual void Publish(string webhookName, object data, int? tenantId, bool sendExactSameData = false, WebhookHeader headers = null)
         {
             var subscriptions = _webhookSubscriptionManager.GetAllSubscriptionsIfFeaturesGranted(tenantId, webhookName);
             Publish(webhookName, data, subscriptions, sendExactSameData, headers);
         }
 
-        public virtual void Publish(string[] tenantIds, string webhookName, object data, bool sendExactSameData = false, WebhookHeader headers = null)
+        public virtual void Publish(int?[] tenantIds, string webhookName, object data, bool sendExactSameData = false, WebhookHeader headers = null)
         {
             var subscriptions =
                 _webhookSubscriptionManager.GetAllSubscriptionsOfTenantsIfFeaturesGranted(tenantIds, webhookName);
@@ -176,7 +176,7 @@ namespace Abp.Webhooks
 
         #endregion
 
-        protected virtual async Task<WebhookEvent> SaveAndGetWebhookAsync(string tenantId, string webhookName,
+        protected virtual async Task<WebhookEvent> SaveAndGetWebhookAsync(int? tenantId, string webhookName,
             object data)
         {
             var webhookInfo = new WebhookEvent
@@ -193,7 +193,7 @@ namespace Abp.Webhooks
             return webhookInfo;
         }
 
-        protected virtual WebhookEvent SaveAndGetWebhook(string tenantId, string webhookName, object data)
+        protected virtual WebhookEvent SaveAndGetWebhook(int? tenantId, string webhookName, object data)
         {
             var webhookInfo = new WebhookEvent
             {

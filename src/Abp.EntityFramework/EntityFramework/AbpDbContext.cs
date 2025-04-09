@@ -188,7 +188,7 @@ namespace Abp.EntityFramework
         {
             Database.Initialize(false);
             this.SetFilterScopedParameterValue(AbpDataFilters.MustHaveTenant, AbpDataFilters.Parameters.TenantId,
-                AbpSession.TenantId ?? "0");
+                AbpSession.TenantId ?? 0);
             this.SetFilterScopedParameterValue(AbpDataFilters.MayHaveTenant, AbpDataFilters.Parameters.TenantId,
                 AbpSession.TenantId);
         }
@@ -204,11 +204,11 @@ namespace Abp.EntityFramework
             modelBuilder.Filter(AbpDataFilters.SoftDelete, (ISoftDelete d) => d.IsDeleted, false);
             modelBuilder.Filter(AbpDataFilters.MustHaveTenant,
 #pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
-				(IMustHaveTenant t, string tenantId) => t.TenantId == tenantId || t.TenantId==null || t.TenantId=="",
+				(IMustHaveTenant t, int tenantId) => t.TenantId == tenantId || (int?) t.TenantId == null,
 #pragma warning restore CS0472 // While "(int?)t.TenantId == null" seems wrong, it's needed. See https://github.com/jcachat/EntityFramework.DynamicFilters/issues/62#issuecomment-208198058
-                "0"); 
+                0); 
             modelBuilder.Filter(AbpDataFilters.MayHaveTenant,
-                (IMayHaveTenant t, string tenantId) => t.TenantId == tenantId, "0");
+                (IMayHaveTenant t, int? tenantId) => t.TenantId == tenantId, 0);
         }
 
         public override int SaveChanges()
@@ -282,7 +282,7 @@ namespace Abp.EntityFramework
             }
         }
 
-        protected virtual void ApplyAbpConcepts(DbEntityEntry entry, string userId, EntityChangeReport changeReport)
+        protected virtual void ApplyAbpConcepts(DbEntityEntry entry, long? userId, EntityChangeReport changeReport)
         {
             switch (entry.State)
             {
@@ -300,7 +300,7 @@ namespace Abp.EntityFramework
             AddDomainEvents(changeReport.DomainEvents, entry.Entity);
         }
 
-        protected virtual void ApplyAbpConceptsForAddedEntity(DbEntityEntry entry, string userId,
+        protected virtual void ApplyAbpConceptsForAddedEntity(DbEntityEntry entry, long? userId,
             EntityChangeReport changeReport)
         {
             CheckAndSetId(entry.Entity);
@@ -310,7 +310,7 @@ namespace Abp.EntityFramework
             changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Created));
         }
 
-        protected virtual void ApplyAbpConceptsForModifiedEntity(DbEntityEntry entry, string userId,
+        protected virtual void ApplyAbpConceptsForModifiedEntity(DbEntityEntry entry, long? userId,
             EntityChangeReport changeReport)
         {
             SetModificationAuditProperties(entry.Entity, userId);
@@ -326,7 +326,7 @@ namespace Abp.EntityFramework
             }
         }
 
-        protected virtual void ApplyAbpConceptsForDeletedEntity(DbEntityEntry entry, string userId,
+        protected virtual void ApplyAbpConceptsForDeletedEntity(DbEntityEntry entry, long? userId,
             EntityChangeReport changeReport)
         {
             if (IsHardDeleteEntity(entry))
@@ -466,16 +466,16 @@ namespace Abp.EntityFramework
             var entity = entityAsObj.As<IMustHaveTenant>();
 
             //Don't set if it's already set
-            if (entity.TenantId.HasValue())
+            if (entity.TenantId != 0)
             {
                 return;
             }
 
             var currentTenantId = GetCurrentTenantIdOrNull();
 
-            if (currentTenantId.HasValue())
+            if (currentTenantId != null)
             {
-                entity.TenantId = currentTenantId;
+                entity.TenantId = currentTenantId.Value;
             }
             else
             {
@@ -499,7 +499,7 @@ namespace Abp.EntityFramework
             var entity = entityAsObj.As<IMayHaveTenant>();
 
             //Don't set if it's already set
-            if (entity.TenantId.HasValue())
+            if (entity.TenantId != null)
             {
                 return;
             }
@@ -519,7 +519,7 @@ namespace Abp.EntityFramework
             entity.TenantId = GetCurrentTenantIdOrNull();
         }
 
-        protected virtual void SetCreationAuditProperties(object entityAsObj, string userId)
+        protected virtual void SetCreationAuditProperties(object entityAsObj, long? userId)
         {
             EntityAuditingHelper.SetCreationAuditProperties(
                 MultiTenancyConfig,
@@ -530,7 +530,7 @@ namespace Abp.EntityFramework
             );
         }
 
-        protected virtual void SetModificationAuditProperties(object entityAsObj, string userId)
+        protected virtual void SetModificationAuditProperties(object entityAsObj, long? userId)
         {
             EntityAuditingHelper.SetModificationAuditProperties(
                 MultiTenancyConfig,
@@ -554,7 +554,7 @@ namespace Abp.EntityFramework
             softDeleteEntry.Entity.IsDeleted = true;
         }
 
-        protected virtual void SetDeletionAuditProperties(object entityAsObj, string userId)
+        protected virtual void SetDeletionAuditProperties(object entityAsObj, long? userId)
         {
             EntityAuditingHelper.SetDeletionAuditProperties(
                 MultiTenancyConfig,
@@ -574,9 +574,9 @@ namespace Abp.EntityFramework
             }
         }
 
-        protected virtual string GetAuditUserId()
+        protected virtual long? GetAuditUserId()
         {
-            if (AbpSession.UserId.HasValue() &&
+            if (AbpSession.UserId.HasValue &&
                 CurrentUnitOfWorkProvider != null &&
                 CurrentUnitOfWorkProvider.Current != null &&
                 CurrentUnitOfWorkProvider.Current.GetTenantId() == AbpSession.TenantId)
@@ -587,7 +587,7 @@ namespace Abp.EntityFramework
             return null;
         }
 
-        protected virtual string GetCurrentTenantIdOrNull()
+        protected virtual int? GetCurrentTenantIdOrNull()
         {
             if (CurrentUnitOfWorkProvider?.Current != null)
             {

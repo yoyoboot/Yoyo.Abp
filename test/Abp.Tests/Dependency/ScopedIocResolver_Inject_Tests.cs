@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Dependency;
 using Shouldly;
 using Xunit;

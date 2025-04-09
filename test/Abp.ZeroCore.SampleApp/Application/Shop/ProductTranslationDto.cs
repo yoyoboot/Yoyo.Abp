@@ -1,4 +1,4 @@
-namespace Abp.ZeroCore.SampleApp.Application.Shop
+﻿namespace Abp.ZeroCore.SampleApp.Application.Shop
 {
     public class ProductTranslationDto
     {

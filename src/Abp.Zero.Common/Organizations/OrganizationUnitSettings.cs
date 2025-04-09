@@ -36,11 +36,11 @@ namespace Abp.Organizations
         /// Maximum allowed organization unit membership count for a user.
         /// Returns value for given tenant.
         /// </summary>
-        public async Task<int> GetMaxUserMembershipCountAsync(string tenantId)
+        public async Task<int> GetMaxUserMembershipCountAsync(int? tenantId)
         {
-            if (tenantId.HasValue())
+            if (tenantId.HasValue)
             {
-                return await _settingManager.GetSettingValueForTenantAsync<int>(AbpZeroSettingNames.OrganizationUnits.MaxUserMembershipCount, tenantId);
+                return await _settingManager.GetSettingValueForTenantAsync<int>(AbpZeroSettingNames.OrganizationUnits.MaxUserMembershipCount, tenantId.Value);
             }
             else
             {
@@ -52,11 +52,11 @@ namespace Abp.Organizations
         /// Maximum allowed organization unit membership count for a user.
         /// Returns value for given tenant.
         /// </summary>
-        public int GetMaxUserMembershipCount(string tenantId)
+        public int GetMaxUserMembershipCount(int? tenantId)
         {
-            if (tenantId.HasValue())
+            if (tenantId.HasValue)
             {
-                return _settingManager.GetSettingValueForTenant<int>(AbpZeroSettingNames.OrganizationUnits.MaxUserMembershipCount, tenantId);
+                return _settingManager.GetSettingValueForTenant<int>(AbpZeroSettingNames.OrganizationUnits.MaxUserMembershipCount, tenantId.Value);
             }
             else
             {
@@ -64,11 +64,11 @@ namespace Abp.Organizations
             }
         }
 
-        public async Task SetMaxUserMembershipCountAsync(string tenantId, int value)
+        public async Task SetMaxUserMembershipCountAsync(int? tenantId, int value)
         {
-            if (tenantId.HasValue())
+            if (tenantId.HasValue)
             {
-                await _settingManager.ChangeSettingForTenantAsync(tenantId, AbpZeroSettingNames.OrganizationUnits.MaxUserMembershipCount, value.ToString());
+                await _settingManager.ChangeSettingForTenantAsync(tenantId.Value, AbpZeroSettingNames.OrganizationUnits.MaxUserMembershipCount, value.ToString());
             }
             else
             {
@@ -76,11 +76,11 @@ namespace Abp.Organizations
             }
         }
 
-        public void SetMaxUserMembershipCount(string tenantId, int value)
+        public void SetMaxUserMembershipCount(int? tenantId, int value)
         {
-            if (tenantId.HasValue())
+            if (tenantId.HasValue)
             {
-                _settingManager.ChangeSettingForTenant(tenantId, AbpZeroSettingNames.OrganizationUnits.MaxUserMembershipCount, value.ToString());
+                _settingManager.ChangeSettingForTenant(tenantId.Value, AbpZeroSettingNames.OrganizationUnits.MaxUserMembershipCount, value.ToString());
             }
             else
             {

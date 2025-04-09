@@ -1,4 +1,4 @@
-using Castle.DynamicProxy;
+﻿using Castle.DynamicProxy;
 using Castle.MicroKernel.Registration;
 using Shouldly;
 using Xunit;

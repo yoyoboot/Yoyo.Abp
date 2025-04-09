@@ -1,4 +1,4 @@
-namespace Abp.Configuration
+﻿namespace Abp.Configuration
 {
     /// <summary>
     /// The context that is used in setting providers.

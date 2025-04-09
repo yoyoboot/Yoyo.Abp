@@ -1,4 +1,4 @@
-namespace Abp.Domain.Uow
+﻿namespace Abp.Domain.Uow
 {
     /// <summary>
     /// Used to get/set current <see cref="IUnitOfWork"/>. 

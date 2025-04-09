@@ -1,4 +1,4 @@
-using Abp.Events.Bus;
+﻿using Abp.Events.Bus;
 
 namespace Abp.EntityFrameworkCore.Dapper.Tests.Domain
 {

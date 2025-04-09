@@ -18,9 +18,9 @@ $projects = (
     "Abp.EntityFramework.Common",
     "Abp.EntityFramework.GraphDiff",
     "Abp.EntityFrameworkCore",
-    "Abp.EntityFrameworkCore.EFPlus",
+	"Abp.EntityFrameworkCore.EFPlus",
     "Abp.FluentMigrator",
-    "Abp.FluentValidation",
+	"Abp.FluentValidation",
     "Abp.HangFire",
     "Abp.HangFire.AspNetCore",
     "Abp.MailKit",
@@ -51,7 +51,8 @@ $projects = (
     "Abp.ZeroCore.IdentityServer4",
     "Abp.ZeroCore.IdentityServer4.EntityFrameworkCore",
     "Abp.ZeroCore.IdentityServer4.vNext",
-    "Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore"
+    "Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore",
+	"Abp.ZeroCore.NHibernate"
 )
 
 # Rebuild solution
@@ -59,26 +60,22 @@ Set-Location $slnPath
 & dotnet restore
 
 # Copy all nuget packages to the pack folder
-foreach ($project in $projects) {
+foreach($project in $projects) {
     
-    ## path
     $projectFolder = Join-Path $srcPath $project
-    if (!(Test-Path $projectFolder)) {
-        continue
-    }
 
     # Create nuget pack
     Set-Location $projectFolder
     Get-ChildItem (Join-Path $projectFolder "bin/Release") -ErrorAction SilentlyContinue | Remove-Item -Recurse
     & dotnet msbuild /p:Configuration=Release
-    & dotnet msbuild /p:Configuration=Release /t:pack /p:IncludeSymbols=false /p:SymbolPackageFormat=snupkg
+    & dotnet msbuild /p:Configuration=Release /t:pack /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg
 
     # Copy nuget package
-    $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + 'Yoyo.' + $project + ".*.nupkg")
+    $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + $project + ".*.nupkg")
     Move-Item $projectPackPath $packFolder
 
-    # Copy symbol package
-    $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + 'Yoyo.' + $project + ".*.snupkg")
+	# Copy symbol package
+    $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + $project + ".*.snupkg")
     Move-Item $projectPackPath $packFolder
 }
 

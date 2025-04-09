@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Abp.Dependency;
@@ -157,7 +157,7 @@ namespace Abp.TestBase
             }
         }
 
-        protected virtual void WithUnitOfWork(string tenantId, Action action, UnitOfWorkOptions options = null)
+        protected virtual void WithUnitOfWork(int? tenantId, Action action, UnitOfWorkOptions options = null)
         {
             using (var uowManager = LocalIocManager.ResolveAsDisposable<IUnitOfWorkManager>())
             {
@@ -184,7 +184,7 @@ namespace Abp.TestBase
             }
         }
 
-        protected async Task WithUnitOfWorkAsync(string tenantId, Func<Task> action, UnitOfWorkOptions options = null)
+        protected async Task WithUnitOfWorkAsync(int? tenantId, Func<Task> action, UnitOfWorkOptions options = null)
         {
             using (var uowManager = LocalIocManager.ResolveAsDisposable<IUnitOfWorkManager>())
             {

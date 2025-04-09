@@ -4,8 +4,8 @@ namespace Abp.MultiTenancy
 {
     public interface ITenantResolver
     {
-        string ResolveTenantId();
+        int? ResolveTenantId();
         
-        Task<string> ResolveTenantIdAsync();
+        Task<int?> ResolveTenantIdAsync();
     }
 }

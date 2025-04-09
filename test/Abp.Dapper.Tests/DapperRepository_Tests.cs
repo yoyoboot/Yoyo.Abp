@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,26 +15,26 @@ namespace Abp.Dapper.Tests
 {
     public class DapperRepository_Tests : DapperApplicationTestBase
     {
-        private readonly IDapperRepository<Product,int> _productDapperRepository;
-        private readonly IRepository<Product,int> _productRepository;
+        private readonly IDapperRepository<Product> _productDapperRepository;
+        private readonly IRepository<Product> _productRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly IRepository<ProductDetail,int> _productDetailRepository;
-        private readonly IDapperRepository<ProductDetail,int> _productDetailDapperRepository;
-        private readonly IRepository<Person,int> _personRepository;
-        private readonly IDapperRepository<Person,int> _personDapperRepository;
-        private readonly IDapperRepository<Good,int> _goodDapperRepository;
+        private readonly IRepository<ProductDetail> _productDetailRepository;
+        private readonly IDapperRepository<ProductDetail> _productDetailDapperRepository;
+        private readonly IRepository<Person> _personRepository;
+        private readonly IDapperRepository<Person> _personDapperRepository;
+        private readonly IDapperRepository<Good> _goodDapperRepository;
         private readonly IDapperQueryFilterExecuter _dapperQueryFilterExecuter;
 
         public DapperRepository_Tests()
         {
-            _productDapperRepository = Resolve<IDapperRepository<Product,int>>();
-            _productRepository = Resolve<IRepository<Product,int>>();
+            _productDapperRepository = Resolve<IDapperRepository<Product>>();
+            _productRepository = Resolve<IRepository<Product>>();
             _unitOfWorkManager = Resolve<IUnitOfWorkManager>();
-            _productDetailRepository = Resolve<IRepository<ProductDetail,int>>();
-            _productDetailDapperRepository = Resolve<IDapperRepository<ProductDetail,int>>();
-            _personRepository = Resolve<IRepository<Person,int>>();
-            _personDapperRepository = Resolve<IDapperRepository<Person,int>>();
-            _goodDapperRepository = Resolve<IDapperRepository<Good,int>>();
+            _productDetailRepository = Resolve<IRepository<ProductDetail>>();
+            _productDetailDapperRepository = Resolve<IDapperRepository<ProductDetail>>();
+            _personRepository = Resolve<IRepository<Person>>();
+            _personDapperRepository = Resolve<IDapperRepository<Person>>();
+            _goodDapperRepository = Resolve<IDapperRepository<Good>>();
             _dapperQueryFilterExecuter = Resolve<IDapperQueryFilterExecuter>();
         }
 
@@ -118,7 +118,7 @@ namespace Abp.Dapper.Tests
                     softDeletedProductFromDapperWhenFilterDisabled.ShouldNotBeNull();
                 }
 
-                using (AbpSession.Use("2","266"))
+                using (AbpSession.Use(2, 266))
                 {
                     int productWithTenant2Id = await _productDapperRepository
                         .InsertAndGetIdAsync(new Product("ProductWithTenant2"));
@@ -126,17 +126,17 @@ namespace Abp.Dapper.Tests
                     var productWithTenant2 = await _productRepository.GetAsync(productWithTenant2Id);
 
                     productWithTenant2.TenantId
-                        .ShouldBe("1"); //Not sure about that?,Because we changed TenantId to 2 in this scope !!! Abp.TenantId = "2" now NOT 1 !!!
+                        .ShouldBe(1); //Not sure about that?,Because we changed TenantId to 2 in this scope !!! Abp.TenantId = 2 now NOT 1 !!!
                 }
 
-                using (_unitOfWorkManager.Current.SetTenantId("3"))
+                using (_unitOfWorkManager.Current.SetTenantId(3))
                 {
                     int productWithTenant3Id = await _productDapperRepository
                         .InsertAndGetIdAsync(new Product("ProductWithTenant3"));
 
                     Product productWithTenant3 = await _productRepository.GetAsync(productWithTenant3Id);
 
-                    productWithTenant3.TenantId.ShouldBe("3");
+                    productWithTenant3.TenantId.ShouldBe(3);
                 }
 
                 Product productWithTenantId3FromDapper = await _productDapperRepository
@@ -147,7 +147,7 @@ namespace Abp.Dapper.Tests
                 Product p = await _productDapperRepository.FirstOrDefaultAsync(x => x.Status == Status.Active);
                 p.ShouldNotBeNull();
 
-                using (_unitOfWorkManager.Current.SetTenantId("3"))
+                using (_unitOfWorkManager.Current.SetTenantId(3))
                 {
                     Product productWithTenantId3FromDapperInsideTenantScope = await _productDapperRepository
                         .FirstOrDefaultAsync(x => x.Name == "ProductWithTenant3");
@@ -190,7 +190,7 @@ namespace Abp.Dapper.Tests
 
                     Person personWithTenant40 = _personRepository.Get(personWithTenantId40);
 
-                    personWithTenant40.TenantId.ShouldBe(AbpSession.TenantId);
+                    personWithTenant40.TenantId.ShouldBe(AbpSession.TenantId.Value);
                 }
             }
         }

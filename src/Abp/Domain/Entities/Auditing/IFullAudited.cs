@@ -13,7 +13,7 @@ namespace Abp.Domain.Entities.Auditing
     /// </summary>
     /// <typeparam name="TUser">Type of the user</typeparam>
     public interface IFullAudited<TUser> : IAudited<TUser>, IFullAudited, IDeletionAudited<TUser>
-        where TUser : IEntity<string>
+        where TUser : IEntity<long>
     {
 
     }

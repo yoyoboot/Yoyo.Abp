@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Abp.CachedUniqueKeys
 {
@@ -12,9 +12,9 @@ namespace Abp.CachedUniqueKeys
 
         Task RemoveKeyAsync(string cacheName, UserIdentifier user);
 
-        Task<string> GetKeyAsync(string cacheName, string tenantId, string userId);
+        Task<string> GetKeyAsync(string cacheName, int? tenantId, long? userId);
 
-        Task RemoveKeyAsync(string cacheName, string tenantId, string userId);
+        Task RemoveKeyAsync(string cacheName, int? tenantId, long? userId);
 
         Task ClearCacheAsync(string cacheName);
 
@@ -26,9 +26,9 @@ namespace Abp.CachedUniqueKeys
 
         void RemoveKey(string cacheName, UserIdentifier user);
 
-        string GetKey(string cacheName, string tenantId, string userId);
+        string GetKey(string cacheName, int? tenantId, long? userId);
 
-        void RemoveKey(string cacheName, string tenantId, string userId);
+        void RemoveKey(string cacheName, int? tenantId, long? userId);
 
         void ClearCache(string cacheName);
     }

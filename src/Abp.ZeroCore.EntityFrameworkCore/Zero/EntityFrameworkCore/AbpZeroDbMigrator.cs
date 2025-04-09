@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Transactions;
 using Abp.Data;
 using Abp.Dependency;
@@ -55,7 +55,7 @@ namespace Abp.Zero.EntityFrameworkCore
         protected virtual void CreateOrMigrate(AbpTenantBase tenant, Action<TDbContext> seedAction)
         {
             var args = new DbPerTenantConnectionStringResolveArgs(
-                tenant == null ? null : tenant.Id,
+                tenant == null ? (int?) null : (int?) tenant.Id,
                 tenant == null ? MultiTenancySides.Host : MultiTenancySides.Tenant
             );
 

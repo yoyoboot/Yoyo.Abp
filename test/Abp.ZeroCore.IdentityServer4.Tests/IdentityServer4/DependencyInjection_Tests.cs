@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.Configuration.Startup;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -22,11 +22,11 @@ namespace Abp.IdentityServer4
         public async Task Should_Inject_AbpUserClaimsPrincipalFactory()
         {
             Resolve<IMultiTenancyConfig>().IsEnabled = true;
-            AbpSession.TenantId = "1";
+            AbpSession.TenantId = 1;
 
-            var repository = Resolve<IRepository<User, string>>();
+            var repository = Resolve<IRepository<User, long>>();
 
-            var userToAdd = User.CreateTenantAdminUser(AbpSession.TenantId, "admin@test.com");
+            var userToAdd = User.CreateTenantAdminUser(AbpSession.TenantId.Value, "admin@test.com");
             userToAdd.Password = "123qwe";
             var userId = await repository.InsertAndGetIdAsync(userToAdd);
 

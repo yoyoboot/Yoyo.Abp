@@ -1,4 +1,4 @@
-using Abp.Web.Security.AntiForgery;
+﻿using Abp.Web.Security.AntiForgery;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 

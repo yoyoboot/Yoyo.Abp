@@ -1,4 +1,4 @@
-namespace Abp.Web.Security.AntiForgery
+﻿namespace Abp.Web.Security.AntiForgery
 {
     /// <summary>
     /// Common configuration shared between ASP.NET Core, ASP.NET MVC and ASP.NET Web API.

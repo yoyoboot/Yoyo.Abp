@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities.Auditing;
 using Abp.Timing;
@@ -14,7 +14,7 @@ namespace Abp.Notifications
         /// <summary>
         /// Tenant Id.
         /// </summary>
-        public string TenantId { get; set; }
+        public int? TenantId { get; set; }
 
         /// <summary>
         /// Unique notification name.

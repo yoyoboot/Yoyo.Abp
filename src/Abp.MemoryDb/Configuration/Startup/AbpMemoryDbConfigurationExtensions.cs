@@ -1,4 +1,4 @@
-using Abp.MemoryDb.Configuration;
+﻿using Abp.MemoryDb.Configuration;
 
 namespace Abp.Configuration.Startup
 {

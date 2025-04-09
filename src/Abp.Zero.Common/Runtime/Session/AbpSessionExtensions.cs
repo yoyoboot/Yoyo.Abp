@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Abp.Authorization.Users;
 
 namespace Abp.Runtime.Session
@@ -18,8 +18,8 @@ namespace Abp.Runtime.Session
             }
 
             return session.TenantId == user.TenantId && 
-                session.UserId.HasValue() && 
-                session.UserId == user.Id;
+                session.UserId.HasValue && 
+                session.UserId.Value == user.Id;
         }
     }
 }

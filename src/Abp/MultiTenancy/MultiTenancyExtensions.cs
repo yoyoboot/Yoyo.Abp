@@ -13,7 +13,7 @@ namespace Abp.MultiTenancy
         /// <param name="obj">The object</param>
         public static MultiTenancySides GetMultiTenancySide(this IMayHaveTenant obj)
         {
-            return obj.TenantId.HasValue()
+            return obj.TenantId.HasValue
                 ? MultiTenancySides.Tenant
                 : MultiTenancySides.Host;
         }

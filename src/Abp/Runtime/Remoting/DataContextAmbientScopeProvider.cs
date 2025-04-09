@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using Abp.Collections.Extensions;
 using Castle.Core.Logging;

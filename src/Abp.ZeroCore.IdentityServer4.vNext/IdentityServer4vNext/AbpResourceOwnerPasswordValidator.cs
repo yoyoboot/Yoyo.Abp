@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Abp.Authorization.Users;
@@ -81,12 +81,12 @@ namespace Abp.IdentityServer4vNext
 
         protected virtual IEnumerable<Claim> GetAdditionalClaimsOrNull(TUser user)
         {
-            if (!user.TenantId.HasValue())
+            if (!user.TenantId.HasValue)
             {
                 return null;
             }
 
-            return new[] {new Claim(AbpClaimTypes.TenantId, user.TenantId)};
+            return new[] {new Claim(AbpClaimTypes.TenantId, user.TenantId?.ToString())};
         }
     }
 }

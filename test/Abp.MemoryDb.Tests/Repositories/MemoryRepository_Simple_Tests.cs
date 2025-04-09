@@ -1,4 +1,4 @@
-using Abp.Domain.Entities;
+﻿using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.MemoryDb.Repositories;
 using NSubstitute;
@@ -10,7 +10,7 @@ namespace Abp.MemoryDb.Tests.Repositories
     public class MemoryRepository_Simple_Tests
     {
         private readonly MemoryDatabase _database;
-        private readonly IRepository<MyEntity,int> _repository;
+        private readonly IRepository<MyEntity> _repository;
 
         public MemoryRepository_Simple_Tests()
         {
@@ -45,7 +45,7 @@ namespace Abp.MemoryDb.Tests.Repositories
             test1.ShouldBe(null);
         }
 
-        public class MyEntity : Entity<int>
+        public class MyEntity : Entity
         {
             public string Name { get; set; }
 

@@ -1,4 +1,4 @@
-using Abp.Configuration;
+﻿using Abp.Configuration;
 using NUnit.Framework;
 using Shouldly;
 using Xunit;

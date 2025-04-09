@@ -1,4 +1,4 @@
-namespace Abp.Data
+﻿namespace Abp.Data
 {
     /// Reference from https://github.com/microsoft/service-fabric/blob/c326b801c6c709f36684700edfe7bb88ceec9d7f/src/prod/src/managed/Microsoft.ServiceFabric.Data.Interfaces/ConditionalResult.cs
     /// <summary>

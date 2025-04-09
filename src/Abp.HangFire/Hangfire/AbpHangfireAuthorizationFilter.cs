@@ -1,4 +1,4 @@
-using Abp.Authorization;
+﻿using Abp.Authorization;
 using Abp.Dependency;
 using Abp.Extensions;
 using Abp.Runtime.Session;
@@ -38,7 +38,7 @@ namespace Abp.Hangfire
         {
             using (var abpSession = IocResolver.ResolveAsDisposable<IAbpSession>())
             {
-                return abpSession.Object.UserId.HasValue();
+                return abpSession.Object.UserId.HasValue;
             }
         }
 

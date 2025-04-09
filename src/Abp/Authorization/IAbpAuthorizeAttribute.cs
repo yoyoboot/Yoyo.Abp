@@ -1,4 +1,4 @@
-namespace Abp.Authorization
+﻿namespace Abp.Authorization
 {
     /// <summary>
     /// Defines standard interface for authorization attributes.
