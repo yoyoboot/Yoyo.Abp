@@ -1,4 +1,4 @@
-﻿namespace Abp.Web.MultiTenancy
+namespace Abp.Web.MultiTenancy
 {
     /// <summary>
     /// Used to create client scripts for multi-tenancy.

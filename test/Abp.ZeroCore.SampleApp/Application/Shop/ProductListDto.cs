@@ -1,8 +1,8 @@
-﻿using Abp.Application.Services.Dto;
+using Abp.Application.Services.Dto;
 
 namespace Abp.ZeroCore.SampleApp.Application.Shop
 {
-    public class ProductListDto : EntityDto
+    public class ProductListDto : EntityDto<int>
     {
         public decimal Price { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using Abp.AspNetCore.Mvc.Controllers;
+using Abp.AspNetCore.Mvc.Controllers;
 using Abp.UI;
 using Abp.Web.Models;
 using Microsoft.AspNetCore.Mvc;

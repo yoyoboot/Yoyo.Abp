@@ -1,4 +1,4 @@
-﻿using Abp.Notifications;
+using Abp.Notifications;
 
 namespace Abp.Zero.Notifications
 {

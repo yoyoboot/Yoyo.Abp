@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Abp.Auditing
 {
@@ -10,22 +10,22 @@ namespace Abp.Auditing
         /// <summary>
         /// TenantId.
         /// </summary>
-        public int? TenantId { get; set; }
+        public string TenantId { get; set; }
         
         /// <summary>
         /// UserId.
         /// </summary>
-        public long? UserId { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
         /// ImpersonatorUserId.
         /// </summary>
-        public long? ImpersonatorUserId { get; set; }
+        public string ImpersonatorUserId { get; set; }
 
         /// <summary>
         /// ImpersonatorTenantId.
         /// </summary>
-        public int? ImpersonatorTenantId { get; set; }
+        public string ImpersonatorTenantId { get; set; }
 
         /// <summary>
         /// Service (class/interface) name.
@@ -84,8 +84,8 @@ namespace Abp.Auditing
 
         public override string ToString()
         {
-            var loggedUserId = UserId.HasValue
-                                   ? "user " + UserId.Value
+            var loggedUserId = UserId.HasValue()
+                                   ? "user " + UserId
                                    : "an anonymous user";
 
             var exceptionOrSuccessMessage = Exception != null

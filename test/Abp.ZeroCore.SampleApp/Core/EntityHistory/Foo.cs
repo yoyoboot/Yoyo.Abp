@@ -1,4 +1,4 @@
-﻿using Abp.Auditing;
+using Abp.Auditing;
 using Abp.Domain.Entities;
 
 namespace Abp.ZeroCore.SampleApp.Core.EntityHistory

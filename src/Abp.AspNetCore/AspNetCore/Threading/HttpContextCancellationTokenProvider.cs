@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using Abp.Threading;
 using Microsoft.AspNetCore.Http;
 using System.Threading;

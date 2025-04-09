@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using Abp.Events.Bus.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Abp.EntityHistory
 {
     [Table("AbpEntityChanges")]
-    public class EntityChange : Entity<long>, IMayHaveTenant
+    public class EntityChange : Entity<string>, IMayHaveTenant
     {
         /// <summary>
         /// Maximum length of <see cref="EntityId"/> property.
@@ -35,7 +35,7 @@ namespace Abp.EntityHistory
         /// <summary>
         /// Gets/sets change set id, used to group entity changes.
         /// </summary>
-        public virtual long EntityChangeSetId { get; set; }
+        public virtual string EntityChangeSetId { get; set; }
 
         /// <summary>
         /// Gets/sets primary key of the entity.
@@ -52,7 +52,7 @@ namespace Abp.EntityHistory
         /// <summary>
         /// TenantId.
         /// </summary>
-        public virtual int? TenantId { get; set; }
+        public virtual string TenantId { get; set; }
 
         /// <summary>
         /// PropertyChanges.

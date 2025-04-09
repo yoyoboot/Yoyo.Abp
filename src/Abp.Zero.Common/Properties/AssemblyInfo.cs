@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Abp.Zero")]
-[assembly: InternalsVisibleTo("Abp.ZeroCore")]
+[assembly: InternalsVisibleTo("Yoyo.Abp.Zero")]
+[assembly: InternalsVisibleTo("Yoyo.Abp.ZeroCore")]

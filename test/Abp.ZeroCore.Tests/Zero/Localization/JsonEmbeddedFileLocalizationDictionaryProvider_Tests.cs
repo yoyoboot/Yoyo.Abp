@@ -1,4 +1,4 @@
-﻿using Abp.Localization;
+using Abp.Localization;
 using Abp.Localization.Dictionaries;
 using Abp.Localization.Dictionaries.Json;
 using Abp.Localization.Sources;

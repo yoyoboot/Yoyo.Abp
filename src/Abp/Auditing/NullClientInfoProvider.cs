@@ -1,4 +1,4 @@
-﻿namespace Abp.Auditing
+namespace Abp.Auditing
 {
     public class NullClientInfoProvider : IClientInfoProvider
     {

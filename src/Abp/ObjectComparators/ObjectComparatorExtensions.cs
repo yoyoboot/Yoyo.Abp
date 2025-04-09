@@ -1,4 +1,4 @@
-﻿using Abp.Extensions;
+using Abp.Extensions;
 using System;
 
 namespace Abp.ObjectComparators

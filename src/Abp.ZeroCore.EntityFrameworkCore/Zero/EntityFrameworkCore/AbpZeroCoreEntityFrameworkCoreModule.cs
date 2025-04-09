@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Uow;
+using Abp.Domain.Uow;
 using Abp.EntityFrameworkCore;
 using Abp.Modules;
 using Abp.MultiTenancy;

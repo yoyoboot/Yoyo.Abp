@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -22,13 +22,13 @@ namespace Abp.Tests.RealTime
         [Fact]
         public void Test_All()
         {
-            int tenantId = 1;
+            string tenantId = "1";
 
-            Dictionary<string, int> connections = new Dictionary<string, int>();
+            Dictionary<string, string> connections = new Dictionary<string, string>();
 
             for (int i = 0; i < 100; i++)
             {
-                connections.Add(MakeNewConnectionId(), i + 1);
+                connections.Add(MakeNewConnectionId(), (i + 1).ToString());
             }
 
             foreach (var pair in connections)

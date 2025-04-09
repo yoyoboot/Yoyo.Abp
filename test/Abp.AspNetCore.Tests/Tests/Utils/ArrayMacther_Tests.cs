@@ -1,4 +1,4 @@
-﻿using Abp.AspNetCore.Mvc.Proxying.Utils;
+using Abp.AspNetCore.Mvc.Proxying.Utils;
 using Xunit;
 
 namespace Abp.AspNetCore.Tests.Utils

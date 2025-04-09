@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Abp.AspNetCore.Configuration;
 using Abp.Dependency;
 using Abp.Domain.Uow;

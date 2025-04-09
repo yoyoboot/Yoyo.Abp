@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Abp.Runtime.Session;
 using Microsoft.AspNetCore.Http;
 

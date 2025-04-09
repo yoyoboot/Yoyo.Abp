@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Abp.Collections.Extensions;
 using Abp.Configuration.Startup;
 using Abp.Dependency;
@@ -25,7 +25,7 @@ namespace Abp.AspNetCore.MultiTenancy
             Logger = NullLogger.Instance;
         }
 
-        public int? ResolveTenantId()
+        public string ResolveTenantId()
         {
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext == null)
@@ -46,7 +46,7 @@ namespace Abp.AspNetCore.MultiTenancy
                     );
             }
 
-            return int.TryParse(tenantIdHeader.First(), out var tenantId) ? tenantId : (int?) null;
+            return tenantIdHeader.FirstOrDefault();
         }
     }
 }

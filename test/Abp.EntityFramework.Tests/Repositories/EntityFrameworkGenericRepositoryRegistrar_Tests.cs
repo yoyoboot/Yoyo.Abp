@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data.Entity;
 using Abp.Dependency;
 using Abp.Domain.Entities;
@@ -43,21 +43,21 @@ namespace Abp.EntityFramework.Tests.Repositories
             (entity1Repository is EfRepositoryBase<MyBaseDbContext, MyEntity1>).ShouldBe(true);
 
             //Entity 1 (with specified PK)
-            var entity1RepositoryWithPk = LocalIocManager.Resolve<IRepository<MyEntity1, int>>();
+            var entity1RepositoryWithPk = LocalIocManager.Resolve<IRepository<MyEntity1, string>>();
             entity1RepositoryWithPk.ShouldNotBe(null);
-            (entity1RepositoryWithPk is EfRepositoryBase<MyBaseDbContext, MyEntity1, int>).ShouldBe(true);
+            (entity1RepositoryWithPk is EfRepositoryBase<MyBaseDbContext, MyEntity1, string>).ShouldBe(true);
 
             //Entity 1 (with specified Repository forIMyModuleRepository )
             var entity1RepositoryWithModuleInterface = LocalIocManager.Resolve<IMyModuleRepository<MyEntity1>>();
             entity1RepositoryWithModuleInterface.ShouldNotBe(null);
             (entity1RepositoryWithModuleInterface is MyModuleRepositoryBase<MyEntity1>).ShouldBe(true);
-            (entity1RepositoryWithModuleInterface is EfRepositoryBase<MyModuleDbContext, MyEntity1, int>).ShouldBe(true);
+            (entity1RepositoryWithModuleInterface is EfRepositoryBase<MyModuleDbContext, MyEntity1, string>).ShouldBe(true);
 
             //Entity 1 (with specified Repository forIMyModuleRepository )
-            var entity1RepositoryWithModuleInterfaceWithPk = LocalIocManager.Resolve<IMyModuleRepository<MyEntity1, int>>();
+            var entity1RepositoryWithModuleInterfaceWithPk = LocalIocManager.Resolve<IMyModuleRepository<MyEntity1, string>>();
             entity1RepositoryWithModuleInterfaceWithPk.ShouldNotBe(null);
-            (entity1RepositoryWithModuleInterfaceWithPk is MyModuleRepositoryBase<MyEntity1, int>).ShouldBe(true);
-            (entity1RepositoryWithModuleInterfaceWithPk is EfRepositoryBase<MyModuleDbContext, MyEntity1, int>).ShouldBe(true);
+            (entity1RepositoryWithModuleInterfaceWithPk is MyModuleRepositoryBase<MyEntity1, string>).ShouldBe(true);
+            (entity1RepositoryWithModuleInterfaceWithPk is EfRepositoryBase<MyModuleDbContext, MyEntity1, string>).ShouldBe(true);
 
             //Entity 2
             var entity2Repository = LocalIocManager.Resolve<IRepository<MyEntity2, long>>();
@@ -114,7 +114,7 @@ namespace Abp.EntityFramework.Tests.Repositories
         }
 
         public interface IMyModuleRepository<TEntity> : IRepository<TEntity>
-            where TEntity : class, IEntity<int>
+            where TEntity : class, IEntity<string>
         {
 
         }
@@ -134,8 +134,8 @@ namespace Abp.EntityFramework.Tests.Repositories
             }
         }
 
-        public class MyModuleRepositoryBase<TEntity> : MyModuleRepositoryBase<TEntity, int>, IMyModuleRepository<TEntity>
-            where TEntity : class, IEntity<int>
+        public class MyModuleRepositoryBase<TEntity> : MyModuleRepositoryBase<TEntity, string>, IMyModuleRepository<TEntity>
+            where TEntity : class, IEntity<string>
         {
             public MyModuleRepositoryBase(IDbContextProvider<MyModuleDbContext> dbContextProvider)
                 : base(dbContextProvider)

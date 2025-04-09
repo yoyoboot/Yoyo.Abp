@@ -1,4 +1,4 @@
-﻿using Abp.Authorization.Users;
+using Abp.Authorization.Users;
 using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Events.Bus.Entities;

@@ -1,4 +1,4 @@
-﻿namespace Abp.Domain.Repositories
+namespace Abp.Domain.Repositories
 {
     internal class UnitOfWorkExtensionDataTypes
     {

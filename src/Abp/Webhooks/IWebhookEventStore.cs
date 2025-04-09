@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace Abp.Webhooks
@@ -18,11 +18,11 @@ namespace Abp.Webhooks
         /// <summary>
         /// Gets Webhook info by id
         /// </summary>
-        Task<WebhookEvent> GetAsync(int? tenantId, Guid id);
+        Task<WebhookEvent> GetAsync(string tenantId, Guid id);
 
         /// <summary>
         /// Gets Webhook info by id
         /// </summary>
-        WebhookEvent Get(int? tenantId, Guid id);
+        WebhookEvent Get(string tenantId, Guid id);
     }
 }

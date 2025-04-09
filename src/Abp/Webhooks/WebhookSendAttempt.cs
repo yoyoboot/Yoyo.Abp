@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -39,7 +39,7 @@ namespace Abp.Webhooks
 
         public virtual DateTime? LastModificationTime { get; set; }
 
-        public virtual int? TenantId { get; set; }
+        public virtual string TenantId { get; set; }
 
         /// <summary>
         /// WebhookEvent of this send attempt.

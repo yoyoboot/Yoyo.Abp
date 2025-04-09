@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Abp.AspNetCore.SignalR.Notifications;
 using Abp.Modules;
 

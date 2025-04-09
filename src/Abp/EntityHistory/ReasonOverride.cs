@@ -1,4 +1,4 @@
-﻿namespace Abp.EntityHistory
+namespace Abp.EntityHistory
 {
     public class ReasonOverride
     {

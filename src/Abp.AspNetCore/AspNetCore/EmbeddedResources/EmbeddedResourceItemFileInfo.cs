@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Abp.Resources.Embedded;
 using Microsoft.Extensions.FileProviders;

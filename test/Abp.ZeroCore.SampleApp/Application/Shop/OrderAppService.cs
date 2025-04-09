@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
@@ -10,9 +10,9 @@ namespace Abp.ZeroCore.SampleApp.Application.Shop
 {
     public class OrderAppService : ApplicationService, IOrderAppService
     {
-        private readonly IRepository<Order> _orderRepository;
+        private readonly IRepository<Order, int> _orderRepository;
 
-        public OrderAppService(IRepository<Order> orderRepository)
+        public OrderAppService(IRepository<Order, int> orderRepository)
         {
             _orderRepository = orderRepository;
         }

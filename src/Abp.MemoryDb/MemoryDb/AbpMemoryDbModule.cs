@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Abp.MemoryDb.Configuration;
 using Abp.Modules;
 using Abp.Reflection.Extensions;

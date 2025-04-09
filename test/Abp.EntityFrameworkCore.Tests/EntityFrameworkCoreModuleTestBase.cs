@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.EntityFrameworkCore.Tests.Domain;
@@ -50,7 +50,7 @@ namespace Abp.EntityFrameworkCore.Tests
 
                     var post2 = new Post { Blog = blog1, Title = "test-post-2-title", Body = "test-post-2-body" };
                     var post3 = new Post { Blog = blog1, Title = "test-post-3-title", Body = "test-post-3-body-deleted", IsDeleted = true };
-                    var post4 = new Post { Blog = blog1, Title = "test-post-4-title", Body = "test-post-4-body", TenantId = 42 };
+                    var post4 = new Post { Blog = blog1, Title = "test-post-4-title", Body = "test-post-4-body", TenantId = "42"};
 
                     context.Posts.AddRange(post1, post2, post3, post4);
 
@@ -74,9 +74,9 @@ namespace Abp.EntityFrameworkCore.Tests
             using (var context = LocalIocManager.Resolve<SupportDbContext>())
             {
                 context.Tickets.AddRange(
-                    new Ticket { EmailAddress = "john@aspnetboilerplate.com", Message = "an active message", TenantId = 1 },
-                    new Ticket { EmailAddress = "david@aspnetboilerplate.com", Message = "an inactive message", IsActive = false, TenantId = 1 },
-                    new Ticket { EmailAddress = "smith@aspnetboilerplate.com", Message = "an active message of tenant 42", TenantId = 42 }
+                    new Ticket { EmailAddress = "john@aspnetboilerplate.com", Message = "an active message", TenantId = "1"},
+                    new Ticket { EmailAddress = "david@aspnetboilerplate.com", Message = "an inactive message", IsActive = false, TenantId = "1"},
+                    new Ticket { EmailAddress = "smith@aspnetboilerplate.com", Message = "an active message of tenant 42", TenantId = "42" }
                 );
 
                 context.SaveChanges();

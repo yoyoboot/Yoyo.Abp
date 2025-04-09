@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Abp.Dependency;
 using Abp.Runtime.Caching;
@@ -38,9 +38,9 @@ namespace Abp.CachedUniqueKeys
             return RemoveKeyAsync(cacheName, user.TenantId, user.UserId);
         }
 
-        public virtual async Task<string> GetKeyAsync(string cacheName, int? tenantId, long? userId)
+        public virtual async Task<string> GetKeyAsync(string cacheName, string tenantId, string userId)
         {
-            if (!AbpSession.UserId.HasValue)
+            if (!AbpSession.UserId.HasValue())
             {
                 return Guid.NewGuid().ToString("N");
             }
@@ -50,9 +50,9 @@ namespace Abp.CachedUniqueKeys
                 () => Task.FromResult(Guid.NewGuid().ToString("N")));
         }
 
-        public virtual async Task RemoveKeyAsync(string cacheName, int? tenantId, long? userId)
+        public virtual async Task RemoveKeyAsync(string cacheName, string tenantId, string userId)
         {
-            if (!AbpSession.UserId.HasValue)
+            if (!AbpSession.UserId.HasValue())
             {
                 return;
             }
@@ -87,9 +87,9 @@ namespace Abp.CachedUniqueKeys
             RemoveKey(cacheName, user.TenantId, user.UserId);
         }
 
-        public virtual string GetKey(string cacheName, int? tenantId, long? userId)
+        public virtual string GetKey(string cacheName, string tenantId, string userId)
         {
-            if (!AbpSession.UserId.HasValue)
+            if (!AbpSession.UserId.HasValue())
             {
                 return Guid.NewGuid().ToString("N");
             }
@@ -99,9 +99,9 @@ namespace Abp.CachedUniqueKeys
                 () => Guid.NewGuid().ToString("N"));
         }
 
-        public virtual void RemoveKey(string cacheName, int? tenantId, long? userId)
+        public virtual void RemoveKey(string cacheName, string tenantId, string userId)
         {
-            if (!AbpSession.UserId.HasValue)
+            if (!AbpSession.UserId.HasValue())
             {
                 return;
             }
@@ -121,7 +121,7 @@ namespace Abp.CachedUniqueKeys
             return _cacheManager.GetCache<string, string>(cacheName);
         }
 
-        protected virtual string GetCacheKeyForUser(int? tenantId, long? userId)
+        protected virtual string GetCacheKeyForUser(string tenantId, string userId)
         {
             if (tenantId == null)
             {

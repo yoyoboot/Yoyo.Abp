@@ -1,4 +1,4 @@
-﻿namespace Abp.Notifications
+namespace Abp.Notifications
 {
     internal class NotificationDefinitionContext : INotificationDefinitionContext
     {

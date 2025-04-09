@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -60,7 +60,7 @@ namespace Abp.Authorization.Roles
         /// </summary>
         /// <param name="tenantId">TenantId or null (if this is not a tenant-level role)</param>
         /// <param name="displayName">Display name of the role</param>
-        protected AbpRole(int? tenantId, string displayName)
+        protected AbpRole(string tenantId, string displayName)
             : base(tenantId, displayName)
         {
             SetNormalizedName();
@@ -72,7 +72,7 @@ namespace Abp.Authorization.Roles
         /// <param name="tenantId">TenantId or null (if this is not a tenant-level role)</param>
         /// <param name="name">Unique role name</param>
         /// <param name="displayName">Display name of the role</param>
-        protected AbpRole(int? tenantId, string name, string displayName)
+        protected AbpRole(string tenantId, string name, string displayName)
             : base(tenantId, name, displayName)
         {
             SetNormalizedName();

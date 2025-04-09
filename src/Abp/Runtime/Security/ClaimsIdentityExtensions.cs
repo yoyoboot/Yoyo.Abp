@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -19,10 +19,10 @@ namespace Abp.Runtime.Security
                 return null;
             }
 
-            return new UserIdentifier(identity.GetTenantId(), userId.Value);
+            return new UserIdentifier(identity.GetTenantId(), userId);
         }
 
-        public static long? GetUserId([NotNull] this IIdentity identity)
+        public static string GetUserId([NotNull] this IIdentity identity)
         {
             Check.NotNull(identity, nameof(identity));
 
@@ -34,10 +34,10 @@ namespace Abp.Runtime.Security
                 return null;
             }
 
-            return Convert.ToInt64(userIdOrNull.Value);
+            return userIdOrNull.Value;
         }
 
-        public static int? GetTenantId(this IIdentity identity)
+        public static string GetTenantId(this IIdentity identity)
         {
             Check.NotNull(identity, nameof(identity));
 
@@ -49,10 +49,10 @@ namespace Abp.Runtime.Security
                 return null;
             }
 
-            return Convert.ToInt32(tenantIdOrNull.Value);
+            return tenantIdOrNull.Value;
         }
 
-        public static long? GetImpersonatorUserId(this IIdentity identity)
+        public static string GetImpersonatorUserId(this IIdentity identity)
         {
             Check.NotNull(identity, nameof(identity));
 
@@ -64,10 +64,10 @@ namespace Abp.Runtime.Security
                 return null;
             }
 
-            return Convert.ToInt64(userIdOrNull.Value);
+            return userIdOrNull.Value;
         }
 
-        public static int? GetImpersonatorTenantId(this IIdentity identity)
+        public static string GetImpersonatorTenantId(this IIdentity identity)
         {
             Check.NotNull(identity, nameof(identity));
 
@@ -79,7 +79,7 @@ namespace Abp.Runtime.Security
                 return null;
             }
 
-            return Convert.ToInt32(tenantIdOrNull.Value);
+            return tenantIdOrNull.Value;
         }
     }
 }

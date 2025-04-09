@@ -1,4 +1,4 @@
-﻿using Abp.Web.Api.ProxyScripting.Configuration;
+using Abp.Web.Api.ProxyScripting.Configuration;
 using Abp.Web.MultiTenancy;
 using Abp.Web.Results.Filters;
 using Abp.Web.Security.AntiForgery;

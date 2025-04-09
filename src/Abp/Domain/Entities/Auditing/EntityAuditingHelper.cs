@@ -1,4 +1,4 @@
-﻿using Abp.Timing;
+using Abp.Timing;
 using System.Collections.Generic;
 using System.Linq;
 using Abp.Configuration.Startup;
@@ -13,8 +13,8 @@ namespace Abp.Domain.Entities.Auditing
         public static void SetCreationAuditProperties(
             IMultiTenancyConfig multiTenancyConfig,
             object entityAsObj,
-            int? tenantId,
-            long? userId,
+            string tenantId,
+            string userId,
             IReadOnlyList<AuditFieldConfiguration> auditFields)
         {
             var entityWithCreationTime = entityAsObj as IHasCreationTime;
@@ -35,7 +35,7 @@ namespace Abp.Domain.Entities.Auditing
                 return;
             }
 
-            if (!userId.HasValue)
+            if (!userId.HasValue())
             {
                 //Unknown user
                 return;
@@ -57,7 +57,7 @@ namespace Abp.Domain.Entities.Auditing
                     return;
                 }
 
-                if (tenantId.HasValue && MultiTenancyHelper.IsHostEntity(entity))
+                if (tenantId.HasValue() && MultiTenancyHelper.IsHostEntity(entity))
                 {
                     //Tenant user created a host entity
                     return;
@@ -77,8 +77,8 @@ namespace Abp.Domain.Entities.Auditing
         public static void SetModificationAuditProperties(
             IMultiTenancyConfig multiTenancyConfig,
             object entityAsObj,
-            int? tenantId,
-            long? userId,
+            string tenantId,
+            string userId,
             IReadOnlyList<AuditFieldConfiguration> auditFields)
         {
             if (entityAsObj is IHasModificationTime)
@@ -115,7 +115,7 @@ namespace Abp.Domain.Entities.Auditing
                     return;
                 }
 
-                if (tenantId.HasValue && MultiTenancyHelper.IsHostEntity(entity))
+                if (tenantId.HasValue() && MultiTenancyHelper.IsHostEntity(entity))
                 {
                     //Tenant user modified a host entity
                     entity.LastModifierUserId = null;
@@ -136,8 +136,8 @@ namespace Abp.Domain.Entities.Auditing
         public static void SetDeletionAuditProperties(
             IMultiTenancyConfig multiTenancyConfig,
             object entityAsObj,
-            int? tenantId,
-            long? userId,
+            string tenantId,
+            string userId,
             IReadOnlyList<AuditFieldConfiguration> auditFields)
         {
             if (entityAsObj is IHasDeletionTime)

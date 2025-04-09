@@ -1,4 +1,4 @@
-﻿using Abp.Organizations;
+using Abp.Organizations;
 using Abp.ZeroCore.SampleApp.EntityFramework;
 
 namespace Abp.Zero.TestData
@@ -16,9 +16,9 @@ namespace Abp.Zero.TestData
     public class TestOrganizationUnitsBuilder
     {
         private readonly SampleAppDbContext _context;
-        private readonly int _tenantId;
+        private readonly string _tenantId;
 
-        public TestOrganizationUnitsBuilder(SampleAppDbContext context, int tenantId)
+        public TestOrganizationUnitsBuilder(SampleAppDbContext context, string tenantId)
         {
             _context = context;
             _tenantId = tenantId;
@@ -40,7 +40,7 @@ namespace Abp.Zero.TestData
             var ou21 = CreateOU("OU21", OrganizationUnit.CreateCode(2, 1), ou2.Id);
         }
 
-        private OrganizationUnit CreateOU(string displayName, string code, long? parentId = null)
+        private OrganizationUnit CreateOU(string displayName, string code, string parentId = null)
         {
             var ou = _context.OrganizationUnits.Add(new OrganizationUnit(_tenantId, displayName, parentId) { Code = code }).Entity;
             _context.SaveChanges();

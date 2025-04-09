@@ -1,4 +1,4 @@
-﻿namespace Abp.Authorization
+namespace Abp.Authorization
 {
     /// <summary>
     /// Represents a permission <see cref="Name"/> with <see cref="IsGranted"/> information.

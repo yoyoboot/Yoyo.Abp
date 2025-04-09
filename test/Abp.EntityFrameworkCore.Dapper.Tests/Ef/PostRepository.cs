@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Abp.EntityFrameworkCore.Dapper.Tests.Domain;
 using Abp.EntityFrameworkCore.Repositories;

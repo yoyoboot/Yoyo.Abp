@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Abp.Configuration;
 using Abp.Domain.Uow;
 using Abp.Localization;

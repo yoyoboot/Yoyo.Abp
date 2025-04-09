@@ -1,4 +1,4 @@
-﻿namespace Abp.MultiTenancy
+namespace Abp.MultiTenancy
 {
     public class TenantStore : ITenantStore
     {
@@ -9,9 +9,9 @@
             _tenantCache = tenantCache;
         }
 
-        public TenantInfo Find(int tenantId)
+        public TenantInfo FindById(string tenantId)
         {
-            var tenant = _tenantCache.GetOrNull(tenantId);
+            var tenant = _tenantCache.GetOrNull(tenantId, null);
             if (tenant == null)
             {
                 return null;

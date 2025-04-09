@@ -13,14 +13,14 @@ namespace Abp.BackgroundJobs
         /// </summary>
         /// <param name="jobId">The Job Unique Identifier.</param>
         /// <returns>The BackgroundJobInfo object.</returns>
-        Task<BackgroundJobInfo> GetAsync(long jobId);
+        Task<BackgroundJobInfo> GetAsync(string jobId);
 
         /// <summary>
         /// Gets a BackgroundJobInfo based on the given jobId.
         /// </summary>
         /// <param name="jobId">The Job Unique Identifier.</param>
         /// <returns>The BackgroundJobInfo object.</returns>
-        BackgroundJobInfo Get(long jobId);
+        BackgroundJobInfo Get(string jobId);
 
         /// <summary>
         /// Inserts a background job.

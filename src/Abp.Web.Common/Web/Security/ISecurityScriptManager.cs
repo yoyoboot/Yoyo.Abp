@@ -1,4 +1,4 @@
-﻿namespace Abp.Web.Security
+namespace Abp.Web.Security
 {
     public interface ISecurityScriptManager
     {

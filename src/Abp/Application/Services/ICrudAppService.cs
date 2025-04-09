@@ -3,8 +3,8 @@ using Abp.Application.Services.Dto;
 namespace Abp.Application.Services
 {
     public interface ICrudAppService<TEntityDto>
-        : ICrudAppService<TEntityDto, int>
-        where TEntityDto : IEntityDto<int>
+        : ICrudAppService<TEntityDto, string>
+        where TEntityDto : IEntityDto<string>
     {
 
     }

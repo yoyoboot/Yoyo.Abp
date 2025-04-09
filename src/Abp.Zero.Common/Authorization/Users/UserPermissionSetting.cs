@@ -1,4 +1,4 @@
-﻿namespace Abp.Authorization.Users
+namespace Abp.Authorization.Users
 {
     /// <summary>
     /// Used to store setting for a permission for a user.
@@ -8,6 +8,6 @@
         /// <summary>
         /// User id.
         /// </summary>
-        public virtual long UserId { get; set; }
+        public virtual string UserId { get; set; }
     }
 }

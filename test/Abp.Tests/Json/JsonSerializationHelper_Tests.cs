@@ -22,7 +22,7 @@ namespace Abp.Tests.Json
         [Fact]
         public void Should_Deserialize_With_Different_Assembly_Version()
         {
-            var str = "Abp.Localization.LocalizableString, Abp, Version=1.5.1.0, Culture=neutral, PublicKeyToken=null|{\"SourceName\":\"Bar\",\"Name\":\"Foo\"}";
+            var str = "Abp.Localization.LocalizableString, Yoyo.Abp, Version=1.5.1.0, Culture=neutral, PublicKeyToken=null|{\"SourceName\":\"Bar\",\"Name\":\"Foo\"}";
             var result = (LocalizableString)JsonSerializationHelper.DeserializeWithType(str);
             result.ShouldNotBeNull();
             result.Name.ShouldBe("Foo");

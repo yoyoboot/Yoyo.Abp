@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using Abp.Authorization.Users;
 using Abp.IdentityServer4;

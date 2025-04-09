@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 using Abp.Dapper.Repositories;
 using Abp.Domain.Repositories;
@@ -14,14 +14,14 @@ namespace Abp.EntityFrameworkCore.Dapper.Tests.Tests
 {
     public class DomainEvents_Tests : AbpEfCoreDapperTestApplicationBase
     {
-        private readonly IDapperRepository<Blog> _blogDapperRepository;
-        private readonly IRepository<Blog> _blogRepository;
+        private readonly IDapperRepository<Blog,int> _blogDapperRepository;
+        private readonly IRepository<Blog,int> _blogRepository;
         private readonly IEventBus _eventBus;
 
         public DomainEvents_Tests()
         {
-            _blogRepository = Resolve<IRepository<Blog>>();
-            _blogDapperRepository = Resolve<IDapperRepository<Blog>>();
+            _blogRepository = Resolve<IRepository<Blog,int>>();
+            _blogDapperRepository = Resolve<IDapperRepository<Blog,int>>();
             _eventBus = Resolve<IEventBus>();
         }
 

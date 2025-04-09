@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Abp.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using Abp.Dependency;
 using Abp.Domain.Entities;
@@ -81,7 +81,7 @@ namespace Abp.EntityFramework.Repositories
             Type repositoryImplementationWithPrimaryKey)
         {
             var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityType);
-            if (primaryKeyType == typeof(int))
+            if (primaryKeyType == typeof(string))
             {
                 var genericRepositoryType = repositoryInterface.MakeGenericType(entityType);
                 if (!iocManager.IsRegistered(genericRepositoryType))
@@ -133,7 +133,7 @@ namespace Abp.EntityFramework.Repositories
             foreach (var entityTypeInfo in _dbContextEntityFinder.GetEntityTypeInfos(dbContextType))
             {
                 var primaryKeyType = EntityHelper.GetPrimaryKeyType(entityTypeInfo.EntityType);
-                if (primaryKeyType == typeof(int))
+                if (primaryKeyType == typeof(string))
                 {
                     var genericRepositoryType = repositoryInterface.MakeGenericType(entityTypeInfo.EntityType);
                     if (!iocManager.IsRegistered(genericRepositoryType))

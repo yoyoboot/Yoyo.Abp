@@ -8,7 +8,7 @@ namespace Abp.Domain.Entities.Auditing
     /// A shortcut of <see cref="CreationAuditedEntity{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
     /// </summary>
     [Serializable]
-    public abstract class CreationAuditedEntity : CreationAuditedEntity<int>, IEntity
+    public abstract class CreationAuditedEntity : CreationAuditedEntity<string>, IEntity
     {
 
     }
@@ -28,7 +28,7 @@ namespace Abp.Domain.Entities.Auditing
         /// <summary>
         /// Creator of this entity.
         /// </summary>
-        public virtual long? CreatorUserId { get; set; }
+        public virtual string CreatorUserId { get; set; }
 
         /// <summary>
         /// Constructor.
@@ -46,7 +46,7 @@ namespace Abp.Domain.Entities.Auditing
     /// <typeparam name="TUser">Type of the user</typeparam>
     [Serializable]
     public abstract class CreationAuditedEntity<TPrimaryKey, TUser> : CreationAuditedEntity<TPrimaryKey>, ICreationAudited<TUser>
-        where TUser : IEntity<long>
+        where TUser : IEntity<string>
     {
         /// <summary>
         /// Reference to the creator user of this entity.

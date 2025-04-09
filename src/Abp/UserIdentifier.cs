@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using Abp.Extensions;
 
@@ -14,12 +14,12 @@ namespace Abp
         /// Tenant Id of the user.
         /// Can be null for host users in a multi tenant application.
         /// </summary>
-        public int? TenantId { get; protected set; }
+        public string TenantId { get; protected set; }
 
         /// <summary>
         /// Id of the user.
         /// </summary>
-        public long UserId { get; protected set; }
+        public string UserId { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserIdentifier"/> class.
@@ -34,7 +34,7 @@ namespace Abp
         /// </summary>
         /// <param name="tenantId">Tenant Id of the user.</param>
         /// <param name="userId">Id of the user.</param>
-        public UserIdentifier(int? tenantId, long userId)
+        public UserIdentifier(string tenantId, string userId)
         {
             TenantId = tenantId;
             UserId = userId;
@@ -59,13 +59,13 @@ namespace Abp
             var splitted = userIdentifierString.Split('@');
             if (splitted.Length == 1)
             {
-                return new UserIdentifier(null, splitted[0].To<long>());
+                return new UserIdentifier(null, splitted[0]);
 
             }
 
             if (splitted.Length == 2)
             {
-                return new UserIdentifier(splitted[1].To<int>(), splitted[0].To<long>());
+                return new UserIdentifier(splitted[1], splitted[0]);
             }
 
             throw new ArgumentException("userAtTenant is not properly formatted", nameof(userIdentifierString));
@@ -84,7 +84,7 @@ namespace Abp
         {
             if (TenantId == null)
             {
-                return UserId.ToString();
+                return UserId;
             }
 
             return UserId + "@" + TenantId;
@@ -121,7 +121,7 @@ namespace Abp
         public override int GetHashCode()
         {
             var hash = 17;
-            hash = TenantId.HasValue ? hash * 23 + TenantId.GetHashCode() : hash;
+            hash = TenantId.HasValue() ? hash * 23 + TenantId.GetHashCode() : hash;
             hash = hash * 23 + UserId.GetHashCode();
             return hash;
         }

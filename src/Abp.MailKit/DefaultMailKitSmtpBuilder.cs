@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using Abp.Net.Mail.Smtp;
 using MailKit.Net.Smtp;
 using MailKit.Security;

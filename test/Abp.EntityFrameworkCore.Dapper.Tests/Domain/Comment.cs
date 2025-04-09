@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 
 namespace Abp.EntityFrameworkCore.Dapper.Tests.Domain
 {

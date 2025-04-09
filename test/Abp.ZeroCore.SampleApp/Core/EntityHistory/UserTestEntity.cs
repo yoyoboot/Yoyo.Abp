@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Abp.Auditing;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
@@ -6,7 +6,7 @@ using Abp.Domain.Entities.Auditing;
 namespace Abp.ZeroCore.SampleApp.Core.EntityHistory
 {
     [Audited]
-    public class UserTestEntity : AggregateRoot, IHasCreationTime
+    public class UserTestEntity : AggregateRoot<int>, IHasCreationTime
     {
         public DateTime CreationTime { get; set; }
 

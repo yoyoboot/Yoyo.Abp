@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities;
@@ -31,7 +31,7 @@ namespace Abp.Localization
         /// <summary>
         /// TenantId of this entity. Can be null for host.
         /// </summary>
-        public virtual int? TenantId { get; set; }
+        public virtual string TenantId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the culture, like "en" or "en-US".
@@ -65,7 +65,7 @@ namespace Abp.Localization
         {
         }
 
-        public ApplicationLanguage(int? tenantId, string name, string displayName, string icon = null, bool isDisabled = false)
+        public ApplicationLanguage(string tenantId, string name, string displayName, string icon = null, bool isDisabled = false)
         {
             TenantId = tenantId;
             Name = name;

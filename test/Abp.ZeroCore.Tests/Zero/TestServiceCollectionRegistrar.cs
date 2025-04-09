@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using Abp.ZeroCore.SampleApp.Core;
 using Abp.ZeroCore.SampleApp.EntityFramework;
 using Castle.MicroKernel.Registration;

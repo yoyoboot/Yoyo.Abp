@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -52,7 +52,7 @@ namespace Abp.AspNetCore.Tests
                 GetUrl<FluentValidationTestController>(
                     nameof(FluentValidationTestController.GetNullableJsonValue2)
                 ),
-                new StringContent("{ \"value\": null }", Encoding.UTF8, "application/json")
+                new StringContent("{ \"value\": null}", Encoding.UTF8, "application/json")
             );
 
             response.Success.ShouldBeTrue();
@@ -67,7 +67,7 @@ namespace Abp.AspNetCore.Tests
                 GetUrl<FluentValidationTestController>(
                     nameof(FluentValidationTestController.GetJsonValueWithArray)
                 ),
-                new StringContent("{ \"array\": [ { \"value\": 1}, { \"value\": 3}, { \"value\": 5}] }", Encoding.UTF8, "application/json")
+                new StringContent("{ \"array\": [ { \"value\": 1}, { \"value\": 3}, { \"value\": 5}]}", Encoding.UTF8, "application/json")
             );
 
             response.Success.ShouldBeTrue();
@@ -85,7 +85,7 @@ namespace Abp.AspNetCore.Tests
                 GetUrl<FluentValidationTestController>(
                     nameof(FluentValidationTestController.GetJsonValueWithArray)
                 ),
-                new StringContent("{ \"array\": [ { \"value\": 1}, { \"value\": -3}] }", Encoding.UTF8, "application/json"),
+                new StringContent("{ \"array\": [ { \"value\": 1}, { \"value\": -3}]}", Encoding.UTF8, "application/json"),
                 HttpStatusCode.BadRequest
             );
 

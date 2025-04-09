@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using static System.String;
 
 namespace Abp.Web.Http

@@ -1,4 +1,4 @@
-﻿namespace Abp.Timing
+namespace Abp.Timing
 {
     public static class TimingSettingNames
     {

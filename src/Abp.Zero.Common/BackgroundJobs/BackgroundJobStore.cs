@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Dependency;
@@ -13,25 +13,25 @@ namespace Abp.BackgroundJobs
     /// </summary>
     public class BackgroundJobStore : IBackgroundJobStore, ITransientDependency
     {
-        private readonly IRepository<BackgroundJobInfo, long> _backgroundJobRepository;
+        private readonly IRepository<BackgroundJobInfo, string> _backgroundJobRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public BackgroundJobStore(
-            IRepository<BackgroundJobInfo, long> backgroundJobRepository,
+            IRepository<BackgroundJobInfo, string> backgroundJobRepository,
             IUnitOfWorkManager unitOfWorkManager)
         {
             _backgroundJobRepository = backgroundJobRepository;
             _unitOfWorkManager = unitOfWorkManager;
         }
 
-        public async Task<BackgroundJobInfo> GetAsync(long jobId)
+        public async Task<BackgroundJobInfo> GetAsync(string jobId)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
                 await _backgroundJobRepository.GetAsync(jobId)
             );
         }
 
-        public BackgroundJobInfo Get(long jobId)
+        public BackgroundJobInfo Get(string jobId)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
                 _backgroundJobRepository.Get(jobId)

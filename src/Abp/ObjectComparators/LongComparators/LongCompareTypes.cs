@@ -1,4 +1,4 @@
-﻿namespace Abp.ObjectComparators.LongComparators
+namespace Abp.ObjectComparators.LongComparators
 {
     public enum LongCompareTypes
     {

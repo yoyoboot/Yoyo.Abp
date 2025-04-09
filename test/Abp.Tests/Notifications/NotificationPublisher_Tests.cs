@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Abp.BackgroundJobs;
 using Abp.Domain.Uow;
 using Abp.Notifications;
@@ -61,7 +61,7 @@ namespace Abp.Tests.Notifications
         public async Task Should_PublishAsync_To_Host()
         {
             // Act
-            await _publisher.PublishAsync("TestNotification", tenantIds: new int?[] { null });
+            await _publisher.PublishAsync("TestNotification", tenantIds: new string[] { null });
 
             // Assert
             await _store.Received()

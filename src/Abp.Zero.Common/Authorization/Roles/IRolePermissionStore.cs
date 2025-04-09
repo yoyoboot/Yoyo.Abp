@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Abp.Authorization.Roles
@@ -42,14 +42,14 @@ namespace Abp.Authorization.Roles
         /// </summary>
         /// <param name="roleId">Role id</param>
         /// <returns>List of permission setting informations</returns>
-        Task<IList<PermissionGrantInfo>> GetPermissionsAsync(int roleId);
+        Task<IList<PermissionGrantInfo>> GetPermissionsAsync(string roleId);
 
         /// <summary>
         /// Gets permission grant setting informations for a role.
         /// </summary>
         /// <param name="roleId">Role id</param>
         /// <returns>List of permission setting informations</returns>
-        IList<PermissionGrantInfo> GetPermissions(int roleId);
+        IList<PermissionGrantInfo> GetPermissions(string roleId);
 
         /// <summary>
         /// Checks whether a role has a permission grant setting info.
@@ -57,7 +57,7 @@ namespace Abp.Authorization.Roles
         /// <param name="roleId">Role id</param>
         /// <param name="permissionGrant">Permission grant setting info</param>
         /// <returns></returns>
-        Task<bool> HasPermissionAsync(int roleId, PermissionGrantInfo permissionGrant);
+        Task<bool> HasPermissionAsync(string roleId, PermissionGrantInfo permissionGrant);
 
         /// <summary>
         /// Deleted all permission settings for a role.

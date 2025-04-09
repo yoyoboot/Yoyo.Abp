@@ -1,4 +1,4 @@
-﻿namespace Abp.Web.Security.AntiForgery
+namespace Abp.Web.Security.AntiForgery
 {
     public class AbpAntiForgeryConfiguration : IAbpAntiForgeryConfiguration
     {

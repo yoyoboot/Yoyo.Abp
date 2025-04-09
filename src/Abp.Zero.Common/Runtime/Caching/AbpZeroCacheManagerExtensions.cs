@@ -1,4 +1,4 @@
-﻿using Abp.Application.Editions;
+using Abp.Application.Editions;
 using Abp.Authorization.Roles;
 using Abp.Authorization.Users;
 using Abp.MultiTenancy;
@@ -17,14 +17,14 @@ namespace Abp.Runtime.Caching
             return cacheManager.GetCache<string, RolePermissionCacheItem>(RolePermissionCacheItem.CacheStoreName);
         }
 
-        public static ITypedCache<int, TenantFeatureCacheItem> GetTenantFeatureCache(this ICacheManager cacheManager)
+        public static ITypedCache<string, TenantFeatureCacheItem> GetTenantFeatureCache(this ICacheManager cacheManager)
         {
-            return cacheManager.GetCache<int, TenantFeatureCacheItem>(TenantFeatureCacheItem.CacheStoreName);
+            return cacheManager.GetCache<string, TenantFeatureCacheItem>(TenantFeatureCacheItem.CacheStoreName);
         }
 
-        public static ITypedCache<int, EditionfeatureCacheItem> GetEditionFeatureCache(this ICacheManager cacheManager)
+        public static ITypedCache<string, EditionfeatureCacheItem> GetEditionFeatureCache(this ICacheManager cacheManager)
         {
-            return cacheManager.GetCache<int, EditionfeatureCacheItem>(EditionfeatureCacheItem.CacheStoreName);
+            return cacheManager.GetCache<string, EditionfeatureCacheItem>(EditionfeatureCacheItem.CacheStoreName);
         }
     }
 }

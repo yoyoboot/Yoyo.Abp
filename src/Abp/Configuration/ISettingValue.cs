@@ -1,4 +1,4 @@
-﻿namespace Abp.Configuration
+namespace Abp.Configuration
 {
     /// <summary>
     /// Represents value of a setting.

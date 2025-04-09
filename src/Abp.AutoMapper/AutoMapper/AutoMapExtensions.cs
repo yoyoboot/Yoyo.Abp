@@ -109,7 +109,7 @@ namespace Abp.AutoMapper
         public static CreateMultiLingualMapResult<TMultiLingualEntity, TTranslation, TDestination> CreateMultiLingualMap<TMultiLingualEntity, TTranslation, TDestination>(this IMapperConfigurationExpression configuration,
             MultiLingualMapContext multiLingualMapContext,
             bool fallbackToParentCultures = false)
-            where TTranslation : class, IEntity, IEntityTranslation<TMultiLingualEntity, int>
+            where TTranslation : class, IEntity<int>, IEntityTranslation<TMultiLingualEntity, int>
             where TMultiLingualEntity : IMultiLingualEntity<TTranslation>
         {
             return configuration.CreateMultiLingualMap<TMultiLingualEntity, int, TTranslation, int, TDestination>(multiLingualMapContext, fallbackToParentCultures);

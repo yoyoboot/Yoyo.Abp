@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Abp.Domain.Entities;
 using Castle.Components.DictionaryAdapter;
 
 namespace Abp.ZeroCore.SampleApp.Core.Shop
 {
-    public class Order: Entity, IMultiLingualEntity<OrderTranslation>
+    public class Order: Entity<int>, IMultiLingualEntity<OrderTranslation>
     {
         public virtual decimal Price { get; set; }
 

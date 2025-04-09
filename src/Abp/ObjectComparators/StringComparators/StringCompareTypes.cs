@@ -1,4 +1,4 @@
-﻿namespace Abp.ObjectComparators.StringComparators
+namespace Abp.ObjectComparators.StringComparators
 {
     public enum StringCompareTypes
     {

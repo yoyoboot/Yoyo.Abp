@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Abp.Collections.Extensions;
 using Abp.Dependency;
 using Abp.Modules;

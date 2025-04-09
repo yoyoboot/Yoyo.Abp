@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Reflection;
 using Abp.Application.Features;
 using Abp.Auditing;

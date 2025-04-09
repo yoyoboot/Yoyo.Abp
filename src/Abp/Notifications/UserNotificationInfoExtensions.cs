@@ -1,4 +1,4 @@
-﻿namespace Abp.Notifications
+namespace Abp.Notifications
 {
     /// <summary>
     /// Extension methods for <see cref="UserNotificationInfo"/>.

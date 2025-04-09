@@ -1,4 +1,4 @@
-﻿using MimeKit;
+using MimeKit;
 using MimeKit.IO;
 using System;
 using System.Collections.Generic;

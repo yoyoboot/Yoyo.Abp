@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -219,7 +219,7 @@ namespace Abp.Notifications
         }
 
         public virtual async Task<List<NotificationSubscriptionInfo>> GetSubscriptionsAsync(
-            int?[] tenantIds,
+            string[] tenantIds,
             string notificationName,
             string entityTypeName,
             string entityId)
@@ -239,7 +239,7 @@ namespace Abp.Notifications
         }
 
         public virtual List<NotificationSubscriptionInfo> GetSubscriptions(
-            int?[] tenantIds,
+            string[] tenantIds,
             string notificationName,
             string entityTypeName,
             string entityId)
@@ -280,7 +280,7 @@ namespace Abp.Notifications
         }
 
         protected virtual async Task<List<NotificationSubscriptionInfo>> GetSubscriptionsAsync(
-            int? tenantId,
+            string tenantId,
             string notificationName,
             string entityTypeName,
             string entityId)
@@ -299,7 +299,7 @@ namespace Abp.Notifications
         }
 
         protected virtual List<NotificationSubscriptionInfo> GetSubscriptions(
-            int? tenantId,
+            string tenantId,
             string notificationName,
             string entityTypeName,
             string entityId)
@@ -358,7 +358,7 @@ namespace Abp.Notifications
         }
 
         public virtual async Task UpdateUserNotificationStateAsync(
-            int? tenantId,
+            string tenantId,
             Guid userNotificationId,
             UserNotificationState state)
         {
@@ -379,7 +379,7 @@ namespace Abp.Notifications
         }
 
         public virtual void UpdateUserNotificationState(
-            int? tenantId,
+            string tenantId,
             Guid userNotificationId,
             UserNotificationState state)
         {
@@ -439,7 +439,7 @@ namespace Abp.Notifications
             });
         }
 
-        public virtual async Task DeleteUserNotificationAsync(int? tenantId, Guid userNotificationId)
+        public virtual async Task DeleteUserNotificationAsync(string tenantId, Guid userNotificationId)
         {
             await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -451,7 +451,7 @@ namespace Abp.Notifications
             });
         }
 
-        public virtual void DeleteUserNotification(int? tenantId, Guid userNotificationId)
+        public virtual void DeleteUserNotification(string tenantId, Guid userNotificationId)
         {
             _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -667,7 +667,7 @@ namespace Abp.Notifications
 
         public virtual async Task<UserNotificationInfoWithNotificationInfo>
             GetUserNotificationWithNotificationOrNullAsync(
-                int? tenantId,
+                string tenantId,
                 Guid userNotificationId)
         {
             var result = _unitOfWorkManager.WithUnitOfWork(() =>
@@ -701,7 +701,7 @@ namespace Abp.Notifications
         }
 
         public virtual UserNotificationInfoWithNotificationInfo GetUserNotificationWithNotificationOrNull(
-            int? tenantId,
+            string tenantId,
             Guid userNotificationId)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>

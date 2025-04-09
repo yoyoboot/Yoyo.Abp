@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Uow;
+using Abp.Domain.Uow;
 
 namespace Abp.EntityFramework
 {

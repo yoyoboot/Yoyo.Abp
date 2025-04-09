@@ -6,7 +6,7 @@ namespace Abp.Application.Services.Dto
     /// A shortcut of <see cref="EntityDto{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
     /// </summary>
     [Serializable]
-    public class EntityDto : EntityDto<int>, IEntityDto
+    public class EntityDto : EntityDto<string>, IEntityDto
     {
         /// <summary>
         /// Creates a new <see cref="EntityDto"/> object.
@@ -20,7 +20,7 @@ namespace Abp.Application.Services.Dto
         /// Creates a new <see cref="EntityDto"/> object.
         /// </summary>
         /// <param name="id">Id of the entity</param>
-        public EntityDto(int id)
+        public EntityDto(string id)
             : base(id)
         {
         }

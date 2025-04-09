@@ -7,7 +7,7 @@ namespace Abp.Domain.Entities.Auditing
     /// A shortcut of <see cref="FullAuditedEntity{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
     /// </summary>
     [Serializable]
-    public abstract class FullAuditedEntity : FullAuditedEntity<int>, IEntity
+    public abstract class FullAuditedEntity : FullAuditedEntity<string>, IEntity
     {
 
     }
@@ -27,7 +27,7 @@ namespace Abp.Domain.Entities.Auditing
         /// <summary>
         /// Which user deleted this entity?
         /// </summary>
-        public virtual long? DeleterUserId { get; set; }
+        public virtual string DeleterUserId { get; set; }
 
         /// <summary>
         /// Deletion time of this entity.
@@ -42,7 +42,7 @@ namespace Abp.Domain.Entities.Auditing
     /// <typeparam name="TUser">Type of the user</typeparam>
     [Serializable]
     public abstract class FullAuditedEntity<TPrimaryKey, TUser> : AuditedEntity<TPrimaryKey, TUser>, IFullAudited<TUser>
-        where TUser : IEntity<long>
+        where TUser : IEntity<string>
     {
         /// <summary>
         /// Is this entity Deleted?
@@ -58,7 +58,7 @@ namespace Abp.Domain.Entities.Auditing
         /// <summary>
         /// Which user deleted this entity?
         /// </summary>
-        public virtual long? DeleterUserId { get; set; }
+        public virtual string DeleterUserId { get; set; }
 
         /// <summary>
         /// Deletion time of this entity.

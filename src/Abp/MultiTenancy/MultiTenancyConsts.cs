@@ -5,6 +5,6 @@ namespace Abp.MultiTenancy
         /// <summary>
         /// Default tenant id: 1.
         /// </summary>
-        public const int DefaultTenantId = 1;
+        public const string DefaultTenantId = "1";
     }
 }

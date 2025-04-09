@@ -7,7 +7,7 @@ namespace Abp.Application.Services.Dto
     /// A shortcut of <see cref="AuditedEntityDto{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
     /// </summary>
     [Serializable]
-    public abstract class AuditedEntityDto : AuditedEntityDto<int>
+    public abstract class AuditedEntityDto : AuditedEntityDto<string>
     {
 
     }
@@ -27,6 +27,6 @@ namespace Abp.Application.Services.Dto
         /// <summary>
         /// Last modifier user of this entity.
         /// </summary>
-        public long? LastModifierUserId { get; set; }
+        public string LastModifierUserId { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Abp.TestBase;
+using Abp.TestBase;
 using Shouldly;
 using System;
 using Xunit;
@@ -15,31 +15,31 @@ namespace Abp.AutoMapper.Tests
 
             var a = new ClassA
             {
-                Id = 1,
+                Id = "1",
                 Name = "test1"
             };
 
             var b = a.MapTo<ClassB>();
 
-            b.Id.ShouldBe(1);
+            b.Id.ShouldBe("1");
             b.Name.ShouldBe("test1");
 
 
             var c = new ClassB
             {
-                Id = 2,
+                Id = "2",
                 Name = "test2"
             };
 
             a.MapTo(c);
 
-            c.Id.ShouldBe(1);
+            c.Id.ShouldBe("1");
             c.Name.ShouldBe("test1");
         }
 
         private class ClassA
         {
-            public int Id { get; set; }
+            public string Id { get; set; }
 
             public string Name { get; set; }
         }
@@ -47,7 +47,7 @@ namespace Abp.AutoMapper.Tests
         [AutoMapFrom(typeof(ClassA))]
         private class ClassB
         {
-            public int Id { get; set; }
+            public string Id { get; set; }
 
             public string Name { get; set; }
         }

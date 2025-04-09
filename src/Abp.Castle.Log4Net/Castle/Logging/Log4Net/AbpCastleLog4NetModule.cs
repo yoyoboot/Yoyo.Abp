@@ -1,4 +1,4 @@
-﻿using Abp.Modules;
+using Abp.Modules;
 
 namespace Abp.Castle.Logging.Log4Net
 {

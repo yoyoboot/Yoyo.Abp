@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using Abp.Runtime.Session;
 using Abp.TestBase.Runtime.Session;
 

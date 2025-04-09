@@ -12,7 +12,7 @@ namespace Abp.Runtime.Session
     /// </summary>
     public class ClaimsAbpSession : AbpSessionBase, ISingletonDependency
     {
-        public override long? UserId
+        public override string UserId
         {
             get
             {
@@ -27,8 +27,8 @@ namespace Abp.Runtime.Session
                     return null;
                 }
 
-                long userId;
-                if (!long.TryParse(userIdClaim.Value, out userId))
+                string userId;
+                return userIdClaim?.Value??string.Empty;
                 {
                     return null;
                 }
@@ -37,7 +37,7 @@ namespace Abp.Runtime.Session
             }
         }
 
-        public override int? TenantId
+        public override string TenantId
         {
             get
             {
@@ -54,7 +54,7 @@ namespace Abp.Runtime.Session
                 var tenantIdClaim = PrincipalAccessor.Principal?.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.TenantId);
                 if (!string.IsNullOrEmpty(tenantIdClaim?.Value))
                 {
-                    return Convert.ToInt32(tenantIdClaim.Value);
+                    return tenantIdClaim.Value;
                 }
 
                 if (UserId == null)
@@ -67,7 +67,7 @@ namespace Abp.Runtime.Session
             }
         }
 
-        public override long? ImpersonatorUserId
+        public override string ImpersonatorUserId
         {
             get
             {
@@ -77,11 +77,11 @@ namespace Abp.Runtime.Session
                     return null;
                 }
 
-                return Convert.ToInt64(impersonatorUserIdClaim.Value);
+                return impersonatorUserIdClaim.Value;
             }
         }
 
-        public override int? ImpersonatorTenantId
+        public override string ImpersonatorTenantId
         {
             get
             {
@@ -96,7 +96,7 @@ namespace Abp.Runtime.Session
                     return null;
                 }
 
-                return Convert.ToInt32(impersonatorTenantIdClaim.Value);
+                return impersonatorTenantIdClaim.Value;
             }
         }
 

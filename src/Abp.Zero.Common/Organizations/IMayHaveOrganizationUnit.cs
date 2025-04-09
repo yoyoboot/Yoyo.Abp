@@ -1,4 +1,4 @@
-﻿namespace Abp.Organizations
+namespace Abp.Organizations
 {
     /// <summary>
     /// This interface is implemented entities those may have an <see cref="OrganizationUnit"/>.

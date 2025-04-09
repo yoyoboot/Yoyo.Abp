@@ -1,4 +1,4 @@
-﻿using Abp.Auditing;
+using Abp.Auditing;
 using Abp.RealTime;
 
 namespace Abp.AspNetCore.SignalR.Hubs

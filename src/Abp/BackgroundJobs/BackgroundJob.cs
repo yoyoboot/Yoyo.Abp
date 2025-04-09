@@ -1,4 +1,4 @@
-﻿namespace Abp.BackgroundJobs
+namespace Abp.BackgroundJobs
 {
     public abstract class BackgroundJob<TArgs> : BackgroundJobBase<TArgs>, IBackgroundJob<TArgs>
     {

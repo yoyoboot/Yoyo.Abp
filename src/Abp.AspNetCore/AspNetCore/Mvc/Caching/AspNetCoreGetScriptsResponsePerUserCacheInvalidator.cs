@@ -1,4 +1,4 @@
-﻿using Abp.CachedUniqueKeys;
+using Abp.CachedUniqueKeys;
 using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Events.Bus.Entities;

@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using Abp.Resources.Embedded;
 
 namespace Abp.AspNetCore.EmbeddedResources

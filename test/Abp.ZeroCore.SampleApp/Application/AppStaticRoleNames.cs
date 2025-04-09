@@ -1,4 +1,4 @@
-﻿namespace Abp.ZeroCore.SampleApp.Application
+namespace Abp.ZeroCore.SampleApp.Application
 {
     public static class AppStaticRoleNames
     {

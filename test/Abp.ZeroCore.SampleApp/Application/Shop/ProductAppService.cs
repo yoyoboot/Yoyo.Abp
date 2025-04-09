@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
@@ -10,12 +10,12 @@ namespace Abp.ZeroCore.SampleApp.Application.Shop
 {
     public class ProductAppService : ApplicationService, IProductAppService
     {
-        private readonly IRepository<Product> _productRepository;
-        private readonly IRepository<ProductTranslation> _productTranslationRepository;
+        private readonly IRepository<Product, int> _productRepository;
+        private readonly IRepository<ProductTranslation, int> _productTranslationRepository;
 
         public ProductAppService(
-            IRepository<Product> productRepository,
-            IRepository<ProductTranslation> productTranslationRepository
+            IRepository<Product, int> productRepository,
+            IRepository<ProductTranslation, int> productTranslationRepository
         )
         {
             _productRepository = productRepository;

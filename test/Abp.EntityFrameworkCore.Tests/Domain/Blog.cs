@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Abp.EntityFrameworkCore.Tests.Domain
 {
-    public class Blog : AggregateRoot, IHasCreationTime
+    public class Blog : AggregateRoot<int>, IHasCreationTime
     {
         public string Name { get; set; }
 
@@ -57,7 +57,7 @@ namespace Abp.EntityFrameworkCore.Tests.Domain
         }
     }
 
-    public class BlogCategory: AggregateRoot, IHasCreationTime
+    public class BlogCategory: AggregateRoot<int>, IHasCreationTime
     {
         public string Name { get; set; }
 
@@ -68,7 +68,7 @@ namespace Abp.EntityFrameworkCore.Tests.Domain
     }
 
     [DisableDateTimeNormalization]
-    public class SubBlogCategory : Entity, IHasCreationTime
+    public class SubBlogCategory : Entity<int>, IHasCreationTime
     {
         public string Name { get; set; }
 

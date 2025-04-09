@@ -1,8 +1,8 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 
 namespace Abp.ZeroCore.SampleApp.Core.Shop
 {
-    public class OrderTranslation : Entity, IEntityTranslation<Order>
+    public class OrderTranslation : Entity<int>, IEntityTranslation<Order>
     {
         public virtual string Name { get; set; }
 

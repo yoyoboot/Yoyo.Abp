@@ -12,12 +12,12 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
     public class Transaction_Tests : EntityFrameworkCoreModuleTestBase
     {
         private readonly IUnitOfWorkManager _uowManager;
-        private readonly IRepository<Blog> _blogRepository;
+        private readonly IRepository<Blog,int> _blogRepository;
 
         public Transaction_Tests()
         {
             _uowManager = Resolve<IUnitOfWorkManager>();
-            _blogRepository = Resolve<IRepository<Blog>>();
+            _blogRepository = Resolve<IRepository<Blog,int>>();
         }
 
         [Fact] 

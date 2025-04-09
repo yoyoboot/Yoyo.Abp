@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Abp.Reflection;
 
 namespace Abp.Web.Api.Modeling

@@ -7,7 +7,7 @@ namespace Abp.Application.Services.Dto
     /// A shortcut of <see cref="FullAuditedEntityDto{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
     /// </summary>
     [Serializable]
-    public abstract class FullAuditedEntityDto : FullAuditedEntityDto<int>
+    public abstract class FullAuditedEntityDto : FullAuditedEntityDto<string>
     {
 
     }
@@ -27,7 +27,7 @@ namespace Abp.Application.Services.Dto
         /// <summary>
         /// Deleter user's Id, if this entity is deleted,
         /// </summary>
-        public long? DeleterUserId { get; set; }
+        public string DeleterUserId { get; set; }
 
         /// <summary>
         /// Deletion time, if this entity is deleted,

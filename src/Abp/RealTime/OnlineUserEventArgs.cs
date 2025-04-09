@@ -1,4 +1,4 @@
-﻿namespace Abp.RealTime
+namespace Abp.RealTime
 {
     public class OnlineUserEventArgs : OnlineClientEventArgs
     {

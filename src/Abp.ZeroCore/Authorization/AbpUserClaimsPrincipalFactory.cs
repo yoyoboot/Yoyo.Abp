@@ -32,9 +32,9 @@ namespace Abp.Authorization
             {
                 var principal = await base.CreateAsync(user);
 
-                if (user.TenantId.HasValue)
+                if (user.TenantId.HasValue())
                 {
-                    principal.Identities.First().AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString()));
+                    principal.Identities.First().AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId));
                 }
 
                 return principal;

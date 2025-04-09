@@ -1,4 +1,4 @@
-﻿namespace Abp.ObjectComparators.IntComparators
+namespace Abp.ObjectComparators.IntComparators
 {
     public enum IntCompareTypes
     {

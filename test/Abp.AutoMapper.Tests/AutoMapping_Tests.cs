@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using AutoMapper;
 using AutoMapper.EquivalencyExpression;
@@ -126,18 +126,18 @@ namespace Abp.AutoMapper.Tests
         {
             var list1 = new List<MyAutoMapKeyClass1>
                         {
-                            new MyAutoMapKeyClass1 { Id = 1, TestProp = "New test value 1"},
-                            new MyAutoMapKeyClass1 { Id = 2, TestProp = "New test value 2"}
+                            new MyAutoMapKeyClass1 { Id = "1", TestProp = "New test value 1"},
+                            new MyAutoMapKeyClass1 { Id = "2", TestProp = "New test value 2"}
                         };
             var list2 = new List<MyAutoMapKeyClass2>
                         {
-                            new MyAutoMapKeyClass2 { Id = 1, SecondId = 10, ThirdId = 100, TestProp = "Test value 1", Value = 5},
-                            new MyAutoMapKeyClass2 { Id = 2,  SecondId = 20, ThirdId = 200,TestProp = "Test value 2", Value = 10}
+                            new MyAutoMapKeyClass2 { Id = "1", SecondId = "10", ThirdId = "100", TestProp = "Test value 1", Value = 5},
+                            new MyAutoMapKeyClass2 { Id = "2",  SecondId = "20", ThirdId = "200",TestProp = "Test value 2", Value = 10}
                         };
             var list3 = new List<MyAutoMapKeyClass3>
                         {
-                            new MyAutoMapKeyClass3 { SecondId = 10, ThirdId = 100, TestProp = "Test value 1", SecondValue = 50},
-                            new MyAutoMapKeyClass3 { SecondId = 20, ThirdId = 200, TestProp = "Test value 2", SecondValue = 100}
+                            new MyAutoMapKeyClass3 { SecondId = "10", ThirdId = "100", TestProp = "Test value 1", SecondValue = 50},
+                            new MyAutoMapKeyClass3 { SecondId = "20", ThirdId = "200", TestProp = "Test value 2", SecondValue = 100}
                         };
 
             _mapper.Map(list1, list2);
@@ -210,7 +210,7 @@ namespace Abp.AutoMapper.Tests
         private class MyAutoMapKeyClass1
         {
             [AutoMapKey]
-            public int Id { get; set; }
+            public string Id { get; set; }
 
             public string TestProp { get; set; }
         }
@@ -218,13 +218,13 @@ namespace Abp.AutoMapper.Tests
         [AutoMapTo(typeof(MyAutoMapKeyClass3))]
         private class MyAutoMapKeyClass2
         {
-            public int Id { get; set; }
+            public string Id { get; set; }
 
             [AutoMapKey]
-            public int SecondId { get; set; }
+            public string SecondId { get; set; }
 
             [AutoMapKey]
-            public int ThirdId { get; set; }
+            public string ThirdId { get; set; }
 
             public string TestProp { get; set; }
 
@@ -233,9 +233,9 @@ namespace Abp.AutoMapper.Tests
 
         private class MyAutoMapKeyClass3
         {
-            public int SecondId { get; set; }
+            public string SecondId { get; set; }
 
-            public int ThirdId { get; set; }
+            public string ThirdId { get; set; }
 
             public string TestProp { get; set; }
 

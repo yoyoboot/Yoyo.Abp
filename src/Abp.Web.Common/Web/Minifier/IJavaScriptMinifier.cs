@@ -1,4 +1,4 @@
-﻿namespace Abp.Web.Minifier
+namespace Abp.Web.Minifier
 {
     /// <summary>
     /// Interface to minify JavaScript code.

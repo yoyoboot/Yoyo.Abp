@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Dependency;
@@ -21,7 +21,7 @@ namespace Abp.DynamicEntityProperties
             _dynamicPropertyManager = dynamicPropertyManager;
         }
 
-        public void CheckPermission(int dynamicPropertyId)
+        public void CheckPermission(string dynamicPropertyId)
         {
             var dynamicProperty = _dynamicPropertyManager.Get(dynamicPropertyId);
             if (dynamicProperty == null)
@@ -40,7 +40,7 @@ namespace Abp.DynamicEntityProperties
             }
         }
 
-        public async Task CheckPermissionAsync(int dynamicPropertyId)
+        public async Task CheckPermissionAsync(string dynamicPropertyId)
         {
             var dynamicProperty = await _dynamicPropertyManager.GetAsync(dynamicPropertyId);
             if (dynamicProperty == null)
@@ -59,7 +59,7 @@ namespace Abp.DynamicEntityProperties
             }
         }
 
-        public bool IsGranted(int dynamicPropertyId)
+        public bool IsGranted(string dynamicPropertyId)
         {
             var dynamicProperty = _dynamicPropertyManager.Get(dynamicPropertyId);
             if (dynamicProperty == null)
@@ -75,7 +75,7 @@ namespace Abp.DynamicEntityProperties
             return _permissionChecker.IsGranted(dynamicProperty.Permission);
         }
 
-        public async Task<bool> IsGrantedAsync(int dynamicPropertyId)
+        public async Task<bool> IsGrantedAsync(string dynamicPropertyId)
         {
             var dynamicProperty = await _dynamicPropertyManager.GetAsync(dynamicPropertyId);
             if (dynamicProperty == null)

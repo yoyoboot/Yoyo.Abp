@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Abp.Application.Editions;
 using Abp.Application.Features;
 using Abp.Authorization;

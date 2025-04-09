@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Abp.Collections.Extensions;
 
 namespace Abp.Webhooks.Extensions

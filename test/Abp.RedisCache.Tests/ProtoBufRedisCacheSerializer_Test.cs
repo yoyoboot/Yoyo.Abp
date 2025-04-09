@@ -1,4 +1,4 @@
-﻿using Abp.Runtime.Caching.Redis;
+using Abp.Runtime.Caching.Redis;
 using Abp.Tests;
 using ProtoBuf;
 using Shouldly;

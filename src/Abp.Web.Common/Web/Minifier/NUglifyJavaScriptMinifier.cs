@@ -1,4 +1,4 @@
-﻿using Castle.Core.Logging;
+using Castle.Core.Logging;
 using NUglify;
 
 namespace Abp.Web.Minifier

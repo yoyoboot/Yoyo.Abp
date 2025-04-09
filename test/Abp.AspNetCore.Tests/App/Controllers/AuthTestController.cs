@@ -1,4 +1,4 @@
-﻿using Abp.AspNetCore.Mvc.Authorization;
+using Abp.AspNetCore.Mvc.Authorization;
 using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Web.Models;
 using Microsoft.AspNetCore.Authorization;

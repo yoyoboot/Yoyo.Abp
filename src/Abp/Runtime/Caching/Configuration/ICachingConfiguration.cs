@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Abp.Configuration.Startup;
 using Microsoft.Extensions.Caching.Memory;

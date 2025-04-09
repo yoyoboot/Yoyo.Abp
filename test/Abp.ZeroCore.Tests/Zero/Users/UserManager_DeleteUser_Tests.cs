@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Abp.Authorization.Users;
 using Abp.Domain.Repositories;
 using Abp.ZeroCore.SampleApp.Core;
@@ -33,7 +33,7 @@ public class UserManager_DeleteUser_Tests : AbpZeroTestBase
             user.Roles.Count.ShouldBe(1);
             
             //Add user login
-            var userLoginRepository = Resolve<IRepository<UserLogin, long>>();
+            var userLoginRepository = Resolve<IRepository<UserLogin, string>>();
             await userLoginRepository.InsertAsync(
                 new UserLogin(
                     user.TenantId,
@@ -47,7 +47,7 @@ public class UserManager_DeleteUser_Tests : AbpZeroTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var userManager = LocalIocManager.Resolve<UserManager>();
-            var userLoginRepository = Resolve<IRepository<UserLogin, long>>();
+            var userLoginRepository = Resolve<IRepository<UserLogin, string>>();
        
             var isLoginInserted = await userLoginRepository.GetAll().AnyAsync(userLogin =>
                 userLogin.UserId == user.Id &&
@@ -61,7 +61,7 @@ public class UserManager_DeleteUser_Tests : AbpZeroTestBase
 
         await WithUnitOfWorkAsync(async () =>
         {
-            var userLoginRepository = Resolve<IRepository<UserLogin, long>>();
+            var userLoginRepository = Resolve<IRepository<UserLogin, string>>();
 
             //user login should be deleted
             var isUserLoginExists = await userLoginRepository.GetAll().AnyAsync(userLogin =>

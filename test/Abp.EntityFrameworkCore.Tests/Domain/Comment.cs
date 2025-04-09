@@ -1,8 +1,8 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 
 namespace Abp.EntityFrameworkCore.Tests.Domain
 {
-    public class Comment : Entity
+    public class Comment : Entity<int>
     {
         public Post Post { get; set; }
 

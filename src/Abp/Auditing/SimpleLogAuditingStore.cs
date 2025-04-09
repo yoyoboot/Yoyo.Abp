@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Castle.Core.Logging;
 
 namespace Abp.Auditing

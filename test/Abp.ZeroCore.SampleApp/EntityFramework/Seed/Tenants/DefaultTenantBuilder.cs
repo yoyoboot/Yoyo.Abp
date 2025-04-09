@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Abp.ZeroCore.SampleApp.Core;
 
 namespace Abp.ZeroCore.SampleApp.EntityFramework.Seed.Tenants
@@ -27,7 +27,7 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework.Seed.Tenants
                 return;
             }
             
-            defaultTenant = new Tenant(Tenant.DefaultTenantName, Tenant.DefaultTenantName);
+            defaultTenant = new Tenant(Tenant.DefaultTenantName, Tenant.DefaultTenantName) { Id="1"};
 
             var defaultEdition = _context.Editions.FirstOrDefault(e => e.Name == EditionManager.DefaultEditionName);
             if (defaultEdition != null)

@@ -1,4 +1,4 @@
-﻿using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Registration;
 using Shouldly;
 using Xunit;
 

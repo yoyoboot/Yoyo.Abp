@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Abp.Configuration.Startup;
 using Abp.Dependency;
 using Abp.MultiTenancy;
@@ -9,7 +9,7 @@ namespace Abp.TestBase.Runtime.Session
 {
     public class TestAbpSession : IAbpSession, ISingletonDependency
     {
-        public virtual long? UserId
+        public virtual string UserId
         {
             get
             {
@@ -23,13 +23,13 @@ namespace Abp.TestBase.Runtime.Session
             set { _userId = value; }
         }
 
-        public virtual int? TenantId
+        public virtual string TenantId
         {
             get
             {
                 if (!_multiTenancy.IsEnabled)
                 {
-                    return 1;
+                    return "1";
                 }
 
                 if (_sessionOverrideScopeProvider.GetValue(AbpSessionBase.SessionOverrideContextKey) != null)
@@ -38,7 +38,7 @@ namespace Abp.TestBase.Runtime.Session
                 }
 
                 var resolvedValue = _tenantResolver.ResolveTenantId();
-                if (resolvedValue != null)
+                if (resolvedValue.HasValue())
                 {
                     return resolvedValue;
                 }
@@ -47,7 +47,7 @@ namespace Abp.TestBase.Runtime.Session
             }
             set
             {
-                if (!_multiTenancy.IsEnabled && value != 1 && value != null)
+                if (!_multiTenancy.IsEnabled && value != "1" && value != null)
                 {
                     throw new AbpException("Can not set TenantId since multi-tenancy is not enabled. Use IMultiTenancyConfig.IsEnabled to enable it.");
                 }
@@ -58,15 +58,15 @@ namespace Abp.TestBase.Runtime.Session
 
         public virtual MultiTenancySides MultiTenancySide { get { return GetCurrentMultiTenancySide(); } }
         
-        public virtual long? ImpersonatorUserId { get; set; }
+        public virtual string ImpersonatorUserId { get; set; }
         
-        public virtual int? ImpersonatorTenantId { get; set; }
+        public virtual string ImpersonatorTenantId { get; set; }
 
         private readonly IMultiTenancyConfig _multiTenancy;
         private readonly IAmbientScopeProvider<SessionOverride> _sessionOverrideScopeProvider;
         private readonly ITenantResolver _tenantResolver;
-        private int? _tenantId;
-        private long? _userId;
+        private string _tenantId;
+        private string _userId;
 
         public TestAbpSession(
             IMultiTenancyConfig multiTenancy, 
@@ -80,12 +80,12 @@ namespace Abp.TestBase.Runtime.Session
 
         protected virtual MultiTenancySides GetCurrentMultiTenancySide()
         {
-            return _multiTenancy.IsEnabled && !TenantId.HasValue
+            return _multiTenancy.IsEnabled && !TenantId.HasValue()
                 ? MultiTenancySides.Host
                 : MultiTenancySides.Tenant;
         }
 
-        public virtual IDisposable Use(int? tenantId, long? userId)
+        public virtual IDisposable Use(string tenantId, string userId)
         {
             return _sessionOverrideScopeProvider.BeginScope(AbpSessionBase.SessionOverrideContextKey, new SessionOverride(tenantId, userId));
         }

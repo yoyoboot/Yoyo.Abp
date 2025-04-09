@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Abp.DynamicEntityProperties
 {
     public interface IDynamicEntityPropertyStore
     {
-        DynamicEntityProperty Get(int id);
+        DynamicEntityProperty Get(string id);
 
-        Task<DynamicEntityProperty> GetAsync(int id);
+        Task<DynamicEntityProperty> GetAsync(string id);
 
         List<DynamicEntityProperty> GetAll();
 
@@ -25,8 +25,8 @@ namespace Abp.DynamicEntityProperties
 
         Task UpdateAsync(DynamicEntityProperty dynamicEntityProperty);
 
-        void Delete(int id);
+        void Delete(string id);
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(string id);
     }
 }

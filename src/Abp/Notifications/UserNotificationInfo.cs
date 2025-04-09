@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Extensions;
 using Abp.Timing;
@@ -22,12 +22,12 @@ namespace Abp.Notifications
         /// <summary>
         /// Tenant Id.
         /// </summary>
-        public virtual int? TenantId { get; set; }
+        public virtual string TenantId { get; set; }
 
         /// <summary>
         /// User Id.
         /// </summary>
-        public virtual long UserId { get; set; }
+        public virtual string UserId { get; set; }
 
         /// <summary>
         /// Notification Id.

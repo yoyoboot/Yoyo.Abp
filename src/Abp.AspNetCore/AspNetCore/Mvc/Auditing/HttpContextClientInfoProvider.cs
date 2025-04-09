@@ -1,4 +1,4 @@
-﻿using Abp.Auditing;
+using Abp.Auditing;
 using Castle.Core.Logging;
 using Microsoft.AspNetCore.Http;
 using System;

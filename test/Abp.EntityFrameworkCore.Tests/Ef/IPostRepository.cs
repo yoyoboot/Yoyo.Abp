@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore.Tests.Domain;
 

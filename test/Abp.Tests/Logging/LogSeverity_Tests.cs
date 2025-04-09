@@ -1,4 +1,4 @@
-﻿using Abp.Authorization;
+using Abp.Authorization;
 using Abp.Logging;
 using Abp.Runtime.Validation;
 using Abp.UI;

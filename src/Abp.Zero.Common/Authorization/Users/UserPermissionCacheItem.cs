@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Abp.Authorization.Users
@@ -11,9 +11,9 @@ namespace Abp.Authorization.Users
     {
         public const string CacheStoreName = "AbpZeroUserPermissions";
 
-        public long UserId { get; set; }
+        public string UserId { get; set; }
 
-        public List<int> RoleIds { get; set; }
+        public List<string> RoleIds { get; set; }
 
         public HashSet<string> GrantedPermissions { get; set; }
 
@@ -21,12 +21,12 @@ namespace Abp.Authorization.Users
 
         public UserPermissionCacheItem()
         {
-            RoleIds = new List<int>();
+            RoleIds = new List<string>();
             GrantedPermissions = new HashSet<string>();
             ProhibitedPermissions = new HashSet<string>();
         }
 
-        public UserPermissionCacheItem(long userId)
+        public UserPermissionCacheItem(string userId)
             : this()
         {
             UserId = userId;

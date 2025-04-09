@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities.Auditing;
@@ -12,7 +12,7 @@ namespace Abp.BackgroundJobs
     /// </summary>
     [Table("AbpBackgroundJobs")]
     [MultiTenancySide(MultiTenancySides.Host)]
-    public class BackgroundJobInfo : CreationAuditedEntity<long>
+    public class BackgroundJobInfo : CreationAuditedEntity<string>
     {
         /// <summary>
         /// Maximum length of <see cref="JobType"/>.

@@ -1,4 +1,4 @@
-﻿namespace Abp.ObjectComparators.DateTimeComparators
+namespace Abp.ObjectComparators.DateTimeComparators
 {
     public enum DateTimeCompareTypes
     {

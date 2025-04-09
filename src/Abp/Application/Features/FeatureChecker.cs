@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Abp.Configuration.Startup;
 using Abp.Dependency;
@@ -46,7 +46,7 @@ namespace Abp.Application.Features
                 throw new AbpException("FeatureChecker can not get a feature value by name. TenantId is not set in the IAbpSession!");
             }
 
-            return GetValueAsync(AbpSession.TenantId.Value, name);
+            return GetValueAsync(AbpSession.TenantId, name);
         }
 
         /// <inheritdoc/>
@@ -57,11 +57,11 @@ namespace Abp.Application.Features
                 throw new AbpException("FeatureChecker can not get a feature value by name. TenantId is not set in the IAbpSession!");
             }
 
-            return GetValue(AbpSession.TenantId.Value, name);
+            return GetValue(AbpSession.TenantId, name);
         }
 
         /// <inheritdoc/>
-        public async Task<string> GetValueAsync(int tenantId, string name)
+        public async Task<string> GetValueAsync(string tenantId, string name)
         {
             var feature = _featureManager.Get(name);
             var value = await FeatureValueStore.GetValueOrNullAsync(tenantId, feature);
@@ -70,7 +70,7 @@ namespace Abp.Application.Features
         }
 
         /// <inheritdoc/>
-        public string GetValue(int tenantId, string name)
+        public string GetValue(string tenantId, string name)
         {
             var feature = _featureManager.Get(name);
             var value = FeatureValueStore.GetValueOrNull(tenantId, feature);
@@ -101,13 +101,13 @@ namespace Abp.Application.Features
         }
 
         /// <inheritdoc/>
-        public async Task<bool> IsEnabledAsync(int tenantId, string featureName)
+        public async Task<bool> IsEnabledAsync(string tenantId, string featureName)
         {
             return string.Equals(await GetValueAsync(tenantId, featureName), "true", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <inheritdoc/>
-        public bool IsEnabled(int tenantId, string featureName)
+        public bool IsEnabled(string tenantId, string featureName)
         {
             return string.Equals(GetValue(tenantId, featureName), "true", StringComparison.OrdinalIgnoreCase);
         }

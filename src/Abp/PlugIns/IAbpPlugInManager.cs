@@ -1,4 +1,4 @@
-﻿namespace Abp.PlugIns
+namespace Abp.PlugIns
 {
     public interface IAbpPlugInManager
     {

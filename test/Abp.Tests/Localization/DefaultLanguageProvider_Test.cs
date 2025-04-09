@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Abp.Localization;
 using Abp.Modules;
 using Abp.Reflection.Extensions;

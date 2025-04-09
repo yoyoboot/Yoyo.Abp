@@ -14,7 +14,7 @@ namespace Abp.BackgroundJobs
     /// </summary>
     public class InMemoryBackgroundJobStore : IBackgroundJobStore
     {
-        private readonly ConcurrentDictionary<long, BackgroundJobInfo> _jobs;
+        private readonly ConcurrentDictionary<string, BackgroundJobInfo> _jobs;
         private long _lastId;
 
         /// <summary>
@@ -22,22 +22,22 @@ namespace Abp.BackgroundJobs
         /// </summary>
         public InMemoryBackgroundJobStore()
         {
-            _jobs = new ConcurrentDictionary<long, BackgroundJobInfo>();
+            _jobs = new ConcurrentDictionary<string, BackgroundJobInfo>();
         }
 
-        public Task<BackgroundJobInfo> GetAsync(long jobId)
+        public Task<BackgroundJobInfo> GetAsync(string jobId)
         {
             return Task.FromResult(_jobs[jobId]);
         }
 
-        public BackgroundJobInfo Get(long jobId)
+        public BackgroundJobInfo Get(string jobId)
         {
             return _jobs[jobId];
         }
 
         public Task InsertAsync(BackgroundJobInfo jobInfo)
         {
-            jobInfo.Id = Interlocked.Increment(ref _lastId);
+            jobInfo.Id = Interlocked.Increment(ref _lastId).ToString();
             _jobs[jobInfo.Id] = jobInfo;
 
             return Task.FromResult(0);
@@ -45,7 +45,7 @@ namespace Abp.BackgroundJobs
 
         public void Insert(BackgroundJobInfo jobInfo)
         {
-            jobInfo.Id = Interlocked.Increment(ref _lastId);
+            jobInfo.Id = Interlocked.Increment(ref _lastId).ToString();
             _jobs[jobInfo.Id] = jobInfo;
         }
 

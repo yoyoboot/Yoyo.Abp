@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Dependency;
@@ -9,23 +9,23 @@ namespace Abp.DynamicEntityProperties
 {
     public class DynamicEntityPropertyValueStore : IDynamicEntityPropertyValueStore, ITransientDependency
     {
-        private readonly IRepository<DynamicEntityPropertyValue, long> _dynamicEntityPropertyValueRepository;
+        private readonly IRepository<DynamicEntityPropertyValue, string> _dynamicEntityPropertyValueRepository;
         private readonly IAsyncQueryableExecuter _asyncQueryableExecuter;
 
         public DynamicEntityPropertyValueStore(
-            IRepository<DynamicEntityPropertyValue, long> dynamicEntityPropertyValueRepository,
+            IRepository<DynamicEntityPropertyValue, string> dynamicEntityPropertyValueRepository,
             IAsyncQueryableExecuter asyncQueryableExecuter)
         {
             _dynamicEntityPropertyValueRepository = dynamicEntityPropertyValueRepository;
             _asyncQueryableExecuter = asyncQueryableExecuter;
         }
 
-        public virtual DynamicEntityPropertyValue Get(long id)
+        public virtual DynamicEntityPropertyValue Get(string id)
         {
             return _dynamicEntityPropertyValueRepository.Get(id);
         }
 
-        public virtual Task<DynamicEntityPropertyValue> GetAsync(long id)
+        public virtual Task<DynamicEntityPropertyValue> GetAsync(string id)
         {
             return _dynamicEntityPropertyValueRepository.GetAsync(id);
         }
@@ -50,23 +50,23 @@ namespace Abp.DynamicEntityProperties
             return _dynamicEntityPropertyValueRepository.UpdateAsync(dynamicEntityPropertyValue);
         }
 
-        public virtual void Delete(long id)
+        public virtual void Delete(string id)
         {
             _dynamicEntityPropertyValueRepository.Delete(id);
         }
 
-        public virtual Task DeleteAsync(long id)
+        public virtual Task DeleteAsync(string id)
         {
             return _dynamicEntityPropertyValueRepository.DeleteAsync(id);
         }
 
-        public virtual List<DynamicEntityPropertyValue> GetValues(int dynamicEntityPropertyId, string entityId)
+        public virtual List<DynamicEntityPropertyValue> GetValues(string dynamicEntityPropertyId, string entityId)
         {
             return _dynamicEntityPropertyValueRepository.GetAll().Where(val =>
                 val.EntityId == entityId && val.DynamicEntityPropertyId == dynamicEntityPropertyId).ToList();
         }
 
-        public virtual Task<List<DynamicEntityPropertyValue>> GetValuesAsync(int dynamicEntityPropertyId,
+        public virtual Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string dynamicEntityPropertyId,
             string entityId)
         {
             return _asyncQueryableExecuter.ToListAsync(
@@ -75,14 +75,14 @@ namespace Abp.DynamicEntityProperties
             );
         }
 
-        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId)
+        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId,int? fsTagNone=null)
         {
             return _dynamicEntityPropertyValueRepository.GetAll()
                 .Where(val => val.EntityId == entityId && val.DynamicEntityProperty.EntityFullName == entityFullName)
                 .ToList();
         }
 
-        public Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId)
+        public Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId,int? fsTagNone=null)
         {
             return _asyncQueryableExecuter.ToListAsync(
                 _dynamicEntityPropertyValueRepository.GetAll()
@@ -91,7 +91,7 @@ namespace Abp.DynamicEntityProperties
             );
         }
 
-        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, int dynamicPropertyId)
+        public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, string dynamicPropertyId)
         {
             return _dynamicEntityPropertyValueRepository.GetAll()
                 .Where(val =>
@@ -103,7 +103,7 @@ namespace Abp.DynamicEntityProperties
         }
 
         public Task<List<DynamicEntityPropertyValue>> GetValuesAsync(string entityFullName, string entityId,
-            int dynamicPropertyId)
+            string dynamicPropertyId)
         {
             return _asyncQueryableExecuter.ToListAsync(
                 _dynamicEntityPropertyValueRepository.GetAll()
@@ -115,7 +115,7 @@ namespace Abp.DynamicEntityProperties
             );
         }
 
-        public virtual void CleanValues(int dynamicEntityPropertyId, string entityId)
+        public virtual void CleanValues(string dynamicEntityPropertyId, string entityId)
         {
             var list = _dynamicEntityPropertyValueRepository.GetAll().Where(val =>
                 val.EntityId == entityId && val.DynamicEntityPropertyId == dynamicEntityPropertyId).ToList();
@@ -126,7 +126,7 @@ namespace Abp.DynamicEntityProperties
             }
         }
 
-        public virtual async Task CleanValuesAsync(int dynamicEntityPropertyId, string entityId)
+        public virtual async Task CleanValuesAsync(string dynamicEntityPropertyId, string entityId)
         {
             var list = await _asyncQueryableExecuter.ToListAsync(_dynamicEntityPropertyValueRepository.GetAll().Where(
                 val =>

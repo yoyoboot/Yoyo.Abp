@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abp.Dependency;
 using Abp.Domain.Repositories;
@@ -19,14 +19,14 @@ namespace Abp.DynamicEntityProperties
             _unitOfWorkManager = unitOfWorkManager;
         }
 
-        public virtual DynamicProperty Get(int id)
+        public virtual DynamicProperty Get(string id,int? fsTagNone=null)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
                 _dynamicPropertyRepository.Get(id)
             );
         }
 
-        public virtual async Task<DynamicProperty> GetAsync(int id)
+        public virtual async Task<DynamicProperty> GetAsync(string id,int? fsTagNone=null)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
                 await _dynamicPropertyRepository.GetAsync(id)
@@ -91,7 +91,7 @@ namespace Abp.DynamicEntityProperties
             );
         }
 
-        public virtual void Delete(int id)
+        public virtual void Delete(string id)
         {
             _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -99,7 +99,7 @@ namespace Abp.DynamicEntityProperties
             });
         }
 
-        public virtual async Task DeleteAsync(int id)
+        public virtual async Task DeleteAsync(string id)
         {
             await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
                 await _dynamicPropertyRepository.DeleteAsync(id)

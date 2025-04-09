@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Abp.Domain.Entities;
 
 namespace Abp.ZeroCore.SampleApp.Core.Shop
 {
-    public class Product : Entity, IMultiLingualEntity<ProductTranslation>
+    public class Product : Entity<int>, IMultiLingualEntity<ProductTranslation>
     {
         public virtual decimal Price { get; set; }
 

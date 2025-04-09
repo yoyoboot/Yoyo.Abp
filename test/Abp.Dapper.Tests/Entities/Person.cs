@@ -1,10 +1,10 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Abp.Dapper.Tests.Entities
 {
     [Table("Person")]
-    public class Person : Entity, IMustHaveTenant
+    public class Person : Entity<int>, IMustHaveTenant
     {
         protected Person()
         {
@@ -17,6 +17,6 @@ namespace Abp.Dapper.Tests.Entities
 
         public virtual string Name { get; set; }
 
-        public int TenantId { get; set; }
+        public string TenantId { get; set; }
     }
 }

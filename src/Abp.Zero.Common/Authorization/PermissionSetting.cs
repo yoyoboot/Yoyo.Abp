@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
@@ -9,14 +9,14 @@ namespace Abp.Authorization
     /// Used to grant/deny a permission for a role or user.
     /// </summary>
     [Table("AbpPermissions")]
-    public abstract class PermissionSetting : CreationAuditedEntity<long>, IMayHaveTenant
+    public abstract class PermissionSetting : CreationAuditedEntity<string>, IMayHaveTenant
     {
         /// <summary>
         /// Maximum length of the <see cref="Name"/> field.
         /// </summary>
         public const int MaxNameLength = 128;
 
-        public virtual int? TenantId { get; set; }
+        public virtual string TenantId { get; set; }
 
         /// <summary>
         /// Unique name of the permission.

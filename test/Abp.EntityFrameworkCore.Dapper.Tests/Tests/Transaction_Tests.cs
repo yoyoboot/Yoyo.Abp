@@ -13,15 +13,15 @@ namespace Abp.EntityFrameworkCore.Dapper.Tests.Tests
 {
     public class Transaction_Tests : AbpEfCoreDapperTestApplicationBase
     {
-        private readonly IDapperRepository<Blog> _blogDapperRepository;
-        private readonly IRepository<Blog> _blogRepository;
+        private readonly IDapperRepository<Blog,int> _blogDapperRepository;
+        private readonly IRepository<Blog,int> _blogRepository;
         private readonly IUnitOfWorkManager _uowManager;
 
         public Transaction_Tests()
         {
             _uowManager = Resolve<IUnitOfWorkManager>();
-            _blogRepository = Resolve<IRepository<Blog>>();
-            _blogDapperRepository = Resolve<IDapperRepository<Blog>>();
+            _blogRepository = Resolve<IRepository<Blog,int>>();
+            _blogDapperRepository = Resolve<IDapperRepository<Blog,int>>();
         }
 
         [Fact]

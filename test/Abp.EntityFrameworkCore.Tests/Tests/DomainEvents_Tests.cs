@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Repositories;
+using Abp.Domain.Repositories;
 using Abp.EntityFrameworkCore.Tests.Domain;
 using Abp.Events.Bus;
 using Shouldly;
@@ -8,12 +8,12 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
 {
     public class DomainEvents_Tests : EntityFrameworkCoreModuleTestBase
     {
-        private readonly IRepository<Blog> _blogRepository;
+        private readonly IRepository<Blog,int> _blogRepository;
         private readonly IEventBus _eventBus;
 
         public DomainEvents_Tests()
         {
-            _blogRepository = Resolve<IRepository<Blog>>();
+            _blogRepository = Resolve<IRepository<Blog,int>>();
             _eventBus = Resolve<IEventBus>();
         }
 

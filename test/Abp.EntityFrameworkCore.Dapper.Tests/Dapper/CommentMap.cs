@@ -1,4 +1,4 @@
-﻿using Abp.EntityFrameworkCore.Dapper.Tests.Domain;
+using Abp.EntityFrameworkCore.Dapper.Tests.Domain;
 
 using DapperExtensions.Mapper;
 

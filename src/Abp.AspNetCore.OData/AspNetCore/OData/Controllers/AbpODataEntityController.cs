@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -13,8 +13,8 @@ using Microsoft.AspNetCore.OData.Results;
 
 namespace Abp.AspNetCore.OData.Controllers
 {
-    public abstract class AbpODataEntityController<TEntity> : AbpODataEntityController<TEntity, int>
-        where TEntity : class, IEntity<int>
+    public abstract class AbpODataEntityController<TEntity> : AbpODataEntityController<TEntity, string>
+        where TEntity : class, IEntity<string>
     {
         protected AbpODataEntityController(IRepository<TEntity> repository)
             : base(repository)

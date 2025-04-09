@@ -1,4 +1,4 @@
-﻿namespace Abp.Dependency
+namespace Abp.Dependency
 {
     public interface IPerWebRequestDependency
     {

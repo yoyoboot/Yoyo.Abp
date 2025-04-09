@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using Abp.Collections;
 using Abp.MultiTenancy;
 

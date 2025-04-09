@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
@@ -14,14 +14,14 @@ namespace Abp.Zero.MultiLingual
     public class MultiLingual_Entity_Tests : AbpZeroTestBase
     {
         private readonly IProductAppService _productAppService;
-        private readonly IRepository<Product> _productRepository;
+        private readonly IRepository<Product, int> _productRepository;
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public MultiLingual_Entity_Tests()
         {
             _productAppService = Resolve<IProductAppService>();
-            _productRepository = Resolve<IRepository<Product>>();
+            _productRepository = Resolve<IRepository<Product, int>>();
             _unitOfWorkManager = Resolve<IUnitOfWorkManager>();
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Abp.DynamicEntityProperties
+namespace Abp.DynamicEntityProperties
 {
     public class DynamicEntityPropertyDefinitionContext : IDynamicEntityPropertyDefinitionContext
     {

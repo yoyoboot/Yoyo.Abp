@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using StackExchange.Redis;
 
 namespace Abp.Runtime.Caching.Redis

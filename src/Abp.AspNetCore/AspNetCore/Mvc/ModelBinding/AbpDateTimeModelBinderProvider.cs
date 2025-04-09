@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Abp.Timing;
 using Microsoft.AspNetCore.Mvc.ModelBinding;

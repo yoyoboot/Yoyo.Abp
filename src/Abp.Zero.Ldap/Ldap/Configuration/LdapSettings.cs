@@ -19,45 +19,45 @@ namespace Abp.Zero.Ldap.Configuration
             SettingManager = settingManager;
         }
 
-        public virtual Task<bool> GetIsEnabled(int? tenantId)
+        public virtual Task<bool> GetIsEnabled(string tenantId)
         {
-            return tenantId.HasValue
-                ? SettingManager.GetSettingValueForTenantAsync<bool>(LdapSettingNames.IsEnabled, tenantId.Value)
+            return tenantId.HasValue()
+                ? SettingManager.GetSettingValueForTenantAsync<bool>(LdapSettingNames.IsEnabled, tenantId)
                 : SettingManager.GetSettingValueForApplicationAsync<bool>(LdapSettingNames.IsEnabled);
         }
 
-        public virtual async Task<ContextType> GetContextType(int? tenantId)
+        public virtual async Task<ContextType> GetContextType(string tenantId)
         {
-            return tenantId.HasValue
-                ? (await SettingManager.GetSettingValueForTenantAsync(LdapSettingNames.ContextType, tenantId.Value)).ToEnum<ContextType>()
+            return tenantId.HasValue()
+                ? (await SettingManager.GetSettingValueForTenantAsync(LdapSettingNames.ContextType, tenantId)).ToEnum<ContextType>()
                 : (await SettingManager.GetSettingValueForApplicationAsync(LdapSettingNames.ContextType)).ToEnum<ContextType>();
         }
 
-        public virtual Task<string> GetContainer(int? tenantId)
+        public virtual Task<string> GetContainer(string tenantId)
         {
-            return tenantId.HasValue
-                ? SettingManager.GetSettingValueForTenantAsync(LdapSettingNames.Container, tenantId.Value)
+            return tenantId.HasValue()
+                ? SettingManager.GetSettingValueForTenantAsync(LdapSettingNames.Container, tenantId)
                 : SettingManager.GetSettingValueForApplicationAsync(LdapSettingNames.Container);
         }
 
-        public virtual Task<string> GetDomain(int? tenantId)
+        public virtual Task<string> GetDomain(string tenantId)
         {
-            return tenantId.HasValue
-                ? SettingManager.GetSettingValueForTenantAsync(LdapSettingNames.Domain, tenantId.Value)
+            return tenantId.HasValue()
+                ? SettingManager.GetSettingValueForTenantAsync(LdapSettingNames.Domain, tenantId)
                 : SettingManager.GetSettingValueForApplicationAsync(LdapSettingNames.Domain);
         }
 
-        public virtual Task<string> GetUserName(int? tenantId)
+        public virtual Task<string> GetUserName(string tenantId)
         {
-            return tenantId.HasValue
-                ? SettingManager.GetSettingValueForTenantAsync(LdapSettingNames.UserName, tenantId.Value)
+            return tenantId.HasValue()
+                ? SettingManager.GetSettingValueForTenantAsync(LdapSettingNames.UserName, tenantId)
                 : SettingManager.GetSettingValueForApplicationAsync(LdapSettingNames.UserName);
         }
 
-        public virtual Task<string> GetPassword(int? tenantId)
+        public virtual Task<string> GetPassword(string tenantId)
         {
-            return tenantId.HasValue
-                ? SettingManager.GetSettingValueForTenantAsync(LdapSettingNames.Password, tenantId.Value)
+            return tenantId.HasValue()
+                ? SettingManager.GetSettingValueForTenantAsync(LdapSettingNames.Password, tenantId)
                 : SettingManager.GetSettingValueForApplicationAsync(LdapSettingNames.Password);
         }
     }

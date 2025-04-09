@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Events.Bus.Entities;
@@ -8,13 +8,13 @@ using Abp.Runtime.Caching;
 namespace Abp.Domain.Entities.Caching
 {
     public class EntityCache<TEntity, TCacheItem> :
-        EntityCache<TEntity, TCacheItem, int>,
+        EntityCache<TEntity, TCacheItem, string>,
         IEntityCache<TCacheItem>
-        where TEntity : class, IEntity<int>
+        where TEntity : class, IEntity<string>
     {
         public EntityCache(
             ICacheManager cacheManager,
-            IRepository<TEntity, int> repository,
+            IRepository<TEntity, string> repository,
             IUnitOfWorkManager unitOfWorkManager,
             string cacheName = null)
             : base(

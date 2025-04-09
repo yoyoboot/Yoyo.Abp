@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Abp.Net.Mail.Smtp;
 using NSubstitute;
 using System.Net.Mail;

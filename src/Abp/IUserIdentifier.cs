@@ -1,4 +1,4 @@
-﻿namespace Abp
+namespace Abp
 {
     /// <summary>
     /// Interface to get a user identifier.
@@ -8,11 +8,11 @@
         /// <summary>
         /// Tenant Id. Can be null for host users.
         /// </summary>
-        int? TenantId { get; }
+        string TenantId { get; }
 
         /// <summary>
         /// Id of the user.
         /// </summary>
-        long UserId { get; }
+        string UserId { get; }
     }
 }

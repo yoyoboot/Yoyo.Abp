@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -10,12 +10,12 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
 {
     public class ExplicitLoading_Tests : EntityFrameworkCoreModuleTestBase
     {
-        private readonly IRepository<Blog> _blogRepository;
+        private readonly IRepository<Blog,int> _blogRepository;
         private readonly IRepository<Post, Guid> _postRepository;
 
         public ExplicitLoading_Tests()
         {
-            _blogRepository = Resolve<IRepository<Blog>>();
+            _blogRepository = Resolve<IRepository<Blog,int>>();
             _postRepository = Resolve<IRepository<Post, Guid>>();
         }
 

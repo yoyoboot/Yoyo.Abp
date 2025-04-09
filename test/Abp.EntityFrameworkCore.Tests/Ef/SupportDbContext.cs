@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -46,8 +46,8 @@ namespace Abp.EntityFrameworkCore.Tests.Ef
         List<TEntity> GetActiveList();
     }
 
-    public interface ISupportRepository<TEntity> : ISupportRepository<TEntity, int>, IRepository<TEntity>
-        where TEntity : class, IEntity<int>
+    public interface ISupportRepository<TEntity> : ISupportRepository<TEntity, string>, IRepository<TEntity>
+        where TEntity : class, IEntity<string>
     {
 
     }
@@ -84,8 +84,8 @@ namespace Abp.EntityFrameworkCore.Tests.Ef
         }
     }
 
-    public class SupportRepositoryBase<TEntity> : SupportRepositoryBase<TEntity, int>, ISupportRepository<TEntity>
-        where TEntity : class, IEntity<int>
+    public class SupportRepositoryBase<TEntity> : SupportRepositoryBase<TEntity, string>, ISupportRepository<TEntity>
+        where TEntity : class, IEntity<string>
     {
         public SupportRepositoryBase(IDbContextProvider<SupportDbContext> dbContextProvider)
             : base(dbContextProvider)

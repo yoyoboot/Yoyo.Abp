@@ -1,9 +1,9 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using System.Collections.Generic;
 
 namespace Abp.ZeroCore.SampleApp.Core.EntityHistory
 {
-    public class Advertisement : Entity
+    public class Advertisement : Entity<int>
     {
         public string Banner { get; set; }
 

@@ -1,4 +1,4 @@
-﻿using Abp.AspNetCore.App.MultiTenancy;
+using Abp.AspNetCore.App.MultiTenancy;
 using Abp.AspNetCore.App.ResultWrapping;
 using Abp.AspNetCore.TestBase;
 using Abp.Configuration.Startup;

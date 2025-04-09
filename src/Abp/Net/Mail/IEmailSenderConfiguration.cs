@@ -1,4 +1,4 @@
-﻿namespace Abp.Net.Mail
+namespace Abp.Net.Mail
 {
     /// <summary>
     /// Defines configurations used while sending emails.

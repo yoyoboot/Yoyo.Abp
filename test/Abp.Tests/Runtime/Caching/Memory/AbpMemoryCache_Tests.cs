@@ -1,4 +1,4 @@
-﻿using Abp.Runtime.Caching.Memory;
+using Abp.Runtime.Caching.Memory;
 using Shouldly;
 using Xunit;
 

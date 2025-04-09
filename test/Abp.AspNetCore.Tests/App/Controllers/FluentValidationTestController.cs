@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Abp.AspNetCore.Mvc.Controllers;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;

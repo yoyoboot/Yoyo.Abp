@@ -47,12 +47,12 @@ namespace Abp.Authorization.Roles
 
         private readonly IRepository<TRole> _roleRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly IRepository<RolePermissionSetting, long> _rolePermissionSettingRepository;
+        private readonly IRepository<RolePermissionSetting, string> _rolePermissionSettingRepository;
 
         public AbpRoleStore(
             IUnitOfWorkManager unitOfWorkManager,
             IRepository<TRole> roleRepository,
-            IRepository<RolePermissionSetting, long> rolePermissionSettingRepository)
+            IRepository<RolePermissionSetting, string> rolePermissionSettingRepository)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _roleRepository = roleRepository;
@@ -226,7 +226,7 @@ namespace Abp.Authorization.Roles
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async() =>
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                return await _roleRepository.FirstOrDefaultAsync(id.To<int>());
+                return await _roleRepository.FirstOrDefaultAsync(id);
             });
         }
 
@@ -241,7 +241,7 @@ namespace Abp.Authorization.Roles
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                return _roleRepository.FirstOrDefault(id.To<int>());
+                return _roleRepository.FirstOrDefault(id);
             });
         }
 
@@ -444,7 +444,7 @@ namespace Abp.Authorization.Roles
             return GetPermissions(role.Id);
         }
 
-        public async Task<IList<PermissionGrantInfo>> GetPermissionsAsync(int roleId)
+        public async Task<IList<PermissionGrantInfo>> GetPermissionsAsync(string roleId)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -454,7 +454,7 @@ namespace Abp.Authorization.Roles
             });
         }
 
-        public IList<PermissionGrantInfo> GetPermissions(int roleId)
+        public IList<PermissionGrantInfo> GetPermissions(string roleId)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -465,7 +465,7 @@ namespace Abp.Authorization.Roles
         }
 
         /// <inheritdoc/>
-        public virtual async Task<bool> HasPermissionAsync(int roleId, PermissionGrantInfo permissionGrant)
+        public virtual async Task<bool> HasPermissionAsync(string roleId, PermissionGrantInfo permissionGrant)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {

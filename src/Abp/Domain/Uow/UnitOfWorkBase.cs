@@ -90,7 +90,7 @@ namespace Abp.Domain.Uow
         /// </summary>
         private Exception _exception;
 
-        private int? _tenantId;
+        private string _tenantId;
 
         /// <summary>
         /// Constructor.
@@ -249,12 +249,12 @@ namespace Abp.Domain.Uow
             });
         }
 
-        public virtual IDisposable SetTenantId(int? tenantId)
+        public virtual IDisposable SetTenantId(string tenantId)
         {
             return SetTenantId(tenantId, true);
         }
 
-        public virtual IDisposable SetTenantId(int? tenantId, bool switchMustHaveTenantEnableDisable)
+        public virtual IDisposable SetTenantId(string tenantId, bool switchMustHaveTenantEnableDisable)
         {
             var oldTenantId = _tenantId;
             _tenantId = tenantId;
@@ -273,7 +273,7 @@ namespace Abp.Domain.Uow
             }
 
             var mayHaveTenantChange = SetFilterParameter(AbpDataFilters.MayHaveTenant, AbpDataFilters.Parameters.TenantId, tenantId);
-            var mustHaveTenantChange = SetFilterParameter(AbpDataFilters.MustHaveTenant, AbpDataFilters.Parameters.TenantId, tenantId ?? 0);
+            var mustHaveTenantChange = SetFilterParameter(AbpDataFilters.MustHaveTenant, AbpDataFilters.Parameters.TenantId, tenantId ?? "0");
 
             return new DisposeAction(() =>
             {
@@ -284,7 +284,7 @@ namespace Abp.Domain.Uow
             });
         }
 
-        public int? GetTenantId()
+        public string GetTenantId()
         {
             return _tenantId;
         }

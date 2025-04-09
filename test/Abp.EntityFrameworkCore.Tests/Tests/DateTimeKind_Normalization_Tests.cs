@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
@@ -11,14 +11,14 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
 {
     public class DateTimeKind_Normalization_Tests : EntityFrameworkCoreModuleTestBase
     {
-        private readonly IRepository<Blog> _blogRepository;
-        private readonly IRepository<BlogCategory> _blogCategoryRepository;
+        private readonly IRepository<Blog,int> _blogRepository;
+        private readonly IRepository<BlogCategory,int> _blogCategoryRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public DateTimeKind_Normalization_Tests()
         {
-            _blogRepository = Resolve<IRepository<Blog>>();
-            _blogCategoryRepository = Resolve<IRepository<BlogCategory>>();
+            _blogRepository = Resolve<IRepository<Blog,int>>();
+            _blogCategoryRepository = Resolve<IRepository<BlogCategory,int>>();
             _unitOfWorkManager = Resolve<IUnitOfWorkManager>();
         }
 

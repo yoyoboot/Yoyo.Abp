@@ -1,4 +1,4 @@
-﻿using Abp.MultiTenancy;
+using Abp.MultiTenancy;
 
 namespace Abp.ZeroCore.SampleApp.Core
 {

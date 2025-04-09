@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
@@ -15,11 +15,11 @@ namespace Abp.Organizations
     /// </summary>
     public class OrganizationUnitManager : DomainService
     {
-        protected IRepository<OrganizationUnit, long> OrganizationUnitRepository { get; private set; }
+        protected IRepository<OrganizationUnit, string> OrganizationUnitRepository { get; private set; }
 
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
         
-        public OrganizationUnitManager(IRepository<OrganizationUnit, long> organizationUnitRepository)
+        public OrganizationUnitManager(IRepository<OrganizationUnit, string> organizationUnitRepository)
         {
             OrganizationUnitRepository = organizationUnitRepository;
 
@@ -63,31 +63,31 @@ namespace Abp.Organizations
             OrganizationUnitRepository.Update(organizationUnit);
         }
 
-        public virtual async Task<string> GetNextChildCodeAsync(long? parentId)
+        public virtual async Task<string> GetNextChildCodeAsync(string parentId)
         {
             var lastChild = await GetLastChildOrNullAsync(parentId);
             if (lastChild == null)
             {
-                var parentCode = parentId != null ? await GetCodeAsync(parentId.Value) : null;
+                var parentCode = parentId != null ? await GetCodeAsync(parentId) : null;
                 return OrganizationUnit.AppendCode(parentCode, OrganizationUnit.CreateCode(1));
             }
 
             return OrganizationUnit.CalculateNextCode(lastChild.Code);
         }
 
-        public virtual string GetNextChildCode(long? parentId)
+        public virtual string GetNextChildCode(string parentId)
         {
             var lastChild = GetLastChildOrNull(parentId);
             if (lastChild == null)
             {
-                var parentCode = parentId != null ? GetCode(parentId.Value) : null;
+                var parentCode = parentId != null ? GetCode(parentId) : null;
                 return OrganizationUnit.AppendCode(parentCode, OrganizationUnit.CreateCode(1));
             }
 
             return OrganizationUnit.CalculateNextCode(lastChild.Code);
         }
 
-        public virtual async Task<OrganizationUnit> GetLastChildOrNullAsync(long? parentId)
+        public virtual async Task<OrganizationUnit> GetLastChildOrNullAsync(string parentId)
         {
             var query = OrganizationUnitRepository.GetAll()
                 .Where(ou => ou.ParentId == parentId)
@@ -95,7 +95,7 @@ namespace Abp.Organizations
             return await AsyncQueryableExecuter.FirstOrDefaultAsync(query);
         }
 
-        public virtual OrganizationUnit GetLastChildOrNull(long? parentId)
+        public virtual OrganizationUnit GetLastChildOrNull(string parentId)
         {
             var query = OrganizationUnitRepository.GetAll()
                 .Where(ou => ou.ParentId == parentId)
@@ -103,17 +103,17 @@ namespace Abp.Organizations
             return query.FirstOrDefault();
         }
 
-        public virtual async Task<string> GetCodeAsync(long id)
+        public virtual async Task<string> GetCodeAsync(string id)
         {
             return (await OrganizationUnitRepository.GetAsync(id)).Code;
         }
 
-        public virtual string GetCode(long id)
+        public virtual string GetCode(string id)
         {
             return (OrganizationUnitRepository.Get(id)).Code;
         }
         
-        public virtual async Task DeleteAsync(long id)
+        public virtual async Task DeleteAsync(string id)
         {
             using (var uow = UnitOfWorkManager.Begin())
             {
@@ -130,7 +130,7 @@ namespace Abp.Organizations
             }
         }
 
-        public virtual void Delete(long id)
+        public virtual void Delete(string id)
         {
             using (var uow = UnitOfWorkManager.Begin())
             {
@@ -147,7 +147,7 @@ namespace Abp.Organizations
             }
         }
 
-        public virtual async Task MoveAsync(long id, long? parentId)
+        public virtual async Task MoveAsync(string id, string parentId)
         {
             using (var uow = UnitOfWorkManager.Begin())
             {
@@ -180,7 +180,7 @@ namespace Abp.Organizations
             }
         }
 
-        public virtual void Move(long id, long? parentId)
+        public virtual void Move(string id, string parentId)
         {
             UnitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -210,41 +210,41 @@ namespace Abp.Organizations
             });
         }
 
-        public async Task<List<OrganizationUnit>> FindChildrenAsync(long? parentId, bool recursive = false)
+        public async Task<List<OrganizationUnit>> FindChildrenAsync(string parentId, bool recursive = false)
         {
             if (!recursive)
             {
                 return await OrganizationUnitRepository.GetAllListAsync(ou => ou.ParentId == parentId);
             }
 
-            if (!parentId.HasValue)
+            if (!parentId.HasValue())
             {
                 return await OrganizationUnitRepository.GetAllListAsync();
             }
 
-            var code = await GetCodeAsync(parentId.Value);
+            var code = await GetCodeAsync(parentId);
 
             return await OrganizationUnitRepository.GetAllListAsync(
-                ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value
+                ou => ou.Code.StartsWith(code) && ou.Id != parentId
             );
         }
 
-        public List<OrganizationUnit> FindChildren(long? parentId, bool recursive = false)
+        public List<OrganizationUnit> FindChildren(string parentId, bool recursive = false)
         {
             if (!recursive)
             {
                 return OrganizationUnitRepository.GetAllList(ou => ou.ParentId == parentId);
             }
 
-            if (!parentId.HasValue)
+            if (!parentId.HasValue())
             {
                 return OrganizationUnitRepository.GetAllList();
             }
 
-            var code = GetCode(parentId.Value);
+            var code = GetCode(parentId);
 
             return OrganizationUnitRepository.GetAllList(
-                ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value
+                ou => ou.Code.StartsWith(code) && ou.Id != parentId
             );
         }
 

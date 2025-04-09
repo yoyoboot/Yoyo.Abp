@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using Abp.Domain.Repositories;
@@ -32,7 +32,7 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
         [Fact]
         public void Should_Resolve_Default_Repositories_For_Second_DbContext()
         {
-            var repo1 = Resolve<IRepository<Ticket>>();
+            var repo1 = Resolve<IRepository<Ticket,int>>();
             var repo2 = Resolve<IRepository<Ticket, int>>();
 
             Assert.Throws<Exception>(
@@ -47,10 +47,10 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
         [Fact]
         public void Should_Resolve_Custom_Repositories_For_Second_DbContext()
         {
-            var repo1 = Resolve<ISupportRepository<Ticket>>();
+            var repo1 = Resolve<ISupportRepository<Ticket,int>>();
             var repo2 = Resolve<ISupportRepository<Ticket, int>>();
 
-            typeof(ISupportRepository<Ticket>).GetTypeInfo().IsInstanceOfType(repo1).ShouldBeTrue();
+            typeof(ISupportRepository<Ticket,int>).GetTypeInfo().IsInstanceOfType(repo1).ShouldBeTrue();
             typeof(ISupportRepository<Ticket, int>).GetTypeInfo().IsInstanceOfType(repo1).ShouldBeTrue();
             typeof(ISupportRepository<Ticket, int>).GetTypeInfo().IsInstanceOfType(repo2).ShouldBeTrue();
 
@@ -82,7 +82,7 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
         {
             using (var uow = Resolve<IUnitOfWorkManager>().Begin())
             {
-                Resolve<IRepository<Blog>>().GetDbContext().ShouldBeOfType<BloggingDbContext>();
+                Resolve<IRepository<Blog,int>>().GetDbContext().ShouldBeOfType<BloggingDbContext>();
 
                 uow.Complete();
             }
@@ -93,7 +93,7 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
         {
             using (var uow = Resolve<IUnitOfWorkManager>().Begin())
             {
-                Resolve<IRepository<Ticket>>().GetDbContext().ShouldBeOfType<SupportDbContext>();
+                Resolve<IRepository<Ticket,int>>().GetDbContext().ShouldBeOfType<SupportDbContext>();
 
                 uow.Complete();
             }
@@ -104,7 +104,7 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
         {
             using (var uow = Resolve<IUnitOfWorkManager>().Begin())
             {
-                Resolve<ISupportRepository<Ticket>>().GetDbContext().ShouldBeOfType<SupportDbContext>();
+                Resolve<ISupportRepository<Ticket,int>>().GetDbContext().ShouldBeOfType<SupportDbContext>();
 
                 uow.Complete();
             }

@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.MultiTenancy;
 using System;
@@ -14,7 +14,7 @@ namespace Abp.Webhooks
         /// <summary>
         /// Subscribed Tenant's id .
         /// </summary>
-        public virtual int? TenantId { get; set; }
+        public virtual string TenantId { get; set; }
 
         /// <summary>
         /// Subscription webhook endpoint

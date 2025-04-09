@@ -171,7 +171,7 @@ namespace Abp.Notifications
                             continue;
                         }
 
-                        if (user.TenantId.HasValue &&
+                        if (user.TenantId.HasValue() &&
                             notificationDefinition.FeatureDependency != null &&
                             !await notificationDefinition.FeatureDependency.IsSatisfiedAsync(featureDependencyContext.Object))
                         {
@@ -206,7 +206,7 @@ namespace Abp.Notifications
                             continue;
                         }
 
-                        if (user.TenantId.HasValue &&
+                        if (user.TenantId.HasValue() &&
                             notificationDefinition.FeatureDependency != null &&
                             ! notificationDefinition.FeatureDependency.IsSatisfied(featureDependencyContext.Object))
                         {

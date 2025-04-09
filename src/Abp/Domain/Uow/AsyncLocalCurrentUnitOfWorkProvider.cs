@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using Abp.Dependency;
 using Castle.Core;
 using Castle.Core.Logging;

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Abp.Dependency;
 using Abp.Runtime.Caching.Configuration;
 using Castle.Core.Logging;

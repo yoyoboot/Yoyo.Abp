@@ -1,4 +1,4 @@
-﻿using Abp.AutoMapper;
+using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Notifications;
 using Abp.Reflection.Extensions;

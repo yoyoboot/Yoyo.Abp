@@ -13,7 +13,7 @@ namespace Abp.Tests.Localization
 <localizationDictionary culture=""tr"">
   <texts>
     <text name=""hello"" value=""Merhaba"" />
-    <text name=""world"">Dünya</text>
+    <text name=""world"">Dï¿½nya</text>
   </texts>
 </localizationDictionary>";
 
@@ -21,7 +21,7 @@ namespace Abp.Tests.Localization
 
             dictionary.CultureInfo.Name.ShouldBe("tr");
             dictionary["hello"].ShouldBe("Merhaba");
-            dictionary["world"].ShouldBe("Dünya");
+            dictionary["world"].ShouldBe("Dï¿½nya");
         }
 
         [Fact]

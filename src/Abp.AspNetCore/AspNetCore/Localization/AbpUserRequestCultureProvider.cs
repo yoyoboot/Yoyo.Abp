@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
@@ -36,7 +36,7 @@ namespace Abp.AspNetCore.Localization
             var userCulture = await settingManager.GetSettingValueForUserAsync(
                 LocalizationSettingNames.DefaultLanguage,
                 abpSession.TenantId,
-                abpSession.UserId.Value,
+                abpSession.UserId,
                 fallbackToDefault: false
             );
 
@@ -103,8 +103,8 @@ namespace Abp.AspNetCore.Localization
 
         private Task<string> GetDefaultCulture(IAbpSession abpSession, ISettingManager settingManager)
         {
-            return abpSession.TenantId.HasValue
-                ? settingManager.GetSettingValueForTenantAsync(LocalizationSettingNames.DefaultLanguage, abpSession.TenantId.Value)
+            return abpSession.TenantId.HasValue()
+                ? settingManager.GetSettingValueForTenantAsync(LocalizationSettingNames.DefaultLanguage, abpSession.TenantId)
                 : settingManager.GetSettingValueForApplicationAsync(LocalizationSettingNames.DefaultLanguage);
         }
     }

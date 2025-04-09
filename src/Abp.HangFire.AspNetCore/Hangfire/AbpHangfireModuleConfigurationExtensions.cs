@@ -1,4 +1,4 @@
-﻿using Abp.BackgroundJobs;
+using Abp.BackgroundJobs;
 using Abp.Configuration.Startup;
 
 namespace Abp.Hangfire.Configuration

@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 
 namespace Abp.Web.Mvc.Alerts
 {

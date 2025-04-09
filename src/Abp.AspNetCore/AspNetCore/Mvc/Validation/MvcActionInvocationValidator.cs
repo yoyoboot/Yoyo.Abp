@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Abp.AspNetCore.Mvc.Extensions;
 using Abp.Collections.Extensions;
 using Abp.Configuration.Startup;

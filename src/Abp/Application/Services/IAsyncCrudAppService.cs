@@ -4,8 +4,8 @@ using Abp.Application.Services.Dto;
 namespace Abp.Application.Services
 {
     public interface IAsyncCrudAppService<TEntityDto>
-        : IAsyncCrudAppService<TEntityDto, int>
-        where TEntityDto : IEntityDto<int>
+        : IAsyncCrudAppService<TEntityDto, string>
+        where TEntityDto : IEntityDto<string>
     {
 
     }

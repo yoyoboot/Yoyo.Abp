@@ -1,4 +1,4 @@
-﻿using Abp.Runtime;
+using Abp.Runtime;
 using Castle.Core.Logging;
 using System;
 

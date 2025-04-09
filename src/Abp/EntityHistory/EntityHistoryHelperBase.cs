@@ -24,7 +24,7 @@ namespace Abp.EntityHistory
         protected readonly IUnitOfWorkManager UnitOfWorkManager;
 
         protected bool IsEntityHistoryEnabled => EntityHistoryConfiguration.IsEnabled &&
-                                                 (AbpSession.UserId.HasValue || EntityHistoryConfiguration
+                                                 (AbpSession.UserId.HasValue() || EntityHistoryConfiguration
                                                      .IsEnabledForAnonymousUsers);
 
         protected EntityHistoryHelperBase(

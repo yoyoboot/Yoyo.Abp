@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
 using Abp.ZeroCore.SampleApp.Core.EntityHistory;

@@ -1,4 +1,4 @@
-﻿using Abp.MongoDb.Configuration;
+using Abp.MongoDb.Configuration;
 
 namespace Abp.Configuration.Startup
 {

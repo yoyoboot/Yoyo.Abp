@@ -1,4 +1,4 @@
-﻿using Abp.Authorization;
+using Abp.Authorization;
 using Abp.Collections;
 
 namespace Abp.Configuration.Startup

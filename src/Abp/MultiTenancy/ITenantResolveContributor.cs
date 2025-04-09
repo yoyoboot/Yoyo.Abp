@@ -1,7 +1,7 @@
-﻿namespace Abp.MultiTenancy
+namespace Abp.MultiTenancy
 {
     public interface ITenantResolveContributor
     {
-        int? ResolveTenantId();
+        string ResolveTenantId();
     }
 }

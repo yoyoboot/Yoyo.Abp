@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Abp.Authorization.Roles
@@ -11,7 +11,7 @@ namespace Abp.Authorization.Roles
     {
         public const string CacheStoreName = "AbpZeroRolePermissions";
 
-        public long RoleId { get; set; }
+        public string RoleId { get; set; }
 
         public HashSet<string> GrantedPermissions { get; set; }
 
@@ -20,7 +20,7 @@ namespace Abp.Authorization.Roles
             GrantedPermissions = new HashSet<string>();
         }
 
-        public RolePermissionCacheItem(int roleId)
+        public RolePermissionCacheItem(string roleId)
             : this()
         {
             RoleId = roleId;

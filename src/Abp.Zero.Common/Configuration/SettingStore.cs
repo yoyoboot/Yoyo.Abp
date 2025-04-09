@@ -12,21 +12,21 @@ namespace Abp.Configuration
     /// </summary>
     public class SettingStore : ISettingStore, ITransientDependency
     {
-        private readonly IRepository<Setting, long> _settingRepository;
+        private readonly IRepository<Setting, string> _settingRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         public SettingStore(
-            IRepository<Setting, long> settingRepository,
+            IRepository<Setting, string> settingRepository,
             IUnitOfWorkManager unitOfWorkManager)
         {
             _settingRepository = settingRepository;
             _unitOfWorkManager = unitOfWorkManager;
         }
 
-        public virtual async Task<List<SettingInfo>> GetAllListAsync(int? tenantId, long? userId)
+        public virtual async Task<List<SettingInfo>> GetAllListAsync(string tenantId, string userId)
         {
             /* Combined SetTenantId and DisableFilter for backward compatibility.
              * SetTenantId switches database (for tenant) if needed.
@@ -51,7 +51,7 @@ namespace Abp.Configuration
             });
         }
 
-        public virtual List<SettingInfo> GetAllList(int? tenantId, long? userId)
+        public virtual List<SettingInfo> GetAllList(string tenantId, string userId)
         {
             /* Combined SetTenantId and DisableFilter for backward compatibility.
              * SetTenantId switches database (for tenant) if needed.
@@ -75,7 +75,7 @@ namespace Abp.Configuration
             });
         }
 
-        public virtual async Task<SettingInfo> GetSettingOrNullAsync(int? tenantId, long? userId, string name)
+        public virtual async Task<SettingInfo> GetSettingOrNullAsync(string tenantId, string userId, string name)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -93,7 +93,7 @@ namespace Abp.Configuration
             });
         }
 
-        public virtual SettingInfo GetSettingOrNull(int? tenantId, long? userId, string name)
+        public virtual SettingInfo GetSettingOrNull(string tenantId, string userId, string name)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {

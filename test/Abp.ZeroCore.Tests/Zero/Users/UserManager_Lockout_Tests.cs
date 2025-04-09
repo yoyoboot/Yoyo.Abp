@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Abp.Configuration;
 using Abp.Dependency;
 using Abp.Zero.Configuration;
@@ -86,7 +86,7 @@ namespace Abp.Zero.Users
 
             LocalIocManager.Using<ISettingManager>(settingManager =>
             {
-                if (AbpSession.TenantId is int tenantId)
+                if (AbpSession.TenantId is string tenantId)
                 {
                     settingManager.ChangeSettingForTenant(tenantId, AbpZeroSettingNames.UserManagement.UserLockOut.IsEnabled, isLockoutEnabledByDefault.ToString());
                 }

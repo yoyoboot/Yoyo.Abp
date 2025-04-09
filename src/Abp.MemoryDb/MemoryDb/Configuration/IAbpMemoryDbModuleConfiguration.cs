@@ -1,4 +1,4 @@
-﻿namespace Abp.MemoryDb.Configuration
+namespace Abp.MemoryDb.Configuration
 {
     public interface IAbpMemoryDbModuleConfiguration
     {

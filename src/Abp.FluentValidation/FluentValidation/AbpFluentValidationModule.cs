@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using Abp.FluentValidation.Configuration;
 using Abp.Modules;
 using Abp.Reflection.Extensions;

@@ -46,11 +46,11 @@ namespace Abp.Domain.Entities
             return ReflectionHelper.GetValueByPath(entity, entity.GetType(), "Id");
         }
 
-        public static string GetHardDeleteKey(object entity, int? tenantId)
+        public static string GetHardDeleteKey(object entity, string tenantId)
         {
             if (MultiTenancyHelper.IsMultiTenantEntity(entity))
             {
-                var tenantIdString = tenantId.HasValue ? tenantId.ToString() : "null";
+                var tenantIdString = tenantId.HasValue() ? tenantId.ToString() : "null";
                 return entity.GetType().FullName + ";TenantId=" + tenantIdString + ";Id=" + GetEntityId(entity);
             }
 

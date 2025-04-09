@@ -1,4 +1,4 @@
-﻿using Abp.ObjectComparators.BooleanComparators;
+using Abp.ObjectComparators.BooleanComparators;
 using System.Collections.Generic;
 using Xunit;
 

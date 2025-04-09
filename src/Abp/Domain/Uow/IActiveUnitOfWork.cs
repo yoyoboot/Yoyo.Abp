@@ -121,7 +121,7 @@ namespace Abp.Domain.Uow
         /// </summary>
         /// <param name="tenantId">The tenant id.</param>
         /// <returns>A disposable object to restore old TenantId value when you dispose it</returns>
-        IDisposable SetTenantId(int? tenantId);
+        IDisposable SetTenantId(string tenantId);
 
         /// <summary>
         /// Sets/Changes Tenant's Id for this UOW.
@@ -134,12 +134,12 @@ namespace Abp.Domain.Uow
         /// This value is true for <see cref="SetTenantId(int?)"/> method.
         /// </param>
         /// <returns>A disposable object to restore old TenantId value when you dispose it</returns>
-        IDisposable SetTenantId(int? tenantId, bool switchMustHaveTenantEnableDisable);
+        IDisposable SetTenantId(string tenantId, bool switchMustHaveTenantEnableDisable);
 
         /// <summary>
         /// Gets Tenant Id for this UOW.
         /// </summary>
         /// <returns></returns>
-        int? GetTenantId();
+        string GetTenantId();
     }
 }

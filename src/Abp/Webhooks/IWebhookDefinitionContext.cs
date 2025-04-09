@@ -1,4 +1,4 @@
-﻿namespace Abp.Webhooks
+namespace Abp.Webhooks
 {
     public interface IWebhookDefinitionContext
     {

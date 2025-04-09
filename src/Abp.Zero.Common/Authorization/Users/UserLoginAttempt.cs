@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities;
@@ -12,7 +12,7 @@ namespace Abp.Authorization.Users
     /// Used to save a login attempt of a user.
     /// </summary>
     [Table("AbpUserLoginAttempts")]
-    public class UserLoginAttempt : Entity<long>, IHasCreationTime, IMayHaveTenant
+    public class UserLoginAttempt : Entity<string>, IHasCreationTime, IMayHaveTenant
     {
         /// <summary>
         /// Max length of the <see cref="TenancyName"/> property.
@@ -42,7 +42,7 @@ namespace Abp.Authorization.Users
         /// <summary>
         /// Tenant's Id, if <see cref="TenancyName"/> was a valid tenant name.
         /// </summary>
-        public virtual int? TenantId { get; set; }
+        public virtual string TenantId { get; set; }
 
         /// <summary>
         /// Tenancy name.
@@ -53,7 +53,7 @@ namespace Abp.Authorization.Users
         /// <summary>
         /// User's Id, if <see cref="UserNameOrEmailAddress"/> was a valid username or email address.
         /// </summary>
-        public virtual long? UserId { get; set; }
+        public virtual string UserId { get; set; }
 
         /// <summary>
         /// User name or email address

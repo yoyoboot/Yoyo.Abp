@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -20,14 +20,14 @@ namespace Abp.Dapper.Filters.Query
             _currentUnitOfWorkProvider = currentUnitOfWorkProvider;
         }
 
-        private int? TenantId
+        private string TenantId
         {
             get
             {
                 DataFilterConfiguration filter = _currentUnitOfWorkProvider.Current.Filters.FirstOrDefault(x => x.FilterName == FilterName);
                 if (filter.FilterParameters.ContainsKey(AbpDataFilters.Parameters.TenantId))
                 {
-                    return (int?)filter.FilterParameters[AbpDataFilters.Parameters.TenantId];
+                    return (string)filter.FilterParameters[AbpDataFilters.Parameters.TenantId];
                 }
 
                 return null;

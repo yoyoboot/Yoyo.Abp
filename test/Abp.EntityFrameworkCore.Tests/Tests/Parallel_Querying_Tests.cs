@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -30,9 +30,9 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
 
     public class ParallelQueryExecuteDemo : ITransientDependency
     {
-        private readonly IRepository<Blog> _blogRepository;
+        private readonly IRepository<Blog,int> _blogRepository;
 
-        public ParallelQueryExecuteDemo(IRepository<Blog> blogRepository)
+        public ParallelQueryExecuteDemo(IRepository<Blog,int> blogRepository)
         {
             _blogRepository = blogRepository;
         }

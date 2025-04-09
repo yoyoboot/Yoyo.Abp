@@ -1,4 +1,4 @@
-﻿namespace Abp.FluentValidation.Configuration
+namespace Abp.FluentValidation.Configuration
 {
     public class AbpFluentValidationConfiguration : IAbpFluentValidationConfiguration
     {

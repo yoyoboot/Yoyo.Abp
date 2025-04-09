@@ -1,4 +1,4 @@
-﻿using IdentityServer4.Stores;
+using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Abp.IdentityServer4vNext

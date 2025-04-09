@@ -1,4 +1,4 @@
-﻿using Abp.AspNetCore.Mvc.Auditing;
+using Abp.AspNetCore.Mvc.Auditing;
 using Abp.AspNetCore.Mvc.Authorization;
 using Abp.AspNetCore.Mvc.Conventions;
 using Abp.AspNetCore.Mvc.ExceptionHandling;

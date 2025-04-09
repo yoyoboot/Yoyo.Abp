@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Abp.MultiTenancy;
 
@@ -8,10 +8,10 @@ namespace Abp.Tests.MultiTenancy
     {
         private readonly List<TenantInfo> _tenants = new List<TenantInfo>
         {
-            new TenantInfo(1, "Default")
+            new TenantInfo("1", "Default")
         };
 
-        public TenantInfo Find(int tenantId)
+        public TenantInfo FindById(string tenantId)
         {
             return _tenants.FirstOrDefault(t => t.Id == tenantId);
         }

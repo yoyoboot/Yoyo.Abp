@@ -4,8 +4,8 @@ using Abp.Domain.Repositories;
 
 namespace Abp.EntityFramework.Repositories
 {
-    public class EfRepositoryBase<TDbContext, TEntity> : EfRepositoryBase<TDbContext, TEntity, int>, IRepository<TEntity>
-        where TEntity : class, IEntity<int>
+    public class EfRepositoryBase<TDbContext, TEntity> : EfRepositoryBase<TDbContext, TEntity, string>, IRepository<TEntity>
+        where TEntity : class, IEntity<string>
         where TDbContext : DbContext
     {
         public EfRepositoryBase(IDbContextProvider<TDbContext> dbContextProvider)

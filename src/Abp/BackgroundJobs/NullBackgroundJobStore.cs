@@ -10,11 +10,11 @@ namespace Abp.BackgroundJobs
     /// </summary>
     public class NullBackgroundJobStore : IBackgroundJobStore
     {
-        public Task<BackgroundJobInfo> GetAsync(long jobId)
+        public Task<BackgroundJobInfo> GetAsync(string jobId)
         {
             return Task.FromResult(new BackgroundJobInfo());
         }
-        public BackgroundJobInfo Get(long jobId)
+        public BackgroundJobInfo Get(string jobId)
         {
             return new BackgroundJobInfo();
         }

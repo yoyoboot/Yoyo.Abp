@@ -17,7 +17,7 @@ namespace Abp.MultiTenancy
         /// <summary>
         /// Edition of the tenant.
         /// </summary>
-        public int? EditionId { get; set; }
+        public string EditionId { get; set; }
 
         /// <summary>
         /// Feature values.

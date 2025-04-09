@@ -15,10 +15,10 @@ using Microsoft.AspNetCore.OData.Results;
 
 namespace Abp.AspNetCore.OData.Controllers
 {
-    public abstract class AbpODataDtoController<TEntity, TOutputDto, TInputDto> : AbpODataDtoController<TEntity, TOutputDto, TInputDto, int>
-        where TEntity : class, IEntity<int>
+    public abstract class AbpODataDtoController<TEntity, TOutputDto, TInputDto> : AbpODataDtoController<TEntity, TOutputDto, TInputDto, string>
+        where TEntity : class, IEntity<string>
         where TInputDto  : class
-        where TOutputDto  : class, IEntityDto<int>
+        where TOutputDto  : class, IEntityDto<string>
     {
         protected AbpODataDtoController(IRepository<TEntity> repository, IObjectMapper objectMapper)
             : base(repository,objectMapper)

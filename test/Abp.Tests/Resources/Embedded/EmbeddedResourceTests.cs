@@ -1,4 +1,4 @@
-﻿using Abp.Reflection.Extensions;
+using Abp.Reflection.Extensions;
 using Abp.Resources.Embedded;
 using Shouldly;
 using System.Linq;

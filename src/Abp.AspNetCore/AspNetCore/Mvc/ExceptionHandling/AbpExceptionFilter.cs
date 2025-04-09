@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Abp.AspNetCore.Configuration;
 using Abp.AspNetCore.Mvc.Extensions;
 using Abp.AspNetCore.Mvc.Results;

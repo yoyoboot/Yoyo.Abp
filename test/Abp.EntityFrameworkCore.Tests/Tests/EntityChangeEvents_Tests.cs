@@ -10,12 +10,12 @@ namespace Abp.EntityFrameworkCore.Tests.Tests
 {
     public class EntityChangeEvents_Tests : EntityFrameworkCoreModuleTestBase
     {
-        private readonly IRepository<Blog> _blogRepository;
+        private readonly IRepository<Blog,int> _blogRepository;
         private readonly IEventBus _eventBus;
 
         public EntityChangeEvents_Tests()
         {
-            _blogRepository = Resolve<IRepository<Blog>>();
+            _blogRepository = Resolve<IRepository<Blog,int>>();
             _eventBus = Resolve<IEventBus>();
         }
 

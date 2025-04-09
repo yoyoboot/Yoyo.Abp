@@ -1,4 +1,4 @@
-﻿namespace Abp.Web.Results.Filters
+namespace Abp.Web.Results.Filters
 {
     public interface IWrapResultFilter
     {

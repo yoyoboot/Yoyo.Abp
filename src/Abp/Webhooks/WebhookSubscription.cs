@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
@@ -10,7 +10,7 @@ namespace Abp.Webhooks
         /// <summary>
         /// Tenant id of the subscribed.
         /// </summary>
-        public int? TenantId { get; set; }
+        public string TenantId { get; set; }
 
         /// <summary>
         /// Subscription webhook endpoint

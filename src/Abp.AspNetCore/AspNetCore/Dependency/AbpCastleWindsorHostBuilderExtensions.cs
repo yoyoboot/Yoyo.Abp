@@ -1,4 +1,4 @@
-﻿using Castle.Windsor;
+using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;

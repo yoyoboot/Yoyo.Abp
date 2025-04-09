@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Abp.Application.Features;
@@ -104,7 +104,7 @@ namespace Abp.Authorization
         {
             if (_unitOfWorkManager.Current != null)
             {
-                return _multiTenancy.IsEnabled && !_unitOfWorkManager.Current.GetTenantId().HasValue
+                return _multiTenancy.IsEnabled && !_unitOfWorkManager.Current.GetTenantId().HasValue()
                     ? MultiTenancySides.Host
                     : MultiTenancySides.Tenant;
             }
@@ -112,7 +112,7 @@ namespace Abp.Authorization
             return AbpSession.MultiTenancySide;
         }
 
-        private int? GetCurrentTenantId()
+        private string GetCurrentTenantId()
         {
             if (_unitOfWorkManager.Current != null)
             {

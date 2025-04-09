@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abp.Dependency;
@@ -82,9 +82,9 @@ namespace Abp.DynamicEntityProperties
             return _allowedInputTypes.ContainsKey(name);
         }
 
-        public void AddEntity<TEntity>() where TEntity : IEntity<int>
+        public void AddEntity<TEntity>() where TEntity : IEntity<string>
         {
-            AddEntity<TEntity, int>();
+            AddEntity<TEntity, string>();
         }
 
         public void AddEntity<TEntity, TPrimaryKey>() where TEntity : IEntity<TPrimaryKey>
@@ -113,9 +113,9 @@ namespace Abp.DynamicEntityProperties
             return ContainsEntity(typeof(TEntity).FullName);
         }
 
-        public bool ContainsEntity<TEntity>() where TEntity : IEntity<int>
+        public bool ContainsEntity<TEntity>() where TEntity : IEntity<string>
         {
-            return ContainsEntity<TEntity, int>();
+            return ContainsEntity<TEntity, string>();
         }
     }
 }

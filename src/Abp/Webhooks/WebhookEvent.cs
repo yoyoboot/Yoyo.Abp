@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -25,7 +25,7 @@ namespace Abp.Webhooks
 
         public virtual DateTime CreationTime { get; set; }
 
-        public virtual int? TenantId { get; set; }
+        public virtual string TenantId { get; set; }
 
         public virtual bool IsDeleted { get; set; }
 

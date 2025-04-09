@@ -1,4 +1,4 @@
-﻿namespace Abp.Runtime.Caching.Redis
+namespace Abp.Runtime.Caching.Redis
 {
     /// <summary>
     /// An upper level container for <see cref="ICache"/> objects.

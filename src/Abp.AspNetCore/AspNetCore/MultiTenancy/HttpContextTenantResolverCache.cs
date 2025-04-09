@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using Abp.MultiTenancy;
 using Microsoft.AspNetCore.Http;
 

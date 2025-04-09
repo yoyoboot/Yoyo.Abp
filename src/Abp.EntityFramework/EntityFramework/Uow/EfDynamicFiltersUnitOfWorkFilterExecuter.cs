@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data.Entity;
 using Abp.Domain.Uow;
 using Abp.Extensions;

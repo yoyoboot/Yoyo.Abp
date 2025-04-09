@@ -1,4 +1,4 @@
-﻿using Abp.Authorization;
+using Abp.Authorization;
 using Abp.Extensions;
 using Abp.Runtime.Session;
 using Hangfire.Dashboard;
@@ -33,7 +33,7 @@ namespace Abp.Hangfire
         private static bool IsLoggedIn(DashboardContext context)
         {
             var abpSession = context.GetHttpContext().RequestServices.GetRequiredService<IAbpSession>();
-            return abpSession.UserId.HasValue;
+            return abpSession.UserId.HasValue();
         }
 
         private static bool IsPermissionGranted(DashboardContext context, string requiredPermissionName)

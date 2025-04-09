@@ -1,4 +1,4 @@
-﻿using Abp.Configuration.Startup;
+using Abp.Configuration.Startup;
 using Abp.Dependency;
 using Abp.Runtime.Security;
 

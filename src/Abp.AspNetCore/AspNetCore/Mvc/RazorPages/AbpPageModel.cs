@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Threading.Tasks;
 using Abp.Application.Features;
 using Abp.Authorization;

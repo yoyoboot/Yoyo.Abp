@@ -1,4 +1,4 @@
-﻿using MailKit.Security;
+using MailKit.Security;
 
 namespace Abp.MailKit
 {

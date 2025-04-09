@@ -1,4 +1,4 @@
-﻿namespace Abp.ObjectComparators.BooleanComparators
+namespace Abp.ObjectComparators.BooleanComparators
 {
     public enum BooleanCompareTypes
     {

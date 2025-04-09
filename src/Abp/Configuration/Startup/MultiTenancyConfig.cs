@@ -1,4 +1,4 @@
-﻿using Abp.Collections;
+using Abp.Collections;
 using Abp.MultiTenancy;
 
 namespace Abp.Configuration.Startup

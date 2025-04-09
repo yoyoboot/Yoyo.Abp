@@ -13,11 +13,11 @@ namespace Abp.Authorization.Users
         IEventHandler<EntityDeletedEventData<AbpUserBase>>, 
         ITransientDependency
     {
-        private readonly IRepository<UserOrganizationUnit, long> _userOrganizationUnitRepository;
+        private readonly IRepository<UserOrganizationUnit, string> _userOrganizationUnitRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public UserOrganizationUnitRemover(
-            IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository, 
+            IRepository<UserOrganizationUnit, string> userOrganizationUnitRepository, 
             IUnitOfWorkManager unitOfWorkManager)
         {
             _userOrganizationUnitRepository = userOrganizationUnitRepository;

@@ -39,7 +39,7 @@ namespace Abp.Notifications
             return Task.FromResult(new List<NotificationSubscriptionInfo>());
         }
 
-        public Task<List<NotificationSubscriptionInfo>> GetSubscriptionsAsync(int?[] tenantIds, string notificationName, string entityTypeName, string entityId)
+        public Task<List<NotificationSubscriptionInfo>> GetSubscriptionsAsync(string[] tenantIds, string notificationName, string entityTypeName, string entityId)
         {
             return Task.FromResult(new List<NotificationSubscriptionInfo>());
         }
@@ -54,7 +54,7 @@ namespace Abp.Notifications
             return Task.FromResult(false);
         }
 
-        public Task UpdateUserNotificationStateAsync(int? notificationId, Guid userNotificationId, UserNotificationState state)
+        public Task UpdateUserNotificationStateAsync(string notificationId, Guid userNotificationId, UserNotificationState state)
         {
             return Task.FromResult(0);
         }
@@ -64,7 +64,7 @@ namespace Abp.Notifications
             return Task.FromResult(0);
         }
 
-        public Task DeleteUserNotificationAsync(int? notificationId, Guid userNotificationId)
+        public Task DeleteUserNotificationAsync(string notificationId, Guid userNotificationId)
         {
             return Task.FromResult(0);
         }
@@ -89,7 +89,7 @@ namespace Abp.Notifications
             return Task.FromResult(0);
         }
 
-        public Task<UserNotificationInfoWithNotificationInfo> GetUserNotificationWithNotificationOrNullAsync(int? tenantId, Guid userNotificationId)
+        public Task<UserNotificationInfoWithNotificationInfo> GetUserNotificationWithNotificationOrNullAsync(string tenantId, Guid userNotificationId)
         {
             return Task.FromResult((UserNotificationInfoWithNotificationInfo)null);
         }
@@ -130,7 +130,7 @@ namespace Abp.Notifications
             return new List<NotificationSubscriptionInfo>();
         }
 
-        public List<NotificationSubscriptionInfo> GetSubscriptions(int?[] tenantIds, string notificationName, string entityTypeName, string entityId)
+        public List<NotificationSubscriptionInfo> GetSubscriptions(string[] tenantIds, string notificationName, string entityTypeName, string entityId)
         {
             return new List<NotificationSubscriptionInfo>();
         }
@@ -145,7 +145,7 @@ namespace Abp.Notifications
             return false;
         }
 
-        public void UpdateUserNotificationState(int? tenantId, Guid userNotificationId, UserNotificationState state)
+        public void UpdateUserNotificationState(string tenantId, Guid userNotificationId, UserNotificationState state)
         {
         }
 
@@ -153,7 +153,7 @@ namespace Abp.Notifications
         {
         }
 
-        public void DeleteUserNotification(int? tenantId, Guid userNotificationId)
+        public void DeleteUserNotification(string tenantId, Guid userNotificationId)
         {
         }
 
@@ -174,7 +174,7 @@ namespace Abp.Notifications
             return 0;
         }
 
-        public UserNotificationInfoWithNotificationInfo GetUserNotificationWithNotificationOrNull(int? tenantId, Guid userNotificationId)
+        public UserNotificationInfoWithNotificationInfo GetUserNotificationWithNotificationOrNull(string tenantId, Guid userNotificationId)
         {
             return (UserNotificationInfoWithNotificationInfo)null;
         }

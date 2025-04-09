@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Abp.RealTime
@@ -21,12 +21,12 @@ namespace Abp.RealTime
         /// <summary>
         /// Tenant Id.
         /// </summary>
-        int? TenantId { get; }
+        string TenantId { get; }
 
         /// <summary>
         /// User Id.
         /// </summary>
-        long? UserId { get; }
+        string UserId { get; }
 
         /// <summary>
         /// Connection establishment time for this client.

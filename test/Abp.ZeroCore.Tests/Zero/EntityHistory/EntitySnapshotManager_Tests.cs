@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Abp.Domain.Repositories;
@@ -12,12 +12,12 @@ namespace Abp.Zero.EntityHistory
 {
     public class EntitySnapshotManager_Tests : AbpZeroTestBase
     {
-        private readonly IRepository<UserTestEntity> _userRepository;
+        private readonly IRepository<UserTestEntity, int> _userRepository;
         private readonly IEntitySnapshotManager _entitySnapshotManager;
 
         public EntitySnapshotManager_Tests()
         {
-            _userRepository = Resolve<IRepository<UserTestEntity>>();
+            _userRepository = Resolve<IRepository<UserTestEntity, int>>();
             _entitySnapshotManager = Resolve<IEntitySnapshotManager>();
         }
 
@@ -69,7 +69,7 @@ namespace Abp.Zero.EntityHistory
                 snapshot.PropertyChangesStackTree["Name"].ShouldBe("\"test-user-name-updated\" -> \"test-user-name-updated-2\"");
 
                 //undo all changes
-                var snapshot2 = await _entitySnapshotManager.GetSnapshotAsync<UserTestEntity>(id, DateTime.Now.AddDays(-1));
+                var snapshot2 = await _entitySnapshotManager.GetSnapshotAsync<UserTestEntity,int>(id, DateTime.Now.AddDays(-1));
 
                 snapshot2.ChangedPropertiesSnapshots.Count.ShouldBe(2);
                 snapshot2.PropertyChangesStackTree.Count.ShouldBe(2);

@@ -11,7 +11,7 @@ namespace Abp.Application.Features
     /// </summary>
     [Table("AbpFeatures")]
     [MultiTenancySide(MultiTenancySides.Host)]
-    public abstract class FeatureSetting : CreationAuditedEntity<long>, IMayHaveTenant
+    public abstract class FeatureSetting : CreationAuditedEntity<string>, IMayHaveTenant
     {
         /// <summary>
         /// Maximum length of the <see cref="Name"/> field.
@@ -23,7 +23,7 @@ namespace Abp.Application.Features
         /// </summary>
         public const int MaxValueLength = 2000;
 
-        public virtual int? TenantId { get; set; }
+        public virtual string TenantId { get; set; }
 
         /// <summary>
         /// Feature name.

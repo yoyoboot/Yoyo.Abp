@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Abp.AutoMapper;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
@@ -83,7 +83,7 @@ namespace Abp.ZeroCore.SampleApp
         public static void CreateMappings(IMapperConfigurationExpression configuration, MultiLingualMapContext context)
         {
             // Product 
-            configuration.CreateMultiLingualMap<Product, ProductTranslation, ProductListDto>(context, true);
+            configuration.CreateMultiLingualMap<Product,int, ProductTranslation,int, ProductListDto>(context, true);
             configuration.CreateMap<ProductCreateDto, Product>();
             configuration.CreateMap<ProductUpdateDto, Product>();
             configuration.CreateMap<ProductTranslationDto, ProductTranslation>();
@@ -94,7 +94,7 @@ namespace Abp.ZeroCore.SampleApp
             configuration.CreateMap<OfficeUpdateDto, Office>();
             configuration.CreateMap<OfficeTranslationDto, OfficeTranslation>();
 
-            configuration.CreateMultiLingualMap<Order, OrderTranslation, OrderListDto>(context, true)
+            configuration.CreateMultiLingualMap<Order,int, OrderTranslation,int, OrderListDto>(context, true)
                 .EntityMap.ForMember(dest => dest.ProductCount, opt => opt.MapFrom(src => src.Products.Count));
         }
     }

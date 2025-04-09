@@ -15,11 +15,11 @@ namespace Abp.Tests.Events.Bus
             EventBus.Register<EntityChangedEventData<Person>>(
                 eventData =>
                 {
-                    eventData.Entity.Id.ShouldBe(42);
+                    eventData.Entity.Id.ShouldBe("42");
                     triggeredEvent = true;
                 });
 
-            EventBus.Trigger(new EntityUpdatedEventData<Person>(new Person { Id = 42 }));
+            EventBus.Trigger(new EntityUpdatedEventData<Person>(new Person { Id = "42" }));
 
             triggeredEvent.ShouldBe(true);
         }
@@ -32,11 +32,11 @@ namespace Abp.Tests.Events.Bus
             EventBus.Register<EntityChangedEventData<Person>>(
                 eventData =>
                 {
-                    eventData.Entity.Id.ShouldBe(42);
+                    eventData.Entity.Id.ShouldBe("42");
                     triggeredEvent = true;
                 });
 
-            EventBus.Trigger(new EntityChangedEventData<Student>(new Student { Id = 42 }));
+            EventBus.Trigger(new EntityChangedEventData<Student>(new Student { Id = "42" }));
 
             triggeredEvent.ShouldBe(true);
         }

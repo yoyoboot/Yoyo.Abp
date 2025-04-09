@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using Abp.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 

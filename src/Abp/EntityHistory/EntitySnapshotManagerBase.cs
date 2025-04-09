@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -13,10 +13,10 @@ namespace Abp.EntityHistory
 {
     public abstract class EntitySnapshotManagerBase : IEntitySnapshotManager, ITransientDependency
     {
-        protected readonly IRepository<EntityChange, long> EntityChangeRepository;
+        protected readonly IRepository<EntityChange, string> EntityChangeRepository;
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
-        protected EntitySnapshotManagerBase(IRepository<EntityChange, long> entityChangeRepository)
+        protected EntitySnapshotManagerBase(IRepository<EntityChange, string> entityChangeRepository)
         {
             EntityChangeRepository = entityChangeRepository;
             AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;

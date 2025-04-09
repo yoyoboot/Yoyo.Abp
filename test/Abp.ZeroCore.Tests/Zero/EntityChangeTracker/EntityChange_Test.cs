@@ -1,4 +1,4 @@
-﻿
+
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.EntityFrameworkCore.Extensions;
@@ -12,11 +12,11 @@ namespace Abp.Zero.EntityChangeTracker
 {
     public class EntityChangeTracker_Test : AbpZeroTestBase
     {
-        private readonly IRepository<Blog> _blogRepository;
+        private readonly IRepository<Blog,int> _blogRepository;
 
         public EntityChangeTracker_Test()
         {
-            _blogRepository = Resolve<IRepository<Blog>>();
+            _blogRepository = Resolve<IRepository<Blog,int>>();
         }
 
         [Fact]

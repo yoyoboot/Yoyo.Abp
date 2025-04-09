@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -37,7 +37,7 @@ namespace Abp.Authorization
                 return;
             }
 
-            if (!AbpSession.UserId.HasValue)
+            if (!AbpSession.UserId.HasValue())
             {
                 throw new AbpAuthorizationException(
                     LocalizationManager.GetString(AbpConsts.LocalizationSourceName, "CurrentUserDidNotLoginToTheApplication")
@@ -57,7 +57,7 @@ namespace Abp.Authorization
                 return;
             }
 
-            if (!AbpSession.UserId.HasValue)
+            if (!AbpSession.UserId.HasValue())
             {
                 throw new AbpAuthorizationException(
                     LocalizationManager.GetString(AbpConsts.LocalizationSourceName, "CurrentUserDidNotLoginToTheApplication")

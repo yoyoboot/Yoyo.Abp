@@ -1,4 +1,4 @@
-﻿using System.Configuration;
+using System.Configuration;
 using Abp.Configuration.Startup;
 using Abp.Extensions;
 

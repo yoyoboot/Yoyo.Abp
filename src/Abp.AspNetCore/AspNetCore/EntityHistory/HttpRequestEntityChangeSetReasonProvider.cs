@@ -1,4 +1,4 @@
-﻿using Abp.Dependency;
+using Abp.Dependency;
 using Abp.EntityHistory;
 using Abp.Runtime;
 using JetBrains.Annotations;

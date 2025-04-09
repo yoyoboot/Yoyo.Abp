@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -79,7 +79,7 @@ namespace Abp.Webhooks
             _unitOfWorkManager.WithUnitOfWork(() => _webhookSubscriptionRepository.Delete(id));
         }
 
-        public virtual async Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsAsync(int? tenantId)
+        public virtual async Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsAsync(string tenantId)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -88,7 +88,7 @@ namespace Abp.Webhooks
             });
         }
 
-        public virtual List<WebhookSubscriptionInfo> GetAllSubscriptions(int? tenantId)
+        public virtual List<WebhookSubscriptionInfo> GetAllSubscriptions(string tenantId)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -98,7 +98,7 @@ namespace Abp.Webhooks
         }
 
         public virtual async Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsAsync(
-            int? tenantId,
+            string tenantId,
             string webhookName)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
@@ -111,7 +111,7 @@ namespace Abp.Webhooks
             });
         }
 
-        public virtual List<WebhookSubscriptionInfo> GetAllSubscriptions(int? tenantId, string webhookName)
+        public virtual List<WebhookSubscriptionInfo> GetAllSubscriptions(string tenantId, string webhookName)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -123,7 +123,7 @@ namespace Abp.Webhooks
             });
         }
 
-        public virtual async Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsAsync(int?[] tenantIds)
+        public virtual async Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsAsync(string[] tenantIds)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -133,7 +133,7 @@ namespace Abp.Webhooks
             });
         }
 
-        public virtual List<WebhookSubscriptionInfo> GetAllSubscriptionsOfTenants(int?[] tenantIds)
+        public virtual List<WebhookSubscriptionInfo> GetAllSubscriptionsOfTenants(string[] tenantIds)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -144,7 +144,7 @@ namespace Abp.Webhooks
         }
 
         public virtual async Task<List<WebhookSubscriptionInfo>> GetAllSubscriptionsOfTenantsAsync(
-            int?[] tenantIds,
+            string[] tenantIds,
             string webhookName)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
@@ -157,7 +157,7 @@ namespace Abp.Webhooks
             });
         }
 
-        public virtual List<WebhookSubscriptionInfo> GetAllSubscriptionsOfTenants(int?[] tenantIds, string webhookName)
+        public virtual List<WebhookSubscriptionInfo> GetAllSubscriptionsOfTenants(string[] tenantIds, string webhookName)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -169,7 +169,7 @@ namespace Abp.Webhooks
             });
         }
 
-        public virtual async Task<bool> IsSubscribedAsync(int? tenantId, string webhookName)
+        public virtual async Task<bool> IsSubscribedAsync(string tenantId, string webhookName)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -182,7 +182,7 @@ namespace Abp.Webhooks
             });
         }
 
-        public virtual bool IsSubscribed(int? tenantId, string webhookName)
+        public virtual bool IsSubscribed(string tenantId, string webhookName)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {

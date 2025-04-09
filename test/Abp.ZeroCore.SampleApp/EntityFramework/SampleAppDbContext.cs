@@ -1,4 +1,4 @@
-﻿using Abp.IdentityServer4;
+using Abp.IdentityServer4;
 using Abp.Zero.EntityFrameworkCore;
 using Abp.ZeroCore.SampleApp.Core;
 using Abp.ZeroCore.SampleApp.Core.BookStore;
@@ -92,6 +92,8 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework
             // Register custom entity which is not in DbContext
             modelBuilder.Entity(typeof(CustomEntity));
             modelBuilder.Entity(typeof(CustomEntityWithGuidId));
+
+            modelBuilder.ConfigurationZeroModule<Tenant, Role, User>();
         }
     }
 }

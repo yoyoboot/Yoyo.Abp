@@ -1,4 +1,4 @@
-﻿namespace Abp.Runtime.Caching.Redis
+namespace Abp.Runtime.Caching.Redis
 {
     public interface IAbpPerRequestRedisCache : ICache
     {

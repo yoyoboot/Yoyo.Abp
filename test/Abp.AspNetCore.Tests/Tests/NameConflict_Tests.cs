@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Abp.AspNetCore.App.Controllers;
 using Abp.Web.Models;
 using Shouldly;

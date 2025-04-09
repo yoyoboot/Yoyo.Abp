@@ -45,13 +45,13 @@ namespace Abp.MultiTenancy
 
         protected IRepository<TTenant> TenantRepository { get; set; }
 
-        protected IRepository<TenantFeatureSetting, long> TenantFeatureRepository { get; set; }
+        protected IRepository<TenantFeatureSetting, string> TenantFeatureRepository { get; set; }
 
         private readonly IAbpZeroFeatureValueStore _featureValueStore;
 
         public AbpTenantManager(
             IRepository<TTenant> tenantRepository, 
-            IRepository<TenantFeatureSetting, long> tenantFeatureRepository,
+            IRepository<TenantFeatureSetting, string> tenantFeatureRepository,
             AbpEditionManager editionManager,
             IAbpZeroFeatureValueStore featureValueStore)
         {
@@ -121,17 +121,17 @@ namespace Abp.MultiTenancy
             });
         }
 
-        public virtual async Task<TTenant> FindByIdAsync(int id)
+        public virtual async Task<TTenant> FindByIdAsync(string id)
         {
             return await UnitOfWorkManager.WithUnitOfWorkAsync(async () => await TenantRepository.FirstOrDefaultAsync(id));
         }
 
-        public virtual TTenant FindById(int id)
+        public virtual TTenant FindById(string id)
         {
             return UnitOfWorkManager.WithUnitOfWork(() => TenantRepository.FirstOrDefault(id));
         }
 
-        public virtual async Task<TTenant> GetByIdAsync(int id)
+        public virtual async Task<TTenant> GetByIdAsync(string id)
         {
             var tenant = await FindByIdAsync(id);
             if (tenant == null)
@@ -142,7 +142,7 @@ namespace Abp.MultiTenancy
             return tenant;
         }
 
-        public virtual TTenant GetById(int id)
+        public virtual TTenant GetById(string id)
         {
             var tenant = FindById(id);
             if (tenant == null)
@@ -185,17 +185,17 @@ namespace Abp.MultiTenancy
             });
         }
 
-        public Task<string> GetFeatureValueOrNullAsync(int tenantId, string featureName)
+        public Task<string> GetFeatureValueOrNullAsync(string tenantId, string featureName)
         {
             return _featureValueStore.GetValueOrNullAsync(tenantId, featureName);
         }
 
-        public string GetFeatureValueOrNull(int tenantId, string featureName)
+        public string GetFeatureValueOrNull(string tenantId, string featureName)
         {
             return _featureValueStore.GetValueOrNull(tenantId, featureName);
         }
 
-        public virtual async Task<IReadOnlyList<NameValue>> GetFeatureValuesAsync(int tenantId)
+        public virtual async Task<IReadOnlyList<NameValue>> GetFeatureValuesAsync(string tenantId)
         {
             var values = new List<NameValue>();
 
@@ -207,7 +207,7 @@ namespace Abp.MultiTenancy
             return values;
         }
 
-        public virtual IReadOnlyList<NameValue> GetFeatureValues(int tenantId)
+        public virtual IReadOnlyList<NameValue> GetFeatureValues(string tenantId)
         {
             var values = new List<NameValue>();
 
@@ -219,7 +219,7 @@ namespace Abp.MultiTenancy
             return values;
         }
 
-        public virtual async Task SetFeatureValuesAsync(int tenantId, params NameValue[] values)
+        public virtual async Task SetFeatureValuesAsync(string tenantId, params NameValue[] values)
         {
             if (values.IsNullOrEmpty())
             {
@@ -232,7 +232,7 @@ namespace Abp.MultiTenancy
             }
         }
 
-        public virtual void SetFeatureValues(int tenantId, params NameValue[] values)
+        public virtual void SetFeatureValues(string tenantId, params NameValue[] values)
         {
             if (values.IsNullOrEmpty())
             {
@@ -245,7 +245,7 @@ namespace Abp.MultiTenancy
             }
         }
 
-        public virtual async Task SetFeatureValueAsync(int tenantId, string featureName, string value)
+        public virtual async Task SetFeatureValueAsync(string tenantId, string featureName, string value)
         {
             await UnitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -253,7 +253,7 @@ namespace Abp.MultiTenancy
             });
         }
 
-        public virtual void SetFeatureValue(int tenantId, string featureName, string value)
+        public virtual void SetFeatureValue(string tenantId, string featureName, string value)
         {
             UnitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -292,8 +292,8 @@ namespace Abp.MultiTenancy
                 }
 
                 //Determine default value
-                var defaultValue = tenant.EditionId.HasValue
-                    ? (await EditionManager.GetFeatureValueOrNullAsync(tenant.EditionId.Value, featureName) ?? feature.DefaultValue)
+                var defaultValue = tenant.EditionId.HasValue()
+                    ? (await EditionManager.GetFeatureValueOrNullAsync(tenant.EditionId, featureName) ?? feature.DefaultValue)
                     : feature.DefaultValue;
 
                 //No need to store value if it's default
@@ -350,8 +350,8 @@ namespace Abp.MultiTenancy
                 }
 
                 //Determine default value
-                var defaultValue = tenant.EditionId.HasValue
-                    ? (EditionManager.GetFeatureValueOrNull(tenant.EditionId.Value, featureName) ?? feature.DefaultValue)
+                var defaultValue = tenant.EditionId.HasValue()
+                    ? (EditionManager.GetFeatureValueOrNull(tenant.EditionId, featureName) ?? feature.DefaultValue)
                     : feature.DefaultValue;
 
                 //No need to store value if it's default
@@ -382,7 +382,7 @@ namespace Abp.MultiTenancy
         /// Tenant will have features according to it's edition.
         /// </summary>
         /// <param name="tenantId">Tenant Id</param>
-        public virtual async Task ResetAllFeaturesAsync(int tenantId)
+        public virtual async Task ResetAllFeaturesAsync(string tenantId)
         {
             await UnitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -399,7 +399,7 @@ namespace Abp.MultiTenancy
         /// Tenant will have features according to it's edition.
         /// </summary>
         /// <param name="tenantId">Tenant Id</param>
-        public virtual void ResetAllFeatures(int tenantId)
+        public virtual void ResetAllFeatures(string tenantId)
         {
             UnitOfWorkManager.WithUnitOfWork(() =>
             {

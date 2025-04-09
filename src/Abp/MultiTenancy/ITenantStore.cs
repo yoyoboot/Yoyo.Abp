@@ -5,7 +5,7 @@ namespace Abp.MultiTenancy
     public interface ITenantStore
     {
         [CanBeNull]
-        TenantInfo Find(int tenantId);
+        TenantInfo FindById(string tenantId);
 
         [CanBeNull]
         TenantInfo Find([NotNull] string tenancyName);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Net;
 using System.Net.Http;
@@ -146,7 +146,7 @@ namespace Abp.Webhooks
             }
         }
 
-        public virtual async Task StoreResponseOnWebhookSendAttemptAsync(Guid webhookSendAttemptId, int? tenantId, HttpStatusCode? statusCode, string content)
+        public virtual async Task StoreResponseOnWebhookSendAttemptAsync(Guid webhookSendAttemptId, string tenantId, HttpStatusCode? statusCode, string content)
         {
             using (var uow = UnitOfWorkManager.Begin())
             {

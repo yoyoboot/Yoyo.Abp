@@ -15,11 +15,11 @@ namespace Abp.ZeroCore.SampleApp.Application.Shop
 
     public class OfficeAppService : ApplicationService, IOfficeAppService
     {
-        private readonly IRepository<Office> _officeRepository;
+        private readonly IRepository<Office, int> _officeRepository;
         private readonly IRepository<OfficeTranslation, long> _officeTranslationRepository;
 
         public OfficeAppService(
-            IRepository<Office> officeRepository,
+            IRepository<Office, int> officeRepository,
             IRepository<OfficeTranslation, long> officeTranslationRepository
         )
         {

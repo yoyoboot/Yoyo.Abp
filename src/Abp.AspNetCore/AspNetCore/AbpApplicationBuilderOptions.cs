@@ -1,4 +1,4 @@
-﻿namespace Abp.AspNetCore
+namespace Abp.AspNetCore
 {
     public class AbpApplicationBuilderOptions
     {

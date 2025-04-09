@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Abp.ZeroCore.SampleApp.Core.BookStore;
 using Shouldly;
 using Xunit;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Abp.AspNetCore.Configuration

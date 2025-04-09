@@ -26,12 +26,12 @@ namespace Abp.MultiTenancy
 
         public void HandleEvent(EntityChangedEventData<TenantFeatureSetting> eventData)
         {
-            if (!eventData.Entity.TenantId.HasValue)
+            if (!eventData.Entity.TenantId.HasValue())
             {
                 throw new Exception("TenantId field of TenantFeatureSetting cannot be null !");
             }
 
-            _cacheManager.GetTenantFeatureCache().Remove(eventData.Entity.TenantId.Value);
+            _cacheManager.GetTenantFeatureCache().Remove(eventData.Entity.TenantId);
         }
     }
 }

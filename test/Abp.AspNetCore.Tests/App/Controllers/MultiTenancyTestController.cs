@@ -1,4 +1,4 @@
-﻿using Abp.AspNetCore.Mvc.Controllers;
+using Abp.AspNetCore.Mvc.Controllers;
 using Abp.Runtime.Session;
 
 namespace Abp.AspNetCore.App.Controllers
@@ -12,7 +12,7 @@ namespace Abp.AspNetCore.App.Controllers
             _abpSession = abpSession;
         }
 
-        public int? GetTenantId()
+        public string GetTenantId()
         {
             return _abpSession.TenantId;
         }

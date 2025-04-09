@@ -1,4 +1,4 @@
-﻿namespace Abp.Zero.Configuration
+namespace Abp.Zero.Configuration
 {
     internal class AbpZeroConfig : IAbpZeroConfig
     {

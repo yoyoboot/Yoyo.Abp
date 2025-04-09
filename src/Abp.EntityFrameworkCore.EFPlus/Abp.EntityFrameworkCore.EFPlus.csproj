@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
   <Import Project="..\..\configureawait.props" />
@@ -6,8 +6,8 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>Abp.EntityFrameworkCore.EFPlus</AssemblyName>
-    <PackageId>Abp.EntityFrameworkCore.EFPlus</PackageId>
+    <AssemblyName>Yoyo.Abp.EntityFrameworkCore.EFPlus</AssemblyName>
+    <PackageId>Yoyo.Abp.EntityFrameworkCore.EFPlus</PackageId>
     <PackageTags>asp.net;asp.net mvc;boilerplate;application framework;web framework;framework;domain driven design;EntityFrameworkCore;ORM;Entity Framework Core</PackageTags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -18,7 +18,7 @@
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RootNamespace>Abp</RootNamespace>
-    <Description>Abp.EntityFrameworkCore.EFPlus</Description>
+    <Description>Yoyo.Abp.EntityFrameworkCore.EFPlus</Description>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace Abp.ZeroCore.SampleApp.EntityFramework.Seed.Host
+namespace Abp.ZeroCore.SampleApp.EntityFramework.Seed.Host
 {
     public class InitialHostDbBuilder
     {

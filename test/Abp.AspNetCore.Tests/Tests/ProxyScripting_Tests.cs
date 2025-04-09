@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Proxying;
 using Abp.Web.Api.ProxyScripting.Generators.JQuery;
 using Shouldly;

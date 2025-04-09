@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Abp.Modules;
 using Abp.Runtime.Caching.Redis;
 using Abp.TestBase;

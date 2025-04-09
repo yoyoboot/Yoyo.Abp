@@ -61,30 +61,30 @@ namespace Abp.Authorization.Users
 
         public IQueryable<TUser> Users => UserRepository.GetAll();
 
-        public IRepository<TUser, long> UserRepository { get; }
+        public IRepository<TUser, string> UserRepository { get; }
 
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
         private readonly IRepository<TRole> _roleRepository;
-        private readonly IRepository<UserRole, long> _userRoleRepository;
-        private readonly IRepository<UserLogin, long> _userLoginRepository;
-        private readonly IRepository<UserClaim, long> _userClaimRepository;
-        private readonly IRepository<UserPermissionSetting, long> _userPermissionSettingRepository;
-        private readonly IRepository<UserOrganizationUnit, long> _userOrganizationUnitRepository;
-        private readonly IRepository<OrganizationUnitRole, long> _organizationUnitRoleRepository;
+        private readonly IRepository<UserRole, string> _userRoleRepository;
+        private readonly IRepository<UserLogin, string> _userLoginRepository;
+        private readonly IRepository<UserClaim, string> _userClaimRepository;
+        private readonly IRepository<UserPermissionSetting, string> _userPermissionSettingRepository;
+        private readonly IRepository<UserOrganizationUnit, string> _userOrganizationUnitRepository;
+        private readonly IRepository<OrganizationUnitRole, string> _organizationUnitRoleRepository;
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public AbpUserStore(
             IUnitOfWorkManager unitOfWorkManager,
-            IRepository<TUser, long> userRepository,
+            IRepository<TUser, string> userRepository,
             IRepository<TRole> roleRepository,
-            IRepository<UserRole, long> userRoleRepository,
-            IRepository<UserLogin, long> userLoginRepository,
-            IRepository<UserClaim, long> userClaimRepository,
-            IRepository<UserPermissionSetting, long> userPermissionSettingRepository,
-            IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository,
-            IRepository<OrganizationUnitRole, long> organizationUnitRoleRepository)
+            IRepository<UserRole, string> userRoleRepository,
+            IRepository<UserLogin, string> userLoginRepository,
+            IRepository<UserClaim, string> userClaimRepository,
+            IRepository<UserPermissionSetting, string> userPermissionSettingRepository,
+            IRepository<UserOrganizationUnit, string> userOrganizationUnitRepository,
+            IRepository<OrganizationUnitRole, string> organizationUnitRoleRepository)
         {
             _unitOfWorkManager = unitOfWorkManager;
             UserRepository = userRepository;
@@ -469,7 +469,7 @@ namespace Abp.Authorization.Users
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                return await UserRepository.FirstOrDefaultAsync(userId.To<long>());
+                return await UserRepository.FirstOrDefaultAsync(userId);
             });
         }
 
@@ -486,7 +486,7 @@ namespace Abp.Authorization.Users
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                return UserRepository.FirstOrDefault(userId.To<long>());
+                return UserRepository.FirstOrDefault(userId);
             });
         }
 
@@ -2535,7 +2535,7 @@ namespace Abp.Authorization.Users
         /// <param name="tenantId">Tenant Id</param>
         /// <param name="userNameOrEmailAddress">User name or email address</param>
         /// <returns>User or null</returns>
-        public virtual async Task<TUser> FindByNameOrEmailAsync(int? tenantId, string userNameOrEmailAddress)
+        public virtual async Task<TUser> FindByNameOrEmailAsync(string tenantId, string userNameOrEmailAddress)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -2552,7 +2552,7 @@ namespace Abp.Authorization.Users
         /// <param name="tenantId">Tenant Id</param>
         /// <param name="userNameOrEmailAddress">User name or email address</param>
         /// <returns>User or null</returns>
-        public virtual TUser FindByNameOrEmail(int? tenantId, string userNameOrEmailAddress)
+        public virtual TUser FindByNameOrEmail(string tenantId, string userNameOrEmailAddress)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -2625,7 +2625,7 @@ namespace Abp.Authorization.Users
             });
         }
 
-        public virtual async Task<TUser> FindAsync(int? tenantId, UserLoginInfo login)
+        public virtual async Task<TUser> FindAsync(string tenantId, UserLoginInfo login)
         {
             var result = _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -2644,7 +2644,7 @@ namespace Abp.Authorization.Users
             return await Task.FromResult(result);
         }
 
-        public virtual TUser Find(int? tenantId, UserLoginInfo login)
+        public virtual TUser Find(string tenantId, UserLoginInfo login)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -2661,7 +2661,7 @@ namespace Abp.Authorization.Users
             });
         }
 
-        public virtual async Task<string> GetUserNameFromDatabaseAsync(long userId)
+        public virtual async Task<string> GetUserNameFromDatabaseAsync(string userId)
         {
             using (var uow = _unitOfWorkManager.Begin(new UnitOfWorkOptions
             {
@@ -2674,7 +2674,7 @@ namespace Abp.Authorization.Users
             }
         }
 
-        public string GetUserNameFromDatabase(long userId)
+        public string GetUserNameFromDatabase(string userId)
         {
             using (var uow = _unitOfWorkManager.Begin(new UnitOfWorkOptions
             {
@@ -2753,7 +2753,7 @@ namespace Abp.Authorization.Users
             });
         }
 
-        public virtual async Task<IList<PermissionGrantInfo>> GetPermissionsAsync(long userId)
+        public virtual async Task<IList<PermissionGrantInfo>> GetPermissionsAsync(string userId)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -2763,7 +2763,7 @@ namespace Abp.Authorization.Users
             });
         }
 
-        public virtual IList<PermissionGrantInfo> GetPermissions(long userId)
+        public virtual IList<PermissionGrantInfo> GetPermissions(string userId)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
@@ -2773,7 +2773,7 @@ namespace Abp.Authorization.Users
             });
         }
 
-        public virtual async Task<bool> HasPermissionAsync(long userId, PermissionGrantInfo permissionGrant)
+        public virtual async Task<bool> HasPermissionAsync(string userId, PermissionGrantInfo permissionGrant)
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
@@ -2785,7 +2785,7 @@ namespace Abp.Authorization.Users
             });
         }
 
-        public virtual bool HasPermission(long userId, PermissionGrantInfo permissionGrant)
+        public virtual bool HasPermission(string userId, PermissionGrantInfo permissionGrant)
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
