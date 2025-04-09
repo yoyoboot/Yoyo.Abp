@@ -13,6 +13,7 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.IdentityFramework;
+using Abp.Localization;
 using Abp.MultiTenancy;
 using Abp.Timing;
 using Abp.Zero.Configuration;
@@ -61,17 +62,17 @@ namespace Abp.Authorization
             ClientInfoProvider = NullClientInfoProvider.Instance;
         }
         
-        public virtual async Task<AbpLoginResult<TTenant, TUser>> LoginAsync(UserLoginInfo login, string tenancyName = null)
+        public virtual async Task<AbpLoginResult<TTenant, TUser>> LoginAsync(UserLoginInfo login, string tenancyName = null, bool shouldLockout = true)
         {
             return await UnitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
-                var result = await LoginAsyncInternal(login, tenancyName);
+                var result = await LoginAsyncInternal(login, tenancyName, shouldLockout);
                 await SaveLoginAttempt(result, tenancyName, login.ProviderKey + "@" + login.LoginProvider);
                 return result;
             });
         }
 
-        protected virtual async Task<AbpLoginResult<TTenant, TUser>> LoginAsyncInternal(UserLoginInfo login, string tenancyName)
+        protected virtual async Task<AbpLoginResult<TTenant, TUser>> LoginAsyncInternal(UserLoginInfo login, string tenancyName, bool shouldLockout)
         {
             if (login == null || login.LoginProvider.IsNullOrEmpty() || login.ProviderKey.IsNullOrEmpty())
             {
@@ -105,6 +106,13 @@ namespace Abp.Authorization
                 if (user == null)
                 {
                     return new AbpLoginResult<TTenant, TUser>(AbpLoginResultType.UnknownExternalLogin, tenant);
+                }
+                if (shouldLockout)
+                {
+                    if (await TryLockOutAsync(tenantId, user.Id))
+                    {
+                        return new AbpLoginResult<TTenant, TUser>(AbpLoginResultType.LockedOut, tenant, user);
+                    }
                 }
 
                 return await CreateLoginResultAsync(user, tenant);
@@ -253,6 +261,13 @@ namespace Abp.Authorization
                         ClientName = ClientInfoProvider.ComputerName.TruncateWithPostfix(UserLoginAttempt.MaxClientNameLength),
                     };
 
+                    using (var localizationContext = IocResolver.ResolveAsDisposable<ILocalizationContext>())
+                    {
+                        loginAttempt.FailReason = loginResult
+                            .GetFailReason(localizationContext.Object)
+                            .TruncateWithPostfix(UserLoginAttempt.MaxFailReasonLength);
+                    }
+                    
                     await UserLoginAttemptRepository.InsertAsync(loginAttempt);
                     await UnitOfWorkManager.Current.SaveChangesAsync();
 
