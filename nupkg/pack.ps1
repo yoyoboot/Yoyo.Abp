@@ -1,5 +1,28 @@
+# 全局通用的配置变量信息
+$version = "1.0.0"
+
+# 是否为发布
+$isProduction = $env:IS_PRODUCTION
+
+
+
+Write-Host "IS_PRODUCTION: $isProduction" -ForegroundColor Blue
+
+
+
+
+# 发布模式，从环境变量读取
+if ($isProduction -eq $True) {
+    Write-Host "TAG: $env:TAG" -ForegroundColor Blue
+
+    $version = $env:TAG
+    Write-Host "version: $version" 
+
+}
+
 # Paths
 $packFolder = (Get-Item -Path "./" -Verbose).FullName
+$distPath = Join-Path $packFolder "dist"
 $slnPath = Join-Path $packFolder "../"
 $srcPath = Join-Path $slnPath "src"
 
@@ -18,9 +41,9 @@ $projects = (
     "Abp.EntityFramework.Common",
     "Abp.EntityFramework.GraphDiff",
     "Abp.EntityFrameworkCore",
-	"Abp.EntityFrameworkCore.EFPlus",
+    "Abp.EntityFrameworkCore.EFPlus",
     "Abp.FluentMigrator",
-	"Abp.FluentValidation",
+    "Abp.FluentValidation",
     "Abp.HangFire",
     "Abp.HangFire.AspNetCore",
     "Abp.MailKit",
@@ -51,33 +74,37 @@ $projects = (
     "Abp.ZeroCore.IdentityServer4",
     "Abp.ZeroCore.IdentityServer4.EntityFrameworkCore",
     "Abp.ZeroCore.IdentityServer4.vNext",
-    "Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore",
-	"Abp.ZeroCore.NHibernate"
+    "Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore"
 )
 
 # Rebuild solution
 Set-Location $slnPath
-& dotnet restore
+& dotnet restore --ignore-failed-sources
 
 # Copy all nuget packages to the pack folder
-foreach($project in $projects) {
+$packageCounter = 0
+foreach ($project in $projects) {
     
+    ## path
     $projectFolder = Join-Path $srcPath $project
+    $csprojFile = Join-Path $projectFolder ($project + '.csproj')
+    if (!(Test-Path $csprojFile)) {
+        continue
+    }
 
     # Create nuget pack
     Set-Location $projectFolder
-    Get-ChildItem (Join-Path $projectFolder "bin/Release") -ErrorAction SilentlyContinue | Remove-Item -Recurse
-    & dotnet msbuild /p:Configuration=Release
-    & dotnet msbuild /p:Configuration=Release /t:pack /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg
+    & dotnet publish --no-restore -c Release
+    & dotnet pack --no-restore `
+        -c Release `
+        -o $distPath `
+        -p:IncludeSymbols=true `
+        -p:SymbolPackageFormat=snupkg `
+        -p:Version=${version}
 
-    # Copy nuget package
-    $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + $project + ".*.nupkg")
-    Move-Item $projectPackPath $packFolder
-
-	# Copy symbol package
-    $projectPackPath = Join-Path $projectFolder ("/bin/Release/" + $project + ".*.snupkg")
-    Move-Item $projectPackPath $packFolder
+    $packageCounter += 1
 }
 
+Write-Host ('package count: ' + $packageCounter )
 # Go back to the pack folder
 Set-Location $packFolder

@@ -1,0 +1,84 @@
+# 预编译
+pre_packs:
+  stage: build
+  only:
+    - tags
+  tags:
+    - portal-runner
+  retry:
+    max: 2
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
+    entrypoint: [ "" ]
+  artifacts:
+    # 产物
+    name: "BasicFramework-$CI_COMMIT_REF_NAME"
+    when: on_success # 成功时生成
+    expire_in: 1 day # 一天自动清除
+    paths:
+      # 路径
+      - ./nupkg/dist/
+  script:
+    - cd nupkg
+    - pwsh ./pack.ps1
+
+# 推送到gitlab源
+push_gitlab:
+  stage: deploy
+  when: manual
+  dependencies:
+    - pre_packs
+  only:
+    - tags
+  tags:
+    - portal-runner
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
+    entrypoint: [ "" ]
+  script:
+    - cd nupkg
+    - export NUGET_GITLAB_SOURCE="${gitlab_52abp_nuget_source}"
+    - export NUGET_GITLAB_USER="${gitlab_52abp_nuget_user}"
+    - export NUGET_GITLAB_TOKEN="${gitlab_52abp_nuget_token}"
+    - pwsh ./nuget_gitlab_login.ps1
+    - export NUGET_SOURCE="${gitlab_52abp_nuget_source}"
+    - export NUGET_SOURCE_APIKEY="${gitlab_52abp_nuget_token}"
+    # - export DISABLE_API_KEY='True'
+    - pwsh ./pack_push.ps1
+
+# 推送到Nexus私有源
+push_nexus:
+  stage: deploy
+  #when: manual
+  dependencies:
+    - pre_packs
+  only:
+    - tags
+  tags:
+    - portal-runner
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
+    entrypoint: [ "" ]
+  script:
+    - cd nupkg
+    - export NUGET_SOURCE="${nexus_nuget}"
+    - export NUGET_SOURCE_APIKEY="${nexus_nuget_token}"
+    - pwsh ./pack_push.ps1
+
+# 推送到nuget源
+push_nuget:
+  stage: deploy
+  dependencies:
+    - pre_packs
+  only:
+    - tags
+  tags:
+    - portal-runner
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
+    entrypoint: [ "" ]
+  script:
+    - cd nupkg
+    - export NUGET_SOURCE="${nuget}"
+    - export NUGET_SOURCE_APIKEY="${nuget_token_yoyoboot}"
+    - pwsh ./pack_push.ps1

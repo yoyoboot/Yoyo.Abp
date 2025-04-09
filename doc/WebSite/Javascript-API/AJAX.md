@@ -88,7 +88,7 @@ something like this:
       "error": null,
       "targetUrl": null,
       "unAuthorizedRequest": false,
-      "__abp": true
+      "__wrapper": true
     }
 
 Here all the properties are camelCase (since it's conventional in
