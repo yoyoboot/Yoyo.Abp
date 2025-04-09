@@ -34,7 +34,7 @@ Domain Layer
 -   [Unit Of Work](Unit-Of-Work.md)
 -   [Domain Events (EventBus)](EventBus-Domain-Events.md)
 -   [Data Filters](Data-Filters.md)
--   [Dynamic Parameter System](Dynamic-Parameter-System.md)
+-   [Dynamic Property System](Dynamic-Parameter-System.md)
 -   [Object Comparators](ObjectComparators.md)
 
 Application Layer
@@ -112,8 +112,7 @@ Releases
     -   [Organization Unit Management](/Pages/Documents/Zero/Organization-Units)
     -   [Permission Management](/Pages/Documents/Zero/Permission-Management)
     -   [Language Management](/Pages/Documents/Zero/Language-Management)
-    -   [Identity Server Integration](Zero/Identity-Server.md)
-    -   [Identity Server vNext Integration](Zero/Identity-Server-vNext.md)
+    -   [Identity Server Integration](Zero/Identity-Server-vNext.md)
 -   Releases
     -   [Nuget Packages](/Pages/Documents/Zero/Nuget-Packages)
     -   [Change Logs & Releases](https://github.com/aspnetboilerplate/module-zero/releases)

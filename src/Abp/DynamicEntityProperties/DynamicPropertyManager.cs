@@ -62,7 +62,7 @@ namespace Abp.DynamicEntityProperties
             return _dynamicPropertyStore.GetAsync(propertyName);
         }
 
-        protected virtual void CheckDynamicProperty(DynamicProperty dynamicProperty)
+        protected virtual void CheckDynamicProperty(DynamicProperty dynamicProperty, bool updating = false)
         {
             if (dynamicProperty == null)
             {
@@ -77,6 +77,15 @@ namespace Abp.DynamicEntityProperties
             if (!_dynamicEntityPropertyDefinitionManager.ContainsInputType(dynamicProperty.InputType))
             {
                 throw new ApplicationException($"Input type is invalid, if you want to use \"{dynamicProperty.InputType}\" input type, define it in DynamicEntityPropertyDefinitionProvider.");
+            }
+
+            if(!updating)
+            {
+                var existingProperty = _dynamicPropertyStore.Get(dynamicProperty.PropertyName);
+                if (existingProperty != null)
+                {
+                    throw new ArgumentException($"There is already a dynamic property with name: '{dynamicProperty.PropertyName}'");
+                }
             }
         }
 
@@ -114,7 +123,7 @@ namespace Abp.DynamicEntityProperties
 
         public virtual DynamicProperty Update(DynamicProperty dynamicProperty)
         {
-            CheckDynamicProperty(dynamicProperty);
+            CheckDynamicProperty(dynamicProperty, true);
 
             using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
             {
@@ -130,7 +139,7 @@ namespace Abp.DynamicEntityProperties
 
         public virtual async Task<DynamicProperty> UpdateAsync(DynamicProperty dynamicProperty)
         {
-            CheckDynamicProperty(dynamicProperty);
+            CheckDynamicProperty(dynamicProperty, true);
 
             using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
             {
