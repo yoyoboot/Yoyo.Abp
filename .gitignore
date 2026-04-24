@@ -136,3 +136,7 @@ nupkg/push-hikalkan.bat
 # Nuke Test Results
 output/test-results/*
 nupkg/dist/*
+src/Abp.AspNetCore/**.lscache
+src/**/**.lscache
+test/**/**.lscache
+build/**.lscache

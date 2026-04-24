@@ -1,0 +1,29 @@
+{
+  "recommendations": [
+    "ms-vscode.vs-keybindings",
+    "vue.volar",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "esbenp.prettier-vscode",
+    "mrmlnc.vscode-less",
+    "antfu.iconify",
+    "mikestead.dotenv",
+    "heybourn.headwind",
+    "shd101wyy.markdown-preview-enhanced"
+  ],
+  "unwantedRecommendations": [
+    "octref.vetur",
+    "mikael.angular-beastcode",
+    "angular.ng-template",
+    "cyrilletuzi.angular-schematics",
+    "ms-dotnettools.csharp",
+    "ms-azuretools.vscode-dapr",
+    "editorconfig.editorc",
+    "grapecity.gc-excelviewer",
+    "golang.go",
+    "george-alisson.html-preview-vscode",
+    "saoudrizwan.claude-dev",
+    "yzhang.markdown-all-in-one",
+    "lokalise.i18n-ally"
+  ]
+}

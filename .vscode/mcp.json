@@ -1,0 +1,84 @@
+{
+	"servers": {
+	    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    }, "mcp-feedback-enhanced": {
+      "command": "uvx",
+      "args": ["mcp-feedback-enhanced@latest"],
+      "timeout": 600,
+      "autoApprove": ["interactive_feedback"],
+      "env": {
+        "PYTHONUTF8": "1",
+        "PYTHONIOENCODING": "utf-8"
+      }
+    },
+		"context7": {
+			"type": "stdio",
+			"command": "C:\\Program Files\\nodejs\\node.exe",
+			"args": [
+				"C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npx-cli.js",
+				"-y",
+				"@upstash/context7-mcp@latest"
+			],
+			"env": {
+				"NODE_ENV": "production"
+			}
+		},
+		"chrome-devtools": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"chrome-devtools-mcp@latest"
+			],
+			"type": "stdio"
+		},
+		"filesystem": {
+			"type": "stdio",
+			"command": "C:\\Program Files\\nodejs\\node.exe",
+			"args": [
+				"C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npx-cli.js",
+				"-y",
+				"@modelcontextprotocol/server-filesystem",
+				"${workspaceFolder}",
+				"${workspaceFolder}\\docs",
+				"${workspaceFolder}\\.github",
+				"${workspaceFolder}\\.worktrees"
+			]
+		},
+		"microsoft-learn-docs": {
+			"type": "http",
+			"url": "https://learn.microsoft.com/api/mcp"
+		},
+
+		"github": {
+			"type": "http",
+			"url": "https://api.githubcopilot.com/mcp/"
+		},
+		"postgres": {
+			"type": "stdio",
+			"command": "C:\\Program Files\\nodejs\\node.exe",
+			"args": [
+				"C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npx-cli.js",
+				"-y",
+				"@sarmadparvez/postgresql-mcp",
+				"${input:postgres_connection}"
+			]
+		},
+		"microsoft/markitdown": {
+			"type": "stdio",
+			"command": "uvx",
+			"args": [
+				"markitdown-mcp@0.0.1a4"
+			],
+			"gallery": "https://api.mcp.github.com",
+			"version": "1.0.0"
+		}
+	},
+	"inputs": [
+
+	]
+}
