@@ -51,6 +51,7 @@
 - 白名单保留项目，删除不在白名单中的库和测试项目；
 - 将大量 `int` / `long` 主键相关类型替换为 `string`；
 - 对 Zero、ZeroCore、EF、EFCore、OData、Dapper、MemoryDb、测试项目和 SampleApp 进行专项修补；
+- 移除 `.NET Framework` / `net4x` 兼容目标、条件依赖和 `AssetTargetFallback` 遗留项，将生成线收敛到当前 `.NET 6` 生产线；
 - 注入 `AbpStringPrimaryKeyValueGenerator.cs`、`StringIdExtensions.cs`、`AbpDbContextExtensions.cs`、`AbpZeroDbContextExtensions.cs` 等补丁文件；
 - 替换 `nupkg/pack.ps1`。
 
@@ -66,6 +67,7 @@
 4. **工具资产低估**：没有把 `proj-rename-ps` 作为核心迁移能力纳入设计。
 5. **生产约束不足**：虽然提到了下游消费验证，但没有把已投产的 `YoyoBoot` 与 `Rider` 作为升级路线的硬门禁。
 6. **错误结果延续风险**：旧 `release/7.4`、`sync/7.4-yoyo`、`sync/8.0-yoyo` 已确认不应继续承载后续工作，应删除后从官方 upstream 重新制作。
+7. **兼容层清理缺失**：旧方案没有把 `.NET Framework` / `net461` 兼容层、NHibernate/Owin/legacy ASP.NET Web 包裁剪作为规则门禁，容易把当前分支没有保留的历史包重新带回。
 
 因此，旧设计应废弃，不再作为后续实施依据。
 
@@ -79,9 +81,10 @@
 4. 将 `Yoyo.Abp.*` 包名与程序集名视为长期永久差异；
 5. 将默认 `string` 主键体系视为长期永久差异；
 6. 将项目裁剪、打包脚本、补丁注入和下游验证标准化；
-7. 先重建并验证 `7.4` 生成路径，再将生成结果回灌到当前生产基线派生的验证分支中验证；
-8. 在 `7.4` 回灌验证通过后，再推进 `v9.4.2 / .NET 8`；
-9. 在 `.NET 8` 版本稳定后，再评估 `v10.x / .NET 9` 与未来 `.NET 10` 路线。
+7. 将 `.NET Framework` / `net461` 兼容层清理纳入迁移规则，避免已废弃目标框架和条件依赖回流；
+8. 先重建并验证 `7.4` 生成路径，再将生成结果回灌到当前生产基线派生的验证分支中验证；
+9. 在 `7.4` 回灌验证通过后，再推进 `v9.4.2 / .NET 8`；
+10. 在 `.NET 8` 版本稳定后，再评估 `v10.x / .NET 9` 与未来 `.NET 10` 路线。
 
 ## 5. 架构设计
 
@@ -133,6 +136,7 @@
 - `PackageId` 改为 `Yoyo.Abp.*`；
 - `AssemblyName` 改为 `Yoyo.Abp.*`；
 - 项目白名单裁剪；
+- `.NET Framework` / `net4x` 目标框架与条件依赖裁剪；
 - 补丁文件注入；
 - `nupkg/pack.ps1` 替换或标准化；
 - 版本号规则与发包清单维护。
@@ -166,14 +170,15 @@
 3. 运行迁移引擎；
 4. 执行基底语义规则；
 5. 执行产品化规则；
-6. 注入补丁文件；
-7. 生成 `Yoyo.Abp.*` 包面；
-8. 执行 Yoyo.Abp 自身编译、测试、打包验证；
-9. 执行包身份与包面验证；
-10. 从当前生产基线创建短生命周期回灌验证分支；
-11. 将生成结果以受控 overlay 方式回灌到验证分支；
-12. 执行下游消费验证；
-13. 输出 `release/<version>`。
+6. 清理 `.NET Framework` / `net4x` 兼容层；
+7. 注入补丁文件；
+8. 生成 `Yoyo.Abp.*` 包面；
+9. 执行 Yoyo.Abp 自身编译、测试、打包验证；
+10. 执行包身份、包面和目标框架验证；
+11. 从当前生产基线创建短生命周期回灌验证分支；
+12. 将生成结果以受控 overlay 方式回灌到验证分支；
+13. 执行下游消费验证；
+14. 输出 `release/<version>`。
 
 ### 5.3 回灌验证模型
 
@@ -202,7 +207,9 @@
 
 - 迁移白名单、实际 `src/` 目录和打包项目清单必须输出对比报告；
 - 当前生产兼容线以当前分支 `codex/dev-7.3.0` 的 33 个 `Yoyo.Abp.*` 包为唯一基线；
+- `nupkg/pack.ps1` 和迁移引擎内置 pack 清单不得包含当前 33 包之外的 NHibernate、Owin、legacy ASP.NET Web、GraphDiff、FluentMigrator、legacy Zero 包；
 - 若要引入 48 包扩展线，必须单独做产品决策和下游验证，不能作为 `7.4` 迁移的隐式副作用；
+- 生成结果不得保留 `.NET Framework` / `net4x` 目标框架、`net461` 条件依赖或 `portable-net45+win8+wp8+wpa81` fallback；
 - 所有 release candidate 必须确认 `.nupkg` / `.snupkg` 文件名、nuspec 依赖和 csproj `PackageId` 均为 `Yoyo.Abp.*` 体系。
 
 ## 6. `proj-rename-ps` 治理设计
@@ -390,7 +397,7 @@
 
 ### 风险 7：包面从 33 个隐式扩大到 48 个
 
-应对：当前生产兼容线以当前分支的 33 个 `Yoyo.Abp.*` 包为基线。48 包扩展线涉及 legacy ASP.NET MVC/WebApi/NHibernate/Owin 等包，必须单独做产品决策、包身份重写和下游验证，不能作为 `7.4` 升级的默认副作用。
+应对：当前生产兼容线以当前分支的 33 个 `Yoyo.Abp.*` 包为基线。48 包扩展线涉及 legacy ASP.NET MVC/WebApi/NHibernate/Owin 等包，必须单独做产品决策、包身份重写和下游验证，不能作为 `7.4` 升级的默认副作用。当前第一波 pack 清单必须排除 NHibernate、Owin、legacy ASP.NET Web、GraphDiff、FluentMigrator 和 legacy Zero 包；`Abp.Web.Common` 是当前 33 包之一，不属于要删除的 legacy Web 包。
 
 ### 风险 8：项目清单分散导致打包遗漏或多打包
 
@@ -399,6 +406,10 @@
 ### 风险 9：官方 upstream 生命周期与目标框架误判
 
 应对：官方 `v10.3` 先按 `v10.x / .NET 9` 评估；`.NET 10` 不绑定到 `v10.3`。同时需要关注 ASP.NET Boilerplate 官方支持窗口，避免长期路线依赖已停止维护的 upstream。
+
+### 风险 10：`.NET Framework` 兼容层回流
+
+应对：迁移引擎必须在处理库项目和测试项目 `.csproj` 时删除 `net4x` / `net461` 目标框架、对应条件 `ItemGroup` / `PropertyGroup`、以及 `portable-net45+win8+wp8+wpa81` fallback。生成验证必须搜索 `src/`、`test/` 和 `nupkg/pack.ps1`，发现 `.NET Framework` 目标或旧兼容包即失败。
 
 ## 10. 新设计结论
 

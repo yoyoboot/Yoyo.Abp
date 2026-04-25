@@ -21,7 +21,7 @@
 5. 回灌 `v7.4` 生成结果到当前基线验证分支；
 6. 定义进入 `v9.4.2 / .NET 8` 的前置门禁。
 
-本计划不实施 `v9.4.2 / .NET 8` 升级，不实施 `.NET 10`，不清理 `.NET Framework` 兼容层。
+本计划不实施 `v9.4.2 / .NET 8` 升级，不实施 `.NET 10`。本计划必须在 `v7.4` 生成路径中清理 `.NET Framework` / `net4x` 兼容层，避免当前分支未保留的历史目标框架和旧包回流。
 
 ## Critical findings to preserve
 
@@ -29,6 +29,8 @@
 - 旧 `.worktrees/sync-upstream` / `release/7.4` 曾包含 48 个项目且 `PackageId` 为 `Abp.*`，已判定为问题结果。
 - 旧本地 `release/7.4`、`sync/7.4-yoyo`、`sync/8.0-yoyo` 已删除；后续不得复用其内容。
 - 第一阶段默认保持当前分支 33 包生产兼容线；48 包扩展线必须单独做产品决策和下游验证。
+- 迁移引擎和 `nupkg/pack.ps1` 的 pack 清单必须与当前 33 包面一致，不得包含 NHibernate、Owin、legacy ASP.NET Web、GraphDiff、FluentMigrator 或 legacy Zero 包；`Abp.Web.Common` 是保留包。
+- 迁移生成结果不得保留 `.NET Framework` / `net4x` 目标框架、`net461` 条件依赖或 `portable-net45+win8+wp8+wpa81` fallback。
 - 官方 `v10.3` 按 `v10.x / .NET 9` 评估，不能直接标记为 `.NET 10` 锚点。
 
 ## File map
@@ -448,12 +450,12 @@ Run:
 
 ```powershell
 Get-ChildItem tools/proj-rename-ps -Recurse -File -Include *.ps1 | Select-Object FullName | Sort-Object FullName | Set-Content artifacts/yoyo-abp-migration/migration-ps1-files.txt
-Select-String -Path tools/proj-rename-ps/**/*.ps1 -Pattern 'PackageId|AssemblyName|Entity<string>|Entity<int>|Entity<long>|Repository<|Copy-Item|RmLib|RunLib|RunTest|RunTestDemos' | Select-Object Path,LineNumber,Line | ConvertTo-Json -Depth 4 | Set-Content artifacts/yoyo-abp-migration/migration-rule-hits.json
+Select-String -Path tools/proj-rename-ps/**/*.ps1 -Pattern 'PackageId|AssemblyName|Entity<string>|Entity<int>|Entity<long>|Repository<|Copy-Item|RmLib|RunLib|RunTest|RunTestDemos|TargetFramework|TargetFrameworks|net461|net4|RemoveNetFrameworkCompatibility|NHibernate|Owin|GraphDiff|FluentMigrator' | Select-Object Path,LineNumber,Line | ConvertTo-Json -Depth 4 | Set-Content artifacts/yoyo-abp-migration/migration-rule-hits.json
 ```
 
 Expected:
 - `migration-ps1-files.txt` includes `src2\abp-yoyo.abp-string-7.3\run.ps1`.
-- `migration-rule-hits.json` includes package rename, string primary key, project removal, and patch injection patterns.
+- `migration-rule-hits.json` includes package rename, string primary key, project removal, patch injection, `.NET Framework` cleanup, and old-package pruning patterns.
 
 - [ ] **Step 2: Create migration rules inventory report**
 
@@ -473,15 +475,18 @@ Write `docs/superpowers/reports/2026-04-25-yoyo-abp-migration-rules-inventory.md
 | --- | --- | --- | --- |
 | Package identity rewrite | `process_lib.ps1` / `RunLib` | Rewrite `Abp.*` packages and assemblies to `Yoyo.Abp.*` | Keep behavior, later extract to manifest |
 | Project white-list pruning | `run.ps1` + `RmLib` | Keep only supported Yoyo.Abp package surface | Capture list before v7.4 generation |
+| .NET Framework compatibility cleanup | `process_lib.ps1` / `RemoveNetFrameworkCompatibility`, `process_test.ps1` | Remove `net4x`/`net461` targets, conditional dependencies, and portable fallback from generated projects | Keep as a first-wave hard gate |
 | String primary key rewrite | `process_lib.ps1`, `process_test.ps1`, `process_test_demo.ps1` | Preserve default `string` key semantics | Keep as permanent migration rule |
 | Patch injection | `run.ps1` copy operations from `abp/` | Inject Yoyo-specific helper and EFCore files | Verify injected file list after every run |
-| Pack script replacement | `run.ps1` copy to `nupkg/pack.ps1` | Preserve Yoyo package output behavior | Verify output package IDs are `Yoyo.Abp.*` |
+| Pack script replacement | `run.ps1` copy to `nupkg/pack.ps1` | Preserve Yoyo package output behavior and current 33-package surface | Verify output package IDs are `Yoyo.Abp.*` and no old compatibility packages are listed |
 | Test and SampleApp compatibility | `process_test.ps1`, `process_test_demo.ps1` | Keep migration result buildable and testable | Run targeted tests after generation |
 
 ## Non-negotiable permanent rules
 
 - `Yoyo.Abp.*` package identity remains permanent.
 - Default `string` primary key remains permanent.
+- `.NET Framework` / `net4x` compatibility is removed from generated output in the first wave.
+- NHibernate, Owin, legacy ASP.NET Web, GraphDiff, FluentMigrator, and legacy Zero packages are not part of the first-wave 33-package surface.
 - Downstream `YoyoBoot` and `Rider` restore/build smoke remain release gates.
 
 ## Tooling rule
@@ -562,6 +567,30 @@ Expected:
 - No non-Yoyo `Abp.*` package IDs remain in generated package projects.
 - No non-Yoyo `Abp.*` assembly names remain in generated package projects.
 - `yoyo-v7.4-packageids.txt` lists `Yoyo.Abp.*` package identities.
+
+- [ ] **Step 3.1: Verify generated target frameworks and old compatibility packages**
+
+Run:
+
+```powershell
+$generated = 'artifacts/yoyo-abp-migration/yoyo-v7.4'
+$netFrameworkHits = Select-String -Path "$generated/src/**/*.csproj", "$generated/test/**/*.csproj" -Pattern 'net4\d+|net461|portable-net45\+win8\+wp8\+wpa81' -ErrorAction SilentlyContinue
+if ($netFrameworkHits) { $netFrameworkHits; throw 'Generated output still contains .NET Framework compatibility targets or fallback.' }
+
+$currentProjects = Get-ChildItem src -Directory | Select-Object -ExpandProperty Name | Sort-Object
+$packProjects = [regex]::Matches((Get-Content "$generated/nupkg/pack.ps1" -Raw), '"(Abp[^"\r\n]*)"') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique
+$diff = Compare-Object $currentProjects $packProjects
+if ($diff) { $diff; throw 'Generated pack list differs from current branch 33-package surface.' }
+
+$legacyPackProjects = $packProjects | Where-Object { $_ -match 'NHibernate|Owin|^Abp\.Web$|^Abp\.Web\.(Api|Mvc|SignalR|Resources)(\.|$)|GraphDiff|FluentMigrator|^Abp\.Zero$|Abp\.Zero\.EntityFramework|Abp\.Zero\.NHibernate|Abp\.Zero\.Owin' }
+if ($legacyPackProjects) { $legacyPackProjects; throw 'Generated pack list contains old compatibility packages.' }
+```
+
+Expected:
+- No generated project targets `.NET Framework` / `net4x` / `net461`.
+- No generated project keeps the old portable fallback.
+- Generated `nupkg/pack.ps1` matches the current branch package surface.
+- Generated pack list does not include NHibernate, Owin, legacy ASP.NET Web, GraphDiff, FluentMigrator, or legacy Zero packages.
 
 - [ ] **Step 4: Compare generated package surface with production baseline**
 
@@ -731,12 +760,26 @@ if ($badPackageIds) { $badPackageIds; throw 'Overlay contains non-Yoyo package I
 $expectedCount = (Get-ChildItem src -Directory).Count
 $projectCount = (Get-ChildItem "$verifyRoot/src" -Directory).Count
 if ($projectCount -ne $expectedCount) { throw "Overlay expected current branch first-wave project count $expectedCount, actual: $projectCount" }
+
+$netFrameworkHits = Select-String -Path "$verifyRoot/src/**/*.csproj", "$verifyRoot/test/**/*.csproj" -Pattern 'net4\d+|net461|portable-net45\+win8\+wp8\+wpa81' -ErrorAction SilentlyContinue
+if ($netFrameworkHits) { $netFrameworkHits; throw 'Overlay still contains .NET Framework compatibility targets or fallback.' }
+
+$packProjects = [regex]::Matches((Get-Content "$verifyRoot/nupkg/pack.ps1" -Raw), '"(Abp[^"\r\n]*)"') | ForEach-Object { $_.Groups[1].Value } | Sort-Object -Unique
+$currentProjects = Get-ChildItem src -Directory | Select-Object -ExpandProperty Name | Sort-Object
+$packDiff = Compare-Object $currentProjects $packProjects
+if ($packDiff) { $packDiff; throw 'Overlay pack list differs from current branch 33-package surface.' }
+
+$legacyPackProjects = $packProjects | Where-Object { $_ -match 'NHibernate|Owin|^Abp\.Web$|^Abp\.Web\.(Api|Mvc|SignalR|Resources)(\.|$)|GraphDiff|FluentMigrator|^Abp\.Zero$|Abp\.Zero\.EntityFramework|Abp\.Zero\.NHibernate|Abp\.Zero\.Owin' }
+if ($legacyPackProjects) { $legacyPackProjects; throw 'Overlay pack list contains old compatibility packages.' }
+
 git -C $verifyRoot status --short
 ```
 
 Expected:
 - Overlay verification branch contains only `Yoyo.Abp.*` PackageId values.
 - Overlay verification branch remains on the current branch first-wave package surface; the current count is 33.
+- Overlay verification branch contains no `.NET Framework` / `net4x` / `net461` targets or old portable fallback.
+- Overlay `nupkg/pack.ps1` remains aligned with the current 33-package surface and excludes old compatibility packages.
 - Git status shows framework and build files changed, while `docs/superpowers/` and `tools/` remain governed assets.
 
 - [ ] **Step 4: Run overlay branch restore/build smoke**
