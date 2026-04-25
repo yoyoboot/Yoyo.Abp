@@ -130,7 +130,11 @@ src/.vs/config/applicationhost.config
 !GitLink.exe
 !nuget.exe
 !SQLite.Interop.dll
-/tools
+/tools/*
+!/tools/proj-rename-ps/
+!/tools/proj-rename-ps/**
+!/tools/yoyo-abp-migration/
+!/tools/yoyo-abp-migration/**
 nupkg/push-hikalkan.bat
 
 # Nuke Test Results
@@ -141,3 +145,5 @@ src/**/**.lscache
 test/**/**.lscache
 build/**.lscache
 /.worktrees/
+artifacts/yoyo-abp-migration/
+tools/yoyo-abp-migration/logs/*.log
