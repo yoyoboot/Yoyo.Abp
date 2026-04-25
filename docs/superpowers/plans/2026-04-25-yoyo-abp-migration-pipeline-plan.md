@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 将 `proj-rename-ps` 纳入 `Yoyo.Abp` 仓库并建立可重复的 Yoyo.Abp 迁移流水线，先固化 `7.3.0.12` 生产基线，再重建 `v7.4` 标准生成路径，为后续 `v9.4.2 / .NET 8` 实施建立门禁。
+**Goal:** 将 `proj-rename-ps` 纳入 `Yoyo.Abp` 仓库并建立可重复的 Yoyo.Abp 迁移流水线，先固化 `7.3.0.12` 生产基线，再重建 `v7.4` 标准生成路径，并将生成结果回灌到当前基线派生的验证分支中验证，为后续 `v9.4.2 / .NET 8` 实施建立门禁。
 
-**Architecture:** 本计划实现第一阶段迁移基础设施，不直接升级到 `.NET 8`。实现方式是：把外部 `proj-rename-ps` 作为迁移引擎导入仓库，增加安全包装入口和运行日志，再用报告固定当前生产包面、迁移规则、下游消费矩阵，最后用官方 upstream `v7.4` 作为输入验证可重复生成路径。
+**Architecture:** 本计划实现第一阶段迁移基础设施，不直接升级到 `.NET 8`。实现方式是：把外部 `proj-rename-ps` 作为迁移引擎导入仓库，增加安全包装入口和运行日志，用报告固定当前生产包面、迁移规则、下游消费矩阵，再用官方 upstream `v7.4` 作为输入验证可重复生成路径。生成结果不会直接成为 release，而是以受控 overlay 方式回灌到 `verify/7.4-yoyo-on-dev-7.3.0` 分支，通过包身份、包面、Yoyo.Abp 自身和下游消费验证后再决定 `release/7.4`。
 
 **Tech Stack:** PowerShell、Git、NuGet、.NET SDK 6、ASP.NET Boilerplate upstream `https://github.com/aspnetboilerplate/aspnetboilerplate/`、Markdown
 
@@ -18,9 +18,18 @@
 2. 固化当前 `Yoyo.Abp 7.3.0.12` 生产基线；
 3. 建立迁移规则清单；
 4. 重建 `v7.4` 标准生成路径；
-5. 定义进入 `v9.4.2 / .NET 8` 的前置门禁。
+5. 回灌 `v7.4` 生成结果到当前基线验证分支；
+6. 定义进入 `v9.4.2 / .NET 8` 的前置门禁。
 
 本计划不实施 `v9.4.2 / .NET 8` 升级，不实施 `.NET 10`，不清理 `.NET Framework` 兼容层。
+
+## Critical findings to preserve
+
+- 当前生产基线 `src/` 下有 33 个项目，包身份为 `Yoyo.Abp.*`。
+- 现有 `.worktrees/sync-upstream` / `release/7.4` 下有 48 个项目，当前 `PackageId` 仍为 `Abp.*`。
+- 因此现有 `release/7.4` 只能作为修复参考，不能直接作为 Yoyo.Abp 产品化 release。
+- 第一阶段默认保持 33 包生产兼容线；48 包扩展线必须单独做产品决策和下游验证。
+- 官方 `v10.3` 按 `v10.x / .NET 9` 评估，不能直接标记为 `.NET 10` 锚点。
 
 ## File map
 
@@ -33,6 +42,7 @@
 - `docs/superpowers/reports/2026-04-25-yoyo-abp-7.3-production-baseline.md` — 当前生产基线报告。
 - `docs/superpowers/reports/2026-04-25-yoyo-abp-migration-rules-inventory.md` — 迁移规则清单。
 - `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-generation-readiness.md` — `v7.4` 标准生成路径准备度报告。
+- `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-overlay-verification.md` — `v7.4` 回灌验证报告。
 
 ### Modify
 
@@ -65,7 +75,7 @@ git diff -- docs/superpowers/specs/2026-04-25-yoyo-abp-migration-pipeline-design
 
 Expected:
 - Diff shows the official upstream URL `https://github.com/aspnetboilerplate/aspnetboilerplate/`.
-- Diff shows version input labels for `.NET 6` / `v7.4`, `.NET 8` / `v9.4.2`, and `.NET 10` / `v10.3`.
+- Diff shows version input labels for `.NET 6` / `v7.4`, `.NET 8` / `v9.4.2`, and `v10.x / .NET 9` / `v10.3`; future `.NET 10` is explicitly left for upstream confirmation.
 - No framework source files under `src/` or `test/` are included.
 
 - [ ] **Step 2: Commit the approved design revision before implementation files**
@@ -526,14 +536,35 @@ $generated = 'artifacts/yoyo-abp-migration/yoyo-v7.4'
 $packageIds = Select-String -Path "$generated/src/**/*.csproj" -Pattern '<PackageId>' | ForEach-Object { $_.Line.Trim() }
 $badPackageIds = $packageIds | Where-Object { $_ -match '<PackageId>Abp' -and $_ -notmatch '<PackageId>Yoyo\.Abp' }
 if ($badPackageIds) { $badPackageIds; throw 'Generated output contains non-Yoyo package IDs.' }
+$assemblyNames = Select-String -Path "$generated/src/**/*.csproj" -Pattern '<AssemblyName>' | ForEach-Object { $_.Line.Trim() }
+$badAssemblyNames = $assemblyNames | Where-Object { $_ -match '<AssemblyName>Abp' -and $_ -notmatch '<AssemblyName>Yoyo\.Abp' }
+if ($badAssemblyNames) { $badAssemblyNames; throw 'Generated output contains non-Yoyo assembly names.' }
 $packageIds | Sort-Object | Set-Content artifacts/yoyo-abp-migration/yoyo-v7.4-packageids.txt
 ```
 
 Expected:
 - No non-Yoyo `Abp.*` package IDs remain in generated package projects.
+- No non-Yoyo `Abp.*` assembly names remain in generated package projects.
 - `yoyo-v7.4-packageids.txt` lists `Yoyo.Abp.*` package identities.
 
-- [ ] **Step 4: Run generated solution restore/build smoke**
+- [ ] **Step 4: Compare generated package surface with production baseline**
+
+Run:
+
+```powershell
+$currentProjects = Get-ChildItem src -Directory | Select-Object -ExpandProperty Name | Sort-Object
+$generatedProjects = Get-ChildItem artifacts/yoyo-abp-migration/yoyo-v7.4/src -Directory | Select-Object -ExpandProperty Name | Sort-Object
+Compare-Object $currentProjects $generatedProjects | Format-Table -AutoSize
+if ($generatedProjects.Count -ne 33) {
+  throw "Expected first-wave generated package surface to stay at 33 projects, actual: $($generatedProjects.Count). Decide explicitly before expanding to 48 packages."
+}
+```
+
+Expected:
+- Generated first-wave package surface contains 33 projects.
+- Any difference from the current 33-project production surface is listed and reviewed before overlay.
+
+- [ ] **Step 5: Run generated solution restore/build smoke**
 
 Run:
 
@@ -553,9 +584,9 @@ Expected:
 - Build either passes or fails with a captured error list that becomes the first repair queue.
 - If build fails, do not continue to package or downstream smoke until errors are classified.
 
-- [ ] **Step 5: Create v7.4 generation readiness report**
+- [ ] **Step 6: Create v7.4 generation readiness report**
 
-Write `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-generation-readiness.md` with this content after Step 4 outcome is known:
+Write `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-generation-readiness.md` with this content after Step 5 outcome is known:
 
 ```markdown
 # Yoyo.Abp v7.4 Generation Readiness
@@ -579,15 +610,16 @@ Write `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-generation-readiness.md`
 | Upstream input materialized | record pass or failure | `Abp.sln` exists under upstream input |
 | Migration wrapper ran | record pass or failure | `tools/yoyo-abp-migration/logs/last-run.log` |
 | Package IDs rewritten | record pass or failure | `artifacts/yoyo-abp-migration/yoyo-v7.4-packageids.txt` |
+| Package surface remains 33-project first wave | record pass or failure | package surface comparison command |
 | Restore/build smoke | record pass or failure | terminal output from `dotnet restore` and `dotnet build` |
 
 ## Decision
 
-- If all checks pass, the next implementation plan can add package smoke and downstream consumption smoke.
+- If all checks pass, proceed to overlay verification on `verify/7.4-yoyo-on-dev-7.3.0`.
 - If build fails, classify errors into migration-rule gaps before touching framework code manually.
 ```
 
-- [ ] **Step 6: Commit v7.4 readiness report**
+- [ ] **Step 7: Commit v7.4 readiness report**
 
 Run:
 
@@ -601,29 +633,203 @@ Expected:
 
 ---
 
-### Task 6: Define downstream smoke gate for the next execution wave
+### Task 6: Overlay v7.4 output onto current baseline verification branch
 
 **Files:**
-- Modify: `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-generation-readiness.md`
+- Create: `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-overlay-verification.md`
 
-- [ ] **Step 1: Add downstream smoke gate section to readiness report**
+- [ ] **Step 1: Create an isolated verification worktree from the current baseline**
 
-Append this section to `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-generation-readiness.md`:
+Run:
+
+```powershell
+$verifyBranch = 'verify/7.4-yoyo-on-dev-7.3.0'
+$verifyRoot = '.worktrees/verify-7.4-yoyo-on-dev-7.3.0'
+if (git rev-parse --verify $verifyBranch 2>$null) { throw "Verification branch already exists: $verifyBranch" }
+if (Test-Path $verifyRoot) { throw "Verification worktree already exists: $verifyRoot" }
+git worktree add -b $verifyBranch $verifyRoot codex/dev-7.3.0
+```
+
+Expected:
+- `.worktrees/verify-7.4-yoyo-on-dev-7.3.0` exists.
+- Branch `verify/7.4-yoyo-on-dev-7.3.0` is based on `codex/dev-7.3.0`.
+
+- [ ] **Step 2: Overlay generated framework output while preserving governance assets**
+
+Run:
+
+```powershell
+$generated = 'artifacts/yoyo-abp-migration/yoyo-v7.4'
+$verifyRoot = '.worktrees/verify-7.4-yoyo-on-dev-7.3.0'
+if (!(Test-Path "$generated/Abp.sln")) { throw "Missing generated output: $generated" }
+
+$dirsToMirror = @('src', 'test', 'nupkg', 'build', 'doc')
+foreach ($dir in $dirsToMirror) {
+  $source = Join-Path $generated $dir
+  $target = Join-Path $verifyRoot $dir
+  if (Test-Path $source) {
+    robocopy $source $target /MIR /XD bin obj dist .git .vs node_modules | Out-Host
+    if ($LASTEXITCODE -gt 7) { throw "robocopy failed for $dir with exit code $LASTEXITCODE" }
+  }
+}
+
+$filesToCopy = @(
+  'Abp.sln',
+  'common.props',
+  'global.json',
+  'Directory.Build.props',
+  'NuGet.Config',
+  'configureawait.props',
+  'appveyor.yml',
+  'azure-pipelines.yml',
+  'build.cmd',
+  'build.ps1',
+  'build.sh',
+  'README.md',
+  'README_CN.md',
+  'LICENSE.md'
+)
+foreach ($file in $filesToCopy) {
+  $source = Join-Path $generated $file
+  if (Test-Path $source) {
+    Copy-Item $source -Destination (Join-Path $verifyRoot $file) -Force
+  }
+}
+```
+
+Expected:
+- `src/`, `test/`, `nupkg/`, `build/`, `doc/` in the verification worktree reflect generated `v7.4` output.
+- `docs/superpowers/` and `tools/` in the verification worktree are preserved from `codex/dev-7.3.0`.
+- `nupkg/dist` is not copied.
+
+- [ ] **Step 3: Verify overlay package identity and package surface**
+
+Run:
+
+```powershell
+$verifyRoot = '.worktrees/verify-7.4-yoyo-on-dev-7.3.0'
+$packageIds = Select-String -Path "$verifyRoot/src/**/*.csproj" -Pattern '<PackageId>' | ForEach-Object { $_.Line.Trim() }
+$badPackageIds = $packageIds | Where-Object { $_ -match '<PackageId>Abp' -and $_ -notmatch '<PackageId>Yoyo\.Abp' }
+if ($badPackageIds) { $badPackageIds; throw 'Overlay contains non-Yoyo package IDs.' }
+$projectCount = (Get-ChildItem "$verifyRoot/src" -Directory).Count
+if ($projectCount -ne 33) { throw "Overlay expected 33 first-wave projects, actual: $projectCount" }
+git -C $verifyRoot status --short
+```
+
+Expected:
+- Overlay verification branch contains only `Yoyo.Abp.*` PackageId values.
+- Overlay verification branch remains on the 33-project first-wave package surface.
+- Git status shows framework and build files changed, while `docs/superpowers/` and `tools/` remain governed assets.
+
+- [ ] **Step 4: Run overlay branch restore/build smoke**
+
+Run:
+
+```powershell
+$verifyRoot = '.worktrees/verify-7.4-yoyo-on-dev-7.3.0'
+Push-Location $verifyRoot
+try {
+  dotnet restore --ignore-failed-sources
+  dotnet build Abp.sln -c Release --no-restore
+}
+finally {
+  Pop-Location
+}
+```
+
+Expected:
+- Restore completes successfully.
+- Build either passes or produces a captured error list to feed back into migration rules.
+- If build fails, do not create `release/7.4`; fix migration rules first.
+
+- [ ] **Step 5: Commit overlay verification branch if identity gate passes**
+
+Run:
+
+```powershell
+$verifyRoot = '.worktrees/verify-7.4-yoyo-on-dev-7.3.0'
+git -C $verifyRoot add src test nupkg build doc Abp.sln common.props global.json Directory.Build.props NuGet.Config configureawait.props appveyor.yml azure-pipelines.yml build.cmd build.ps1 build.sh README.md README_CN.md LICENSE.md
+git -C $verifyRoot commit -m "chore: overlay yoyo abp v7.4 generated output"
+```
+
+Expected:
+- Commit is created on `verify/7.4-yoyo-on-dev-7.3.0`.
+- Commit does not include generated package artifacts from `nupkg/dist`.
+- Commit does not remove `docs/superpowers/` or `tools/`.
+
+- [ ] **Step 6: Create overlay verification report**
+
+Write `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-overlay-verification.md` in the main worktree with this content after Step 4 outcome is known:
+
+```markdown
+# Yoyo.Abp v7.4 Overlay Verification
+
+## Verification branch
+
+- Branch: `verify/7.4-yoyo-on-dev-7.3.0`
+- Base: `codex/dev-7.3.0`
+- Generated input: `artifacts/yoyo-abp-migration/yoyo-v7.4`
+
+## Overlay policy
+
+- Mirrored directories: `src/`, `test/`, `nupkg/`, `build/`, `doc/`
+- Copied root files: solution, shared props, SDK pin, NuGet/config/build/readme/license files
+- Preserved governance assets: `docs/superpowers/`, `tools/`, local workspace configuration
+- Excluded generated artifacts: `nupkg/dist`, `bin`, `obj`
+
+## Checks
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| Package IDs are `Yoyo.Abp.*` | record pass or failure | package identity command |
+| Project surface is 33-project first wave | record pass or failure | project count command |
+| Restore/build smoke | record pass or failure | terminal output |
+| Governance assets preserved | record pass or failure | `git -C <verifyRoot> status --short` review |
+
+## Decision
+
+- If overlay passes, proceed to package smoke and downstream smoke.
+- If overlay fails, fix the migration engine or patch injection rules before generating again.
+```
+
+- [ ] **Step 7: Commit overlay verification report**
+
+Run:
+
+```powershell
+git add docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-overlay-verification.md
+git commit -m "docs: report yoyo abp v7.4 overlay verification"
+```
+
+Expected:
+- Commit contains only the overlay verification report.
+
+---
+
+### Task 7: Define package and downstream smoke gate for the next execution wave
+
+**Files:**
+- Modify: `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-overlay-verification.md`
+
+- [ ] **Step 1: Add package and downstream smoke gate section to overlay report**
+
+Append this section to `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-overlay-verification.md`:
 
 ````markdown
-## Downstream smoke gate for next wave
+## Package and downstream smoke gate for next wave
 
 Before any `release/7.4` publication decision, the generated package set must pass:
 
-1. `Yoyo.Abp` package smoke with a production-style version such as `7.4.0.1`.
+1. `Yoyo.Abp` package smoke from `verify/7.4-yoyo-on-dev-7.3.0` with a production-style version such as `7.4.0.1`.
 2. `C:\Code\yoyoboot\YoyoBoot` restore/build against local package source.
 3. `C:\Code\gitea\Rider\src\aspnet-core` restore/build against local package source.
 4. A recorded decision on whether `v9.4.2 / .NET 8` planning may start.
 
-Suggested package smoke command from generated output:
+Suggested package smoke command from overlay verification branch:
 
 ```powershell
-Push-Location artifacts/yoyo-abp-migration/yoyo-v7.4/nupkg
+$verifyRoot = '.worktrees/verify-7.4-yoyo-on-dev-7.3.0'
+Push-Location "$verifyRoot/nupkg"
 try {
   $env:IS_PRODUCTION = 'true'
   $env:TAG = '7.4.0.1'
@@ -637,17 +843,17 @@ finally {
 ```
 ````
 
-- [ ] **Step 2: Commit downstream smoke gate**
+- [ ] **Step 2: Commit package and downstream smoke gate**
 
 Run:
 
 ```powershell
-git add docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-generation-readiness.md
-git commit -m "docs: define downstream smoke gate for yoyo abp v7.4"
+git add docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-overlay-verification.md
+git commit -m "docs: define package and downstream smoke gate for yoyo abp v7.4"
 ```
 
 Expected:
-- Commit contains only the readiness report update.
+- Commit contains only the overlay verification report update.
 
 ---
 
@@ -661,7 +867,8 @@ Expected:
 - Preserve `7.3.0.12` production baseline and downstream consumers: Task 3.
 - Create migration rules inventory: Task 4.
 - Rebuild `v7.4` standard generation path: Task 5.
-- Define gate before `v9.4.2 / .NET 8`: Task 6.
+- Overlay `v7.4` output onto the current baseline verification branch: Task 6.
+- Define package and downstream gate before `v9.4.2 / .NET 8`: Task 7.
 
 ### Completeness scan
 
@@ -669,4 +876,4 @@ This plan intentionally avoids draft markers, open-ended “fill in” statement
 
 ### Scope control
 
-This plan stops before implementing `v9.4.2 / .NET 8`. The next plan should only start after Task 6 produces a clear gate decision.
+This plan stops before implementing `v9.4.2 / .NET 8`. The next plan should only start after Task 7 produces a clear gate decision.
