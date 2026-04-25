@@ -14,6 +14,8 @@
 
 因此，旧设计中将 `codex/dev-7.3.0` 与 `.worktrees/sync-upstream` / `release/7.4` 直接作为普通分支差异审计的前提不成立。两者之间的大量差异不是单纯 upstream 升级差异，而是“原始 upstream 输入”和“Yoyo 产品化输出”之间天然存在的迁移产物差异。
 
+后续不再沿用旧的 `release/7.4`、`sync/7.4-yoyo`、`sync/8.0-yoyo` 本地分支结果。这些分支已判定为问题结果并从本地删除；新的 `7.4` 产物必须从官方 upstream 干净输入重新生成。
+
 本设计的目标不是简单把当前分支 merge 到某个 upstream 版本，而是建立一套可重复、可审计、可验证的标准化迁移流水线，使官方 upstream 后续版本能够持续转化为 `Yoyo.Abp` 产品线，并逐步支持 `.NET 8` 与未来 `.NET 10`。
 
 ## 2. 已确认事实
@@ -63,6 +65,7 @@
 3. **分支语义错误**：把 `.worktrees/sync-upstream` / `release/7.4` 视为可能直接 merge 的成品分支，而不是 upstream 输入经过部分改造后的中间结果。
 4. **工具资产低估**：没有把 `proj-rename-ps` 作为核心迁移能力纳入设计。
 5. **生产约束不足**：虽然提到了下游消费验证，但没有把已投产的 `YoyoBoot` 与 `Rider` 作为升级路线的硬门禁。
+6. **错误结果延续风险**：旧 `release/7.4`、`sync/7.4-yoyo`、`sync/8.0-yoyo` 已确认不应继续承载后续工作，应删除后从官方 upstream 重新制作。
 
 因此，旧设计应废弃，不再作为后续实施依据。
 
@@ -189,7 +192,7 @@
 - 仓库治理资产默认保留，例如 `.git/`、`docs/superpowers/`、`tools/`、本地工作区配置和迁移报告；
 - 如果 overlay 后验证失败，修复入口优先回到迁移引擎或补丁文件，不在生成结果上堆积不可复现的手工修复。
 
-现有 `.worktrees/sync-upstream` / `release/7.4` 只能作为语义修复参考，不能直接视为 Yoyo 产品化成品。当前核查显示该工作树包含 48 个 `Abp.*` PackageId，而当前生产基线是 33 个 `Yoyo.Abp.*` PackageId；该差异必须通过迁移引擎重新生成和回灌验证来收敛。
+旧 `.worktrees/sync-upstream` / `release/7.4` 结果不能作为后续输入或参考产物。当前核查显示该问题结果包含 48 个 `Abp.*` PackageId，而当前生产基线是 33 个 `Yoyo.Abp.*` PackageId；后续必须以官方 upstream 干净输入和当前分支的 33 包清单重新生成。
 
 ### 5.4 包面与规则单一事实源
 
@@ -198,7 +201,7 @@
 第一阶段不强行重写工具，但必须建立以下门禁：
 
 - 迁移白名单、实际 `src/` 目录和打包项目清单必须输出对比报告；
-- 当前生产兼容线默认以 33 个 `Yoyo.Abp.*` 包为基线；
+- 当前生产兼容线以当前分支 `codex/dev-7.3.0` 的 33 个 `Yoyo.Abp.*` 包为唯一基线；
 - 若要引入 48 包扩展线，必须单独做产品决策和下游验证，不能作为 `7.4` 迁移的隐式副作用；
 - 所有 release candidate 必须确认 `.nupkg` / `.snupkg` 文件名、nuspec 依赖和 csproj `PackageId` 均为 `Yoyo.Abp.*` 体系。
 
@@ -249,11 +252,11 @@
 | 分支类型 | 示例 | 职责 |
 | --- | --- | --- |
 | 生产基线 | `codex/dev-7.3.0` | 当前已投产版本的维护基线 |
-| 升级工作区 | `sync/7.4-yoyo`、`sync/9.4.2-yoyo` | 接收 upstream 输入并运行迁移引擎 |
+| 升级工作区 | `sync/7.4-yoyo`、`sync/9.4.2-yoyo` | 从官方 upstream 干净输入重新创建，接收 upstream 输入并运行迁移引擎 |
 | 回灌验证 | `verify/7.4-yoyo-on-dev-7.3.0` | 将迁移结果叠加到当前基线派生分支，验证真实仓库与下游兼容性 |
 | 稳定发行 | `release/7.4`、`release/9.4.2` | 已验证、可供下游消费的发行分支 |
 
-官方 upstream 版本优先通过 tag、临时 worktree 或只读输入目录表示，不强制长期维护 `upstream/*`、`base/*`、`product/*` 多层分支。`verify/*` 分支是短生命周期分支，只用于快速证明迁移结果能否进入当前产品线；验证通过后再决定是否创建或替换 `release/<version>`。
+官方 upstream 版本优先通过 tag、临时 worktree 或只读输入目录表示，不强制长期维护 `upstream/*`、`base/*`、`product/*` 多层分支。`sync/*` 与 `release/*` 分支名可在重新制作时复用，但不得继承旧 `release/7.4`、`sync/7.4-yoyo`、`sync/8.0-yoyo` 的问题历史。`verify/*` 分支是短生命周期分支，只用于快速证明迁移结果能否进入当前产品线；验证通过后再决定是否创建或替换 `release/<version>`。
 
 ### 7.2 版本路线
 
@@ -276,7 +279,8 @@
 
 - 不再把当前 `.worktrees/sync-upstream` 直接视为最终成品；
 - 使用迁移引擎重新解释 `7.4`；
-- 对比生成结果与当前 `sync-upstream` 的差异；
+- 以官方 `v7.4` 干净输入重新生成，不沿用旧 `sync-upstream` / `release/7.4` 结果；
+- 对比生成结果与当前分支 33 包生产基线的差异；
 - 确认输出包身份是 `Yoyo.Abp.*`，不能保留官方 `Abp.*` PackageId；
 - 先保持当前 33 包生产兼容线，48 包扩展线必须作为单独产品决策；
 - 将生成结果回灌到 `verify/7.4-yoyo-on-dev-7.3.0` 验证分支；
@@ -380,13 +384,13 @@
 
 应对：先完成 `.NET 8 / v9.4.2`，稳定后再评估 `v10.x / .NET 9`；未来 `.NET 10` 以官方明确版本为准。
 
-### 风险 6：已有 `release/7.4` 被误当作 Yoyo 成品
+### 风险 6：旧 `release/7.4` / `sync/*` 结果被误复用
 
-应对：当前已核查 `.worktrees/sync-upstream` / `release/7.4` 是 48 个 `Abp.*` PackageId 的中间产物或参考分支，不能直接作为 `Yoyo.Abp 7.4` 发行分支。必须通过迁移引擎重新生成 `Yoyo.Abp.*` 包身份，并通过回灌验证后再决定 release 分支。
+应对：旧 `release/7.4`、`sync/7.4-yoyo`、`sync/8.0-yoyo` 已从本地删除，后续不得复用其内容。新的 `7.4` 工作必须从官方 upstream 干净输入开始，通过迁移引擎重新生成 `Yoyo.Abp.*` 包身份，并通过回灌验证后再决定 release 分支。
 
 ### 风险 7：包面从 33 个隐式扩大到 48 个
 
-应对：当前生产兼容线以 33 个 `Yoyo.Abp.*` 包为基线。48 包扩展线涉及 legacy ASP.NET MVC/WebApi/NHibernate/Owin 等包，必须单独做产品决策、包身份重写和下游验证，不能作为 `7.4` 升级的默认副作用。
+应对：当前生产兼容线以当前分支的 33 个 `Yoyo.Abp.*` 包为基线。48 包扩展线涉及 legacy ASP.NET MVC/WebApi/NHibernate/Owin 等包，必须单独做产品决策、包身份重写和下游验证，不能作为 `7.4` 升级的默认副作用。
 
 ### 风险 8：项目清单分散导致打包遗漏或多打包
 

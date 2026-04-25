@@ -25,10 +25,10 @@
 
 ## Critical findings to preserve
 
-- 当前生产基线 `src/` 下有 33 个项目，包身份为 `Yoyo.Abp.*`。
-- 现有 `.worktrees/sync-upstream` / `release/7.4` 下有 48 个项目，当前 `PackageId` 仍为 `Abp.*`。
-- 因此现有 `release/7.4` 只能作为修复参考，不能直接作为 Yoyo.Abp 产品化 release。
-- 第一阶段默认保持 33 包生产兼容线；48 包扩展线必须单独做产品决策和下游验证。
+- 当前生产基线以当前分支 `codex/dev-7.3.0` 的 `src/` 实际项目清单为准；当前核查结果是 33 个项目，包身份为 `Yoyo.Abp.*`。
+- 旧 `.worktrees/sync-upstream` / `release/7.4` 曾包含 48 个项目且 `PackageId` 为 `Abp.*`，已判定为问题结果。
+- 旧本地 `release/7.4`、`sync/7.4-yoyo`、`sync/8.0-yoyo` 已删除；后续不得复用其内容。
+- 第一阶段默认保持当前分支 33 包生产兼容线；48 包扩展线必须单独做产品决策和下游验证。
 - 官方 `v10.3` 按 `v10.x / .NET 9` 评估，不能直接标记为 `.NET 10` 锚点。
 
 ## File map
@@ -65,7 +65,23 @@
 - Create: `tools/proj-rename-ps/`
 - Modify: `.gitignore` if needed
 
-- [ ] **Step 1: Verify current design diff only contains approved upstream-source refinements**
+- [ ] **Step 1: Verify obsolete local branches and worktree are absent**
+
+Run:
+
+```powershell
+$obsoleteBranches = git branch --list 'release/7.4' 'sync/7.4-yoyo' 'sync/8.0-yoyo'
+if ($obsoleteBranches) { $obsoleteBranches; throw 'Obsolete local 7.4/sync branches still exist.' }
+if (Test-Path '.worktrees/sync-upstream') { throw 'Obsolete sync-upstream worktree directory still exists.' }
+git worktree list --porcelain
+```
+
+Expected:
+- No local `release/7.4`, `sync/7.4-yoyo`, or `sync/8.0-yoyo` branch exists.
+- `.worktrees/sync-upstream` does not exist.
+- Future `7.4` work starts from official upstream input, not from the deleted branch contents.
+
+- [ ] **Step 2: Verify current design diff only contains approved upstream-source refinements**
 
 Run:
 
@@ -78,7 +94,7 @@ Expected:
 - Diff shows version input labels for `.NET 6` / `v7.4`, `.NET 8` / `v9.4.2`, and `v10.x / .NET 9` / `v10.3`; future `.NET 10` is explicitly left for upstream confirmation.
 - No framework source files under `src/` or `test/` are included.
 
-- [ ] **Step 2: Commit the approved design revision before implementation files**
+- [ ] **Step 3: Commit the approved design revision before implementation files**
 
 Run:
 
@@ -91,7 +107,7 @@ Expected:
 - A docs-only commit is created.
 - Working tree may still contain unrelated pre-existing changes such as `.gitignore`, `.vscode/mcp.json`, or `docs/说明.md`; do not include them unless they are required by this plan.
 
-- [ ] **Step 3: Copy `proj-rename-ps` into the repository**
+- [ ] **Step 4: Copy `proj-rename-ps` into the repository**
 
 Run:
 
@@ -110,7 +126,7 @@ Expected:
 - `tools/proj-rename-ps/src2/abp-yoyo.abp-string-7.3/run.ps1` exists.
 - The nested `.git` directory from the external tool repo is not copied into the main repo.
 
-- [ ] **Step 4: Add ignore rules for migration artifacts if missing**
+- [ ] **Step 5: Add ignore rules for migration artifacts if missing**
 
 Run:
 
@@ -132,7 +148,7 @@ Expected:
 - `.gitignore` contains `artifacts/yoyo-abp-migration/`.
 - `.gitignore` contains `tools/yoyo-abp-migration/logs/*.log`.
 
-- [ ] **Step 5: Commit migration engine import**
+- [ ] **Step 6: Commit migration engine import**
 
 Run:
 
@@ -555,14 +571,15 @@ Run:
 $currentProjects = Get-ChildItem src -Directory | Select-Object -ExpandProperty Name | Sort-Object
 $generatedProjects = Get-ChildItem artifacts/yoyo-abp-migration/yoyo-v7.4/src -Directory | Select-Object -ExpandProperty Name | Sort-Object
 Compare-Object $currentProjects $generatedProjects | Format-Table -AutoSize
-if ($generatedProjects.Count -ne 33) {
-  throw "Expected first-wave generated package surface to stay at 33 projects, actual: $($generatedProjects.Count). Decide explicitly before expanding to 48 packages."
+$expectedCount = $currentProjects.Count
+if ($generatedProjects.Count -ne $expectedCount) {
+  throw "Expected first-wave generated package surface to match current branch project count $expectedCount, actual: $($generatedProjects.Count). Decide explicitly before expanding package surface."
 }
 ```
 
 Expected:
-- Generated first-wave package surface contains 33 projects.
-- Any difference from the current 33-project production surface is listed and reviewed before overlay.
+- Generated first-wave package surface matches the current branch project count; the current count is 33.
+- Any difference from the current branch production surface is listed and reviewed before overlay.
 
 - [ ] **Step 5: Run generated solution restore/build smoke**
 
@@ -610,7 +627,7 @@ Write `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-generation-readiness.md`
 | Upstream input materialized | record pass or failure | `Abp.sln` exists under upstream input |
 | Migration wrapper ran | record pass or failure | `tools/yoyo-abp-migration/logs/last-run.log` |
 | Package IDs rewritten | record pass or failure | `artifacts/yoyo-abp-migration/yoyo-v7.4-packageids.txt` |
-| Package surface remains 33-project first wave | record pass or failure | package surface comparison command |
+| Package surface matches current branch first wave | record pass or failure | package surface comparison command |
 | Restore/build smoke | record pass or failure | terminal output from `dotnet restore` and `dotnet build` |
 
 ## Decision
@@ -711,14 +728,15 @@ $verifyRoot = '.worktrees/verify-7.4-yoyo-on-dev-7.3.0'
 $packageIds = Select-String -Path "$verifyRoot/src/**/*.csproj" -Pattern '<PackageId>' | ForEach-Object { $_.Line.Trim() }
 $badPackageIds = $packageIds | Where-Object { $_ -match '<PackageId>Abp' -and $_ -notmatch '<PackageId>Yoyo\.Abp' }
 if ($badPackageIds) { $badPackageIds; throw 'Overlay contains non-Yoyo package IDs.' }
+$expectedCount = (Get-ChildItem src -Directory).Count
 $projectCount = (Get-ChildItem "$verifyRoot/src" -Directory).Count
-if ($projectCount -ne 33) { throw "Overlay expected 33 first-wave projects, actual: $projectCount" }
+if ($projectCount -ne $expectedCount) { throw "Overlay expected current branch first-wave project count $expectedCount, actual: $projectCount" }
 git -C $verifyRoot status --short
 ```
 
 Expected:
 - Overlay verification branch contains only `Yoyo.Abp.*` PackageId values.
-- Overlay verification branch remains on the 33-project first-wave package surface.
+- Overlay verification branch remains on the current branch first-wave package surface; the current count is 33.
 - Git status shows framework and build files changed, while `docs/superpowers/` and `tools/` remain governed assets.
 
 - [ ] **Step 4: Run overlay branch restore/build smoke**
@@ -782,7 +800,7 @@ Write `docs/superpowers/reports/2026-04-25-yoyo-abp-7.4-overlay-verification.md`
 | Check | Result | Evidence |
 | --- | --- | --- |
 | Package IDs are `Yoyo.Abp.*` | record pass or failure | package identity command |
-| Project surface is 33-project first wave | record pass or failure | project count command |
+| Project surface matches current branch first wave | record pass or failure | project count command |
 | Restore/build smoke | record pass or failure | terminal output |
 | Governance assets preserved | record pass or failure | `git -C <verifyRoot> status --short` review |
 
