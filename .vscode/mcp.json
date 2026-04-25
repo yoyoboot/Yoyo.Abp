@@ -58,16 +58,7 @@
 			"type": "http",
 			"url": "https://api.githubcopilot.com/mcp/"
 		},
-		"postgres": {
-			"type": "stdio",
-			"command": "C:\\Program Files\\nodejs\\node.exe",
-			"args": [
-				"C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npx-cli.js",
-				"-y",
-				"@sarmadparvez/postgresql-mcp",
-				"${input:postgres_connection}"
-			]
-		},
+
 		"microsoft/markitdown": {
 			"type": "stdio",
 			"command": "uvx",
