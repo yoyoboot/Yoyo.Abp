@@ -1,12 +1,50 @@
 
 
 ## 处理测试库中的demos
+function RemoveTestDemoProjectsFromSolution {
+    param (
+        [string]$rootPath
+    )
+
+    if (!(Test-Path -LiteralPath $rootPath)) {
+        return
+    }
+
+    $demoRoot = Get-Item -LiteralPath $rootPath
+    $solutionRoot = $demoRoot.Parent.Parent.FullName
+    $slnPath = Join-Path $solutionRoot 'Abp.sln'
+
+    if (!(Test-Path -LiteralPath $slnPath)) {
+        return
+    }
+
+    $slnContent = Get-Content -Path $slnPath -Raw -Encoding UTF8
+    $demoProjects = Get-ChildItem -Path $demoRoot.FullName -Recurse -Filter '*.csproj' -File
+
+    foreach ($demoProject in $demoProjects) {
+        $relativeProjectPath = [System.IO.Path]::GetRelativePath($solutionRoot, $demoProject.FullName).Replace('/', '\')
+
+        if ($slnContent -notlike "*$relativeProjectPath*") {
+            continue
+        }
+
+        dotnet sln "$slnPath" remove "$($demoProject.FullName)"
+        if ($LASTEXITCODE -ne 0) {
+            throw "Failed to remove demo project from solution: $($demoProject.FullName)"
+        }
+
+        $slnContent = Get-Content -Path $slnPath -Raw -Encoding UTF8
+    }
+}
+
+## 处理测试库中的demos
 function RunTestDemos {
     param (
         $rootPath,
         $projNames
     )
 
+    RemoveTestDemoProjectsFromSolution -rootPath $rootPath
     Remove-Item -Force -Recurse -Path "$rootPath"
     
     return
