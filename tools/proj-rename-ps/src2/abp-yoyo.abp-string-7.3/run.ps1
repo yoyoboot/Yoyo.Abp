@@ -1,19 +1,48 @@
 param(
     # input src
+    [Parameter(Mandatory = $true)]
     [string]$Src
 )
 
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+$scriptRoot = $PSScriptRoot
+$Src = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Src)
+
+if (!(Test-Path -LiteralPath $Src -PathType Container)) {
+    throw "Src must be an existing directory: $Src"
+}
+
+function NormalizeRootBuildCompatibility {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$RootPath
+    )
+
+    $rootCompatibilityFiles = Get-ChildItem -LiteralPath $RootPath -File | Where-Object {
+        $_.Extension -in '.props', '.targets'
+    }
+
+    foreach ($rootCompatibilityFile in $rootCompatibilityFiles) {
+        $content = ReadFile -Path $rootCompatibilityFile.FullName
+        $content = RemoveNetFrameworkCompatibility -Content $content
+        WriteFile -Path $rootCompatibilityFile.FullName -Content $content
+    }
+}
+
 # 执行公用脚本
-. '.\common.ps1'
-. '.\process_lib.ps1'
-. '.\process_test.ps1'
-. '.\process_test_demo.ps1'
+. (Join-Path $scriptRoot 'common.ps1')
+. (Join-Path $scriptRoot 'process_lib.ps1')
+. (Join-Path $scriptRoot 'process_test.ps1')
+. (Join-Path $scriptRoot 'process_test_demo.ps1')
+. (Join-Path $scriptRoot 'validate_output.ps1')
 
 
 
 # #====================== 基础库
 $rootPath = "${Src}\src\"
-$projNames = @(
+$libraryProjectNames = @(
     'Abp',
     'Abp.Web.Common',
     'Abp.AspNetCore',
@@ -50,13 +79,13 @@ $projNames = @(
 )
 
 
-RmLib -rootPath $rootPath -projNames $projNames
-RunLib -rootPath $rootPath -projNames $projNames
+RmLib -rootPath $rootPath -projNames $libraryProjectNames
+RunLib -rootPath $rootPath -projNames $libraryProjectNames
 
 
 #====================== 测试
 $rootPath = "${Src}\test\"
-$projNames = @(
+$testProjectNames = @(
     'Abp.AspNetCore.Tests',
     'Abp.AutoMapper.Tests',
     'Abp.Castle.Log4Net.Tests',
@@ -76,13 +105,13 @@ $projNames = @(
     'Abp.ZeroCore.Tests'
 )
 
-RmLib -rootPath $rootPath -projNames $projNames
-RunTest -rootPath $rootPath -projNames $projNames
+RmLib -rootPath $rootPath -projNames $testProjectNames
+RunTest -rootPath $rootPath -projNames $testProjectNames
 
 
 #====================== 测试demos
 $rootPath = "${Src}\test\aspnet-core-demo\"
-$projNames = @(
+$demoProjectNames = @(
     'AbpAspNetCoreDemo',
     'AbpAspNetCoreDemo.Core',
     'AbpAspNetCoreDemo.IntegrationTests',
@@ -90,19 +119,23 @@ $projNames = @(
     'AbpAspNetCoreDemo.PlugIn'
 )
 
-RunTestDemos -rootPath $rootPath -projNames $projNames
+RunTestDemos -rootPath $rootPath -projNames $demoProjectNames
 
 # ====================== 代码文件移入对应位置
 $rootPath = "${Src}\src\"
 $abpZeroCoreEntityFrameworkCorePath = $rootPath + 'Abp.ZeroCore.EntityFrameworkCore\Zero\EntityFrameworkCore\'
-Copy-Item './abp/AbpZeroDbContextExtensions.cs' -Destination ($abpZeroCoreEntityFrameworkCorePath + 'AbpZeroDbContextExtensions.cs') -Force
+Copy-Item (Join-Path $scriptRoot 'abp\AbpZeroDbContextExtensions.cs') -Destination ($abpZeroCoreEntityFrameworkCorePath + 'AbpZeroDbContextExtensions.cs') -Force
 
 $abpEntityFrameworkCorePath = $rootPath + 'Abp.EntityFrameworkCore\EntityFrameworkCore\Extensions\'
-Copy-Item './abp/AbpDbContextExtensions.cs' -Destination ($abpEntityFrameworkCorePath + 'AbpDbContextExtensions.cs') -Force
-Copy-Item './abp/AbpStringPrimaryKeyValueGenerator.cs' -Destination ($abpEntityFrameworkCorePath + 'AbpStringPrimaryKeyValueGenerator.cs') -Force
+Copy-Item (Join-Path $scriptRoot 'abp\AbpDbContextExtensions.cs') -Destination ($abpEntityFrameworkCorePath + 'AbpDbContextExtensions.cs') -Force
+Copy-Item (Join-Path $scriptRoot 'abp\AbpStringPrimaryKeyValueGenerator.cs') -Destination ($abpEntityFrameworkCorePath + 'AbpStringPrimaryKeyValueGenerator.cs') -Force
 
 $abpPath = $rootPath + 'Abp\Extensions\'
-Copy-Item './abp/StringIdExtensions.cs' -Destination ($abpPath + 'StringIdExtensions.cs') -Force
+Copy-Item (Join-Path $scriptRoot 'abp\StringIdExtensions.cs') -Destination ($abpPath + 'StringIdExtensions.cs') -Force
 
 $nupkgPath = "${Src}\nupkg\"
-Copy-Item './abp/pack.ps1' -Destination ($nupkgPath + 'pack.ps1') -Force
+Copy-Item (Join-Path $scriptRoot 'abp\pack.ps1') -Destination ($nupkgPath + 'pack.ps1') -Force
+
+NormalizeRootBuildCompatibility -RootPath $Src
+
+Assert-MigrationOutput -Src $Src -ExpectedLibraryProjectNames $libraryProjectNames

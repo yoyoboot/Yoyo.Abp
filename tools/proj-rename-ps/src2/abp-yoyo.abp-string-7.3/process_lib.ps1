@@ -7,6 +7,7 @@ function RemoveNetFrameworkCompatibility {
 
     $contentText = $contentText -creplace '(?s)\s*<ItemGroup\s+Condition="\s*''\$\(TargetFramework\)''\s*==\s*''net4\d+''\s*"\s*>.*?</ItemGroup>', ''
     $contentText = $contentText -creplace '(?s)\s*<PropertyGroup\s+Condition="\s*''\$\(TargetFramework\)''\s*==\s*''net4\d+''\s*"\s*>.*?</PropertyGroup>', ''
+    $contentText = $contentText -creplace '(?m)^\s*<PackageReference\s+(?:Include|Update)="Microsoft\.NETFramework\.ReferenceAssemblies"[^>]*/>\s*$', ''
     $contentText = $contentText -creplace 'portable-net45\+win8\+wp8\+wpa81;?', ''
     $contentText = $contentText -creplace '<AssetTargetFallback>\$\(AssetTargetFallback\);?</AssetTargetFallback>\s*', ''
 

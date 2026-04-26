@@ -43,7 +43,8 @@ foreach ($path in @($modulePath, $officeAppServicePath)) {
 $moduleContent = Get-Content -LiteralPath $modulePath -Raw
 $officeAppServiceContent = Get-Content -LiteralPath $officeAppServicePath -Raw
 
-Assert-Contains -Content $moduleContent -Expected 'CreateMultiLingualMap<Office,string, OfficeTranslation, OfficeListDto>' -Label 'SampleApp module'
+Assert-Contains -Content $moduleContent -Expected 'CreateMultiLingualMap<Office,int, OfficeTranslation, OfficeListDto>' -Label 'SampleApp module'
+Assert-NotContains -Content $moduleContent -Unexpected 'CreateMultiLingualMap<Office,string, OfficeTranslation, OfficeListDto>' -Label 'SampleApp module'
 Assert-NotContains -Content $moduleContent -Unexpected 'CreateMultiLingualMap<Office, int, OfficeTranslation, long, OfficeListDto>' -Label 'SampleApp module'
 
 Assert-Contains -Content $officeAppServiceContent -Expected 'IRepository<OfficeTranslation, string>' -Label 'Office app service'

@@ -46,13 +46,13 @@ function RunTestDemos {
 
     RemoveTestDemoProjectsFromSolution -rootPath $rootPath
     Remove-Item -Force -Recurse -Path "$rootPath"
-    
+
     return
 
     foreach ($projName in $projNames) {
 
         Write-Host ("正在处理: $projName")
-    
+
         $inputRootPath = $rootPath + $projName
 
         # 获取项目文件遍历
@@ -106,13 +106,13 @@ function ReplaceTestDemosJs {
     param (
         [string]$path
     )
-    
+
     # 读取文件内容
     $content = ReadFile -Path $path
 
     ## ApplicationWithoutDb_Tests.cs Validation_Tests.cs
     if (
-        [regex]::IsMatch($path, [Regex]::Escape('abp.ng.js')) -or [regex]::IsMatch($path, [Regex]::Escape('abp.jquery.js')) 
+        [regex]::IsMatch($path, [Regex]::Escape('abp.ng.js')) -or [regex]::IsMatch($path, [Regex]::Escape('abp.jquery.js'))
     ) {
         $content = $content -creplace [Regex]::Escape('__abp'), '__wrapper'
     }
