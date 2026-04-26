@@ -1,100 +1,166 @@
-# Yoyo.Abp
+﻿# ASP.NET Boilerplate
 
-<p align="center">
-  <a href="./README.md">English</a> |
-  <a href="./README_CN.md">简体中文</a>  
-</p>
+[![Build Status](https://github.com/aspnetboilerplate/aspnetboilerplate/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/aspnetboilerplate/aspnetboilerplate/actions/workflows/build-and-test.yml)
+[![NuGet](https://img.shields.io/nuget/v/Abp.svg?style=flat-square)](https://www.nuget.org/packages/Abp)
+[![MyGet (with prereleases)](https://img.shields.io/myget/abp-nightly/vpre/Abp.svg?style=flat-square)](https://aspnetboilerplate.com/Pages/Documents/Nightly-Builds)
+[![NuGet Download](https://img.shields.io/nuget/dt/Abp.svg?style=flat-square)](https://www.nuget.org/packages/Abp)
 
-[![NuGet Version](https://img.shields.io/nuget/v/Yoyo.Abp)](https://www.nuget.org/packages/Yoyo.Abp)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/Yoyo.Abp?style=flat-square&logo=nuget)](https://www.nuget.org/packages/Yoyo.Abp)
-![GitHub last commit](https://img.shields.io/github/last-commit/yoyoboot/yoyo.abp)
-![GitHub Release Date](https://img.shields.io/github/release-date/yoyoboot/yoyo.abp)
+## What is ABP?
 
-Welcome to the `Yoyo.Abp` repository! This project is derived from the [ASP.NET Boilerplate](https://github.com/aspnetboilerplate/aspnetboilerplate) framework and has been improved, mainly by updating the default type of entity primary keys from `int` to `string`. We are excited to announce the launch of the [Yoyo.Abp](https://github.com/YoYoBoot/Yoyo.Abp) project, a major update that not only enhances the flexibility and extensibility of the system, but also inherits the power and ease of use of the original `ABP` framework.
+ASP.NET Boilerplate is a general purpose **application framework** specially designed for new modern web applications. It uses already **familiar tools** and implements **best practices** around them to provide you a **SOLID development experience**.
 
-This project is not being rolled out at the drop of a hat, we have already used it in a number of internal and commercial projects, so you are not a guinea pig, we have tailored this to our own needs and believe that the entire development community will benefit from this change.
+ASP.NET Boilerplate works with the latest **ASP.NET Core** & **EF Core** but also supports ASP.NET MVC 5.x & EF 6.x as well.
 
-By utilizing the `string` type primary key, our projects have been able to adapt to a wider range of business scenarios, making it easy to implement seamless interoperability across multiple systems. This change also guarantees the uniqueness of our data across databases and services, providing a solid foundation for potential horizontal scaling in the future, and demonstrating resilience and adaptability to a wide range of development challenges.
+###### Modular Design
 
-Please visit our GitHub repository [Yoyo.Abp](https://github.com/YoYoBoot/Yoyo.Abp) for more details and stay tuned for project updates. Don't forget to star and follow our repository to receive real-time updates!
+Designed to be <a href="https://aspnetboilerplate.com/Pages/Documents/Module-System" target="_blank">**modular**</a> and **extensible**, ABP provides the infrastructure to build your own modules, too.
 
-We sincerely welcome any valuable comments and suggestions and look forward to hearing your feedback.
-Join the YoYoBoot journey together and let's contribute to the development, further optimization and innovation of this project. 🚀🌟
+###### Multi-Tenancy
 
-## Features
+**SaaS** applications made easy! Integrated <a href="https://aspnetboilerplate.com/Pages/Documents/Multi-Tenancy" target="_blank">multi-tenancy</a> from database to UI.
 
-- **Primary Key Type Flexibility**: You can flexibly choose `int`, `long`, `guid` or `string` type to define the primary key of an entity according to your project requirements.
-- **Backwards Compatibility**: Our entity framework can be seamlessly integrated into existing ABP-based projects without the need for major refactoring.
-- **Custom Entity Framework**: You can customize your own entity framework to support string-based primary keys.
-- **Seamless Integration with Existing ABP Infrastructure**: Our Entity Framework can be seamlessly integrated with existing ABP infrastructure without introducing any conflicts or issues.
-- **Enhanced Flexibility for Complex Deployment Scenarios**: Our Entity Framework provides more flexibility to cope with complex deployment scenarios and meet project requirements.
+###### Well-Documented
 
-## Extended Resources - Examples
+Comprehensive <a href="https://aspnetboilerplate.com/Pages/Documents" target="_blank">**documentation**</a> and quick start tutorials.
 
-In addition to our Yoyo.Abp project, we are excited to share a template project [OpenYoYoBoot](https://github.com/YoYoBoot/OpenYoYoBoot) based on front-end and back-end separation with Yoyo.Abp, which is an out-of-the-box solution to help people quickly start and deployment of modern web applications. We highly recommend you to try this project to experience its well-designed and excellent performance, which perfectly combines the innovative features of the front-end with the powerful back-end architecture of Yoyo.Abp.
+## How It Works
 
-Thank you to the community for working together to make these projects a quality resource that is widely used. We look forward to your participation in taking the Yoyo.Abp and OpenYoYoBoot projects to the next level.
+Don't Repeat Yourself! ASP.NET Boilerplate automates common software development tasks by convention. You focus on your business code!
 
-## Why this project?
+![ASP.NET Boilerplate](doc/img/abp-concerns.png)
 
-We have developed too many projects based on the ABP framework, which is very good, but not perfect, especially in the case of entities Primary key types are important features for identifying unique records in databases and applications. In many cases, the default integer type (e.g. `int` or `long`) is used as the primary key. However, there are specific scenarios where using the `string` type as a primary key may provide additional benefits. The following are some of the possible advantages of switching an entity's primary key type from `int` to `string` and some of the potential disadvantages of using `int` as a primary key:
+See the <a href="https://aspnetboilerplate.com/Pages/Documents/Introduction" target="_blank">Introduction</a> document for more details.
 
-### Benefits of using `string` as a primary key
+## Layered Architecture
 
-1. **Global uniqueness**: The `string` type can represent a GUID (globally unique identifier), which provides a simple global uniqueness solution for records across databases in a distributed system.
-2. **Flexibility and Extensibility**: `string` primary keys can hold more than just numbers, and can be embedded in a specific format or schema, such as a date, classification code, or other business logic.
-3. **Readability**: `string` type primary keys, especially those containing certain meaningful words or abbreviations, can improve record recognition and readability.
-4. **Avoid self-incrementing performance issues**: In highly concurrent situations, self-incrementing `int` primary keys can be a performance bottleneck, especially in distributed databases. A `string` primary key (e.g. a pre-generated GUID) can alleviate this problem.
-5. **Integration Friendly**: Using a `string` type primary key makes it easier to integrate with external systems that already use `string` as an identifier.
+ABP provides a layered architectural model based on **Domain Driven Design** and provides a **SOLID** model for your application.
 
-### Potential disadvantages of `int` as a primary key
+![NLayer Architecture](doc/img/abp-nlayer-architecture.png)
 
-1. **Limitations**: The `int` type provides a limited range of values and there is a risk of overflow in large systems or in situations where large data sets are required.
-2. **No support for complex encodings**: The `int` type cannot contain any information other than numbers, so it does not support things like date encodings or other complex formats.
-3. **Limitations in distributed systems**: In a distributed database environment, additional policies are required to ensure that `int` primary keys are globally unique, which can lead to complex implementations and performance losses.
-4. **Self-augmentation issues**: Self-augmenting primary keys of type `int` may lead to locking and contention during concurrent inserts, affecting performance.
-5. **Migration and Scaling Difficulties**: As business grows, there may be a need to migrate from `int` to a wider range of data types, which introduces additional workload and complexity.
+See the <a href="https://aspnetboilerplate.com/Pages/Documents/NLayer-Architecture" target="_blank">NLayer Architecture</a> document for more details.
 
-In other words, choosing the appropriate primary key type needs to be based on application scenarios, performance requirements, maintainability, and future scalability. The enhanced ASP.NET Boilerplate Framework in the form of Yoyo.Abp provides additional freedom and adaptability in architectural choices by providing flexibility in entity primary key types to better adapt to the changing needs of software development.
+## Nuget Packages
 
-## Project update notes
+ASP.NET Boilerplate is distributed as NuGet packages.
 
-Every open source project is immensely worried about the subsequent lack of maintenance and updates, and we are no exception. In order to maintain the vitality and stability of our project, we are committed to regularly reviewing and merging updates and enhancements from the original source code repository to ensure that the latest features, security fixes, and performance improvements have been introduced into our project. This commitment is intended to provide our users and contributors with the most up-to-date, secure, and optimally performing experience and to ensure that discrepancies with the upstream source code repositories are minimized in a timely manner.
+|Package|Status|
+|:------|:-----:|
+|Abp|[![NuGet version](https://badge.fury.io/nu/Abp.svg)](https://badge.fury.io/nu/Abp)|
+|Abp.AspNetCore|[![NuGet version](https://badge.fury.io/nu/Abp.AspNetCore.svg)](https://badge.fury.io/nu/Abp.AspNetCore)|
+|Abp.Web.Common|[![NuGet version](https://badge.fury.io/nu/Abp.Web.Common.svg)](https://badge.fury.io/nu/Abp.Web.Common)|
+|Abp.Web|[![NuGet version](https://badge.fury.io/nu/Abp.Web.svg)](https://badge.fury.io/nu/Abp.Web)|
+|Abp.Web.Mvc|[![NuGet version](https://badge.fury.io/nu/Abp.Web.Mvc.svg)](https://badge.fury.io/nu/Abp.Web.Mvc)|
+|Abp.Web.Api|[![NuGet version](https://badge.fury.io/nu/Abp.Web.Api.svg)](https://badge.fury.io/nu/Abp.Web.Api)|
+|Abp.Web.Api.OData|[![NuGet version](https://badge.fury.io/nu/Abp.eb.Api.OData.svg)](https://badge.fury.io/nu/Abp.Web.Api.OData)|
+|Abp.Web.Resources|[![NuGet version](https://badge.fury.io/nu/Abp.Web.Resources.svg)](https://badge.fury.io/nu/Abp.Web.Resources)|
+|Abp.Web.SignalR|[![NuGet version](https://badge.fury.io/nu/Abp.Web.SignalR.svg)](https://badge.fury.io/nu/Abp.Web.SignalR)|
+|Abp.Owin|[![NuGet version](https://badge.fury.io/nu/Abp.Owin.svg)](https://badge.fury.io/nu/Abp.Owin)|
+|Abp.EntityFramework.Common|[![NuGet version](https://badge.fury.io/nu/Abp.EntityFramework.Common.svg)](https://badge.fury.io/nu/Abp.EntityFramework.Common)|
+|Abp.EntityFramework|[![NuGet version](https://badge.fury.io/nu/Abp.EntityFramework.svg)](https://badge.fury.io/nu/Abp.EntityFramework)|
+|Abp.EntityFramework.GraphDiff|[![NuGet version](https://badge.fury.io/nu/Abp.EntityFramework.GraphDiff.svg)](https://badge.fury.io/nu/Abp.EntityFramework.GraphDiff)|
+|Abp.EntityFrameworkCore|[![NuGet version](https://badge.fury.io/nu/Abp.EntityFrameworkCore.svg)](https://badge.fury.io/nu/Abp.EntityFrameworkCore)|
+|Abp.NHibernate|[![NuGet version](https://badge.fury.io/nu/Abp.NHibernate.svg)](https://badge.fury.io/nu/Abp.NHibernate)|
+|Abp.Dapper|[![NuGet version](https://badge.fury.io/nu/Abp.Dapper.svg)](https://badge.fury.io/nu/Abp.Dapper)|
+|Abp.FluentMigrator|[![NuGet version](https://badge.fury.io/nu/Abp.FluentMigrator.svg)](https://badge.fury.io/nu/Abp.FluentMigrator)|
+|Abp.AspNetCore|[![NuGet version](https://badge.fury.io/nu/Abp.AspNetCore.svg)](https://badge.fury.io/nu/Abp.AspNetCore)|
+|Abp.AspNetCore.SignalR|[![NuGet version](https://badge.fury.io/nu/Abp.AspNetCore.SignalR.svg)](https://badge.fury.io/nu/Abp.AspNetCore.SignalR)|
+|Abp.AutoMapper|[![NuGet version](https://badge.fury.io/nu/Abp.AutoMapper.svg)](https://badge.fury.io/nu/Abp.AutoMapper)|
+|Abp.HangFire|[![NuGet version](https://badge.fury.io/nu/Abp.HangFire.svg)](https://badge.fury.io/nu/Abp.HangFire)|
+|Abp.HangFire.AspNetCore|[![NuGet version](https://badge.fury.io/nu/Abp.HangFire.AspNetCore.svg)](https://badge.fury.io/nu/Abp.HangFire.AspNetCore)|
+|Abp.Castle.Log4Net|[![NuGet version](https://badge.fury.io/nu/Abp.Castle.Log4Net.svg)](https://badge.fury.io/nu/Abp.Castle.Log4Net)|
+|Abp.RedisCache|[![NuGet version](https://badge.fury.io/nu/Abp.RedisCache.svg)](https://badge.fury.io/nu/Abp.RedisCache)|
+|Abp.RedisCache.ProtoBuf|[![NuGet version](https://badge.fury.io/nu/Abp.RedisCache.ProtoBuf.svg)](https://badge.fury.io/nu/Abp.RedisCache.ProtoBuf)|
+|Abp.MailKit|[![NuGet version](https://badge.fury.io/nu/Abp.MailKit.svg)](https://badge.fury.io/nu/Abp.MailKit)|
+|Abp.Quartz|[![NuGet version](https://badge.fury.io/nu/Abp.Quartz.svg)](https://badge.fury.io/nu/Abp.Quartz)|
+|Abp.TestBase|[![NuGet version](https://badge.fury.io/nu/Abp.TestBase.svg)](https://badge.fury.io/nu/Abp.TestBase)|
+|Abp.AspNetCore.TestBase|[![NuGet version](https://badge.fury.io/nu/Abp.AspNetCore.TestBase.svg)](https://badge.fury.io/nu/Abp.AspNetCore.TestBase)|
 
-In order to better achieve this goal, the following are implementation details:
+# Module Zero
 
-1. we will regularly monitor the original repository for updates through the appropriate channels.
-2. we will perform the necessary review and testing work in 1-2 weeks when an update occurs in the original repository.
-3. we will minimize localization specific changes to simplify the merging process with the original repository.
-4. we will prioritize the merge operation if we find a critical update or security vulnerability fix.
-5. We welcome the participation of community members, especially in helping to identify important upstream changes and testing the merge process.
+## What is 'Module Zero'?
 
-We understand the importance of being transparent and responsive to the needs of the community and will endeavor to maintain good communication with the community and share update plans and progress. We also welcome feedback and suggestions from community members to help us better manage and maintain the program.
+This is an <a href="https://aspnetboilerplate.com/" target="_blank">ASP.NET Boilerplate</a> module integrated with Microsoft <a href="https://docs.microsoft.com/en-us/aspnet/identity/overview/getting-started/introduction-to-aspnet-identity" target="_blank">ASP.NET Identity</a>.
 
-## Documentation
+Implements abstract concepts of ASP.NET Boilerplate framework:
 
-For extensive documentation on Yoyo.Abp, visit [documentation](https://github.com/yoyoboot/OpenYoYoBoot).
+* <a href="https://aspnetboilerplate.com/Pages/Documents/Setting-Management" target="_blank">Setting store</a>
+* <a href="https://aspnetboilerplate.com/Pages/Documents/Audit-Logging" target="_blank">Audit log store</a>
+* <a href="https://aspnetboilerplate.com/Pages/Documents/Background-Jobs-And-Workers" target="_blank">Background job store</a>
+* <a href="https://aspnetboilerplate.com/Pages/Documents/Feature-Management" target="_blank">Feature store</a>
+* <a href="https://aspnetboilerplate.com/Pages/Documents/Notification-System" target="_blank">Notification store</a>
+* <a href="https://aspnetboilerplate.com/Pages/Documents/Authorization" target="_blank">Permission checker</a>
 
-## Star History
+Also adds common enterprise application features:
 
-[![Star History Chart](https://api.star-history.com/svg?repos=yoyoboot/yoyo.abp&type=Date)](https://star-history.com/#yoyoboot/yoyo.abp&Date)
+* **<a href="https://aspnetboilerplate.com/Pages/Documents/Zero/User-Management" target="_blank">User</a>, <a href="https://aspnetboilerplate.com/Pages/Documents/Zero/Role-Management" target="_blank">Role</a> and <a href="https://aspnetboilerplate.com/Pages/Documents/Zero/Permission-Management" target="_blank">Permission</a>** management for applications that require authentication and authorization.
+* **<a href="https://aspnetboilerplate.com/Pages/Documents/Zero/Tenant-Management" target="_blank">Tenant</a> and <a href="https://aspnetboilerplate.com/Pages/Documents/Zero/Edition-Management" target="_blank">Edition</a>** management for SaaS applications.
+* **<a href="https://aspnetboilerplate.com/Pages/Documents/Zero/Organization-Units" target="_blank">Organization Units</a>** management.
+* **<a href="https://aspnetboilerplate.com/Pages/Documents/Zero/Language-Management" target="_blank">Language and localization</a> text** management.
+* **<a href="https://aspnetboilerplate.com/Pages/Documents/Zero/Identity-Server" target="_blank">Identity Server 4</a>** integration.
 
-## Contributing
+Module Zero packages define entities and implement base domain logic for these concepts.
 
-For those who'd like to contribute code, see our [Contribution Guide](CONTRIBUTING.md).
+## NuGet Packages
 
-At the same time, please consider supporting Dify by sharing it on social media and at events and conferences.
+### ASP.NET Core Identity Packages
 
-### Contributions
+Packages integrated into <a href="https://docs.microsoft.com/en-us/aspnet/identity/overview/getting-started/introduction-to-aspnet-identity" target="_blank">ASP.NET Core Identity</a> and <a href="http://identityserver.io/" target="_blank">Identity Server 4</a> (supports .NET Standard).
 
-<a href="https://github.com/yoyoboot/Yoyo.Abp/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=yoyoboot/Yoyo.Abp" />
-</a>
+|Package|Status|
+|:------|:-----:|
+|Abp.ZeroCore|[![NuGet version](https://badge.fury.io/nu/Abp.ZeroCore.svg)](https://badge.fury.io/nu/Abp.ZeroCore)|
+|Abp.ZeroCore.EntityFrameworkCore|[![NuGet version](https://badge.fury.io/nu/Abp.ZeroCore.EntityFrameworkCore.svg)](https://badge.fury.io/nu/Abp.ZeroCore.EntityFrameworkCore)|
+|Abp.ZeroCore.IdentityServer4|[![NuGet version](https://badge.fury.io/nu/Abp.ZeroCore.IdentityServer4.svg)](https://badge.fury.io/nu/Abp.ZeroCore.IdentityServer4)|
+|Abp.ZeroCore.IdentityServer4.EntityFrameworkCore|[![NuGet version](https://badge.fury.io/nu/Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore.svg)](https://badge.fury.io/nu/Abp.ZeroCore.IdentityServer4.EntityFrameworkCore)|
+|Abp.ZeroCore.IdentityServer4.vNext|[![NuGet version](https://badge.fury.io/nu/Abp.ZeroCore.IdentityServer4.svg)](https://badge.fury.io/nu/Abp.ZeroCore.IdentityServer4.vNext)|
+|Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore|[![NuGet version](https://badge.fury.io/nu/Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore.svg)](https://badge.fury.io/nu/Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore)|
 
-## Acknowledgments
+### ASP.NET Identity Packages
 
-Thanks to the creators and contributors of [ASP.NET Boilerplate](https://github.com/aspnetboilerplate/aspnetboilerplate) for providing a solid infrastructure.
+Packages integrated into <a href="https://www.asp.net/identity" target="_blank">ASP.NET Identity</a> 2.x.
+
+|Package|Status|
+|:------|:-----:|
+|Abp.Zero|[![NuGet version](https://badge.fury.io/nu/Abp.Zero.svg)](https://badge.fury.io/nu/Abp.Zero)|
+|Abp.Zero.Owin|[![NuGet version](https://badge.fury.io/nu/Abp.Zero.Owin.svg)](https://badge.fury.io/nu/Abp.Zero.Owin)|
+|Abp.Zero.AspNetCore|[![NuGet version](https://badge.fury.io/nu/Abp.Zero.AspNetCore.svg)](https://badge.fury.io/nu/Abp.Zero.AspNetCore)|
+|Abp.Zero.EntityFramework|[![NuGet version](https://badge.fury.io/nu/Abp.Zero.EntityFramework.svg)](https://badge.fury.io/nu/Abp.Zero.EntityFramework)|
+
+### Shared Packages
+
+Shared packages between the Abp.ZeroCore.\* and Abp.Zero.\* packages.
+
+|Package|Status|
+|:------|:-----:|
+|Abp.Zero.Common|[![NuGet version](https://badge.fury.io/nu/Abp.Zero.Common.svg)](https://badge.fury.io/nu/Abp.Zero.Common)|
+|Abp.Zero.Ldap|[![NuGet version](https://badge.fury.io/nu/Abp.Zero.Ldap.svg)](https://badge.fury.io/nu/Abp.Zero.Ldap)|
+
+## Startup Templates
+
+You can create your project from startup templates to easily start with Module Zero:
+
+* <a href="https://aspnetboilerplate.com/Pages/Documents/Zero/Startup-Template-Angular" target="_blank">ASP.NET Core & Angular</a> based startup project.
+* <a href="https://aspnetboilerplate.com/Pages/Documents/Zero/Startup-Template-Core" target="_blank">ASP.NET Core MVC & jQuery</a> based startup project.
+* <a href="https://aspnetboilerplate.com/Pages/Documents/Zero/Startup-Template" target="_blank">ASP.NET Core MVC 5.x / AngularJS</a> based startup project.
+
+A screenshot of the ASP.NET Core based startup template:
+
+![](doc/img/module-zero-core-template-1.png)
+
+## Links
+
+* Web site & Documentation: https://aspnetboilerplate.com
+* Questions & Answers: https://stackoverflow.com/questions/tagged/aspnetboilerplate?sort=newest
+
+## Code of Conduct
+
+This project has adopted the code of conduct defined by the Contributor Covenant to clarify expected behavior in our community.
+For more information see the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct). 
+
+### .NET Foundation
+
+This project is supported by the [.NET Foundation](https://dotnetfoundation.org).
 
 ## License
 
-This project is licensed under the MIT license - see the [LICENSE](LICENSE.md) file for details.
+[MIT](LICENSE).

@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;net6.0</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Abp.Tests</AssemblyName>
     <PackageId>Abp.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -35,24 +35,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0-preview-20211109-03" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NSubstitute" Version="4.2.2" />
-    <PackageReference Include="Shouldly" Version="4.0.3" />
+    <PackageReference Include="NSubstitute" Version="4.3.0" />
+    <PackageReference Include="Shouldly" Version="4.1.0" />
     <PackageReference Include="xunit" Version="2.4.2-pre.12" />
-    <PackageReference Include="TimeZoneConverter" Version="5.0.0" />
+    <PackageReference Include="TimeZoneConverter" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System.Transactions" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,7 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" />
+
     <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

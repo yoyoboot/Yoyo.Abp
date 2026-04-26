@@ -20,5 +20,6 @@ include:
   # - local: ".gitlab/ci/docker-images.dev-ci.yml"
   # - local: ".gitlab/ci/docker-images.tag-ci.yml"
   # - local: ".gitlab/ci/sync-code.any-ci.yml"
+  - local: ".gitlab/ci/module-nuget.branch-ci.yml"
   - local: ".gitlab/ci/module-nuget.tag-ci.yml"
  
