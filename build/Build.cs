@@ -19,12 +19,12 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [MSBuildVerbosityMapping]
 [AzurePipelines(
     AzurePipelinesImage.WindowsLatest,
-    InvokedTargets = new[] {nameof(Test)},
-    ExcludedTargets = new[] {nameof(Clean)},
-    NonEntryTargets = new[] {nameof(Restore), nameof(Compile)})]
+    InvokedTargets = new[] { nameof(Test) },
+    ExcludedTargets = new[] { nameof(Clean) },
+    NonEntryTargets = new[] { nameof(Restore), nameof(Compile) })]
 [AppVeyor(
     AppVeyorImage.VisualStudioLatest,
-    InvokedTargets = new[] {nameof(Test)},
+    InvokedTargets = new[] { nameof(Test) },
     AutoGenerate = false)]
 class Build : NukeBuild
 {
@@ -79,6 +79,7 @@ class Build : NukeBuild
 
     Target Pack => _ => _
         .DependsOn(Compile)
+        .Requires(() => !string.IsNullOrWhiteSpace(PackageVersion))
         .Produces(PackagesDirectory / "*.nupkg")
         .Executes(() =>
         {

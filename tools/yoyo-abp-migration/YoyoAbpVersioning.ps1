@@ -152,3 +152,23 @@ function Get-YoyoAbpPackageVersion {
 
     return (Get-CommonPropsVersion -CommonPropsPath $CommonPropsPath)
 }
+
+function Get-YoyoAbpPackageChannel {
+    [CmdletBinding()]
+    param(
+        [string]$BranchName
+    )
+
+    $resolvedBranchName = Get-YoyoAbpCurrentBranchName -BranchName $BranchName
+    if (!([string]::IsNullOrWhiteSpace($resolvedBranchName))) {
+        if ($resolvedBranchName.StartsWith('release/', [System.StringComparison]::OrdinalIgnoreCase)) {
+            return 'stable'
+        }
+
+        if ($resolvedBranchName.StartsWith('verify/', [System.StringComparison]::OrdinalIgnoreCase)) {
+            return 'validation'
+        }
+    }
+
+    return 'default'
+}

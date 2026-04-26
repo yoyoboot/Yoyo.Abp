@@ -56,7 +56,11 @@ Use a three-segment package version for every release or verify line:
 - `release/7.4` -> `7.4.0`
 - `verify/7.4-yoyo-on-dev-7.3.0` -> `7.4.1`
 - `release/9.4.2` -> `9.4.2`
+- `verify/9.4.2-yoyo-on-release-7.4` -> `9.4.3`
 - `release/10.3` -> `10.3.0`
+- `verify/10.3.1-yoyo-on-release-9.4.2` -> `10.3.2`
+
+The verify branch token is interpreted as the current formal package version token for the next patch line. Two-segment tokens are normalized to `.0`, and verify lines always increment the patch segment by one.
 
 Prefer an explicit package-version override in build and pack automation:
 
@@ -66,4 +70,16 @@ pwsh nupkg/pack.ps1 -Version 7.4.0
 nuke Pack --packageVersion 7.4.0
 ```
 
-If no explicit package version is supplied, the shared helper falls back to branch-aware mapping for `release/*` and `verify/*`, then to `common.props`.
+`nuke Pack` now requires `--packageVersion` so the Pack target never silently falls back to an unintended default.
+
+For `nupkg/pack.ps1`, precedence is:
+
+1. `-Version`
+2. production `TAG` when `IS_PRODUCTION=true`
+3. branch-aware mapping for `release/*` and `verify/*`
+4. `common.props`
+
+Feed policy:
+
+- `release/*` package lines publish to the **stable feed** for downstream consumption.
+- `verify/*` package lines publish to the **validation feed** and must complete package/downstream smoke before a release patch is promoted.
