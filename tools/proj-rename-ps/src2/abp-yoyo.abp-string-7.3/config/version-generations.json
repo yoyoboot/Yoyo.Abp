@@ -1,32 +1,38 @@
 {
-  "defaultProfile": "33-compat",
-  "generations": [
-    {
-      "name": "v7-net6",
-      "tagPrefixes": ["v7."],
-      "targetFramework": "net6.0",
-      "riskNotes": [
-        "Use current 33-package baseline as reference.",
-        "Keep string primary key rules locked."
-      ]
-    },
-    {
-      "name": "v9-net8",
-      "tagPrefixes": ["v9."],
-      "targetFramework": "net8.0",
-      "riskNotes": [
-        "Expect upstream authentication and template drift.",
-        "Treat Abp.ZeroCore.IdentityServer4 removal as explicit radar signal."
-      ]
-    },
-    {
-      "name": "v10-net9",
-      "tagPrefixes": ["v10."],
-      "targetFramework": "net9.0",
-      "riskNotes": [
-        "Do not interpret v10.x as .NET 10.",
-        "Require v9.4.2-stable governance output before entering this generation."
-      ]
-    }
-  ]
+    "defaultProfile": "33-compat",
+    "generations": [
+        {
+            "name": "v7-net6",
+            "tagPrefixes": [
+                "v7."
+            ],
+            "targetFramework": "net6.0",
+            "riskNotes": [
+                "Use current 33-package baseline as reference.",
+                "Keep string primary key rules locked."
+            ]
+        },
+        {
+            "name": "v9-net8",
+            "tagPrefixes": [
+                "v9."
+            ],
+            "targetFramework": "net8.0",
+            "riskNotes": [
+                "Expect upstream authentication and template drift.",
+                "Treat Abp.ZeroCore.IdentityServer4 removal as explicit radar signal."
+            ]
+        },
+        {
+            "name": "v10-net9",
+            "tagPrefixes": [
+                "v10."
+            ],
+            "targetFramework": "net9.0",
+            "riskNotes": [
+                "Do not interpret v10.x as .NET 10.",
+                "Require v9.4.2-stable governance output before entering this generation."
+            ]
+        }
+    ]
 }

@@ -33,8 +33,9 @@ function Assert-NotContains {
 $resolvedRoot = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($GeneratedRoot)
 $modulePath = Join-Path $resolvedRoot 'test\Abp.ZeroCore.SampleApp\AbpZeroCoreSampleAppModule.cs'
 $officeAppServicePath = Join-Path $resolvedRoot 'test\Abp.ZeroCore.SampleApp\Application\Shop\IOfficeAppService.cs'
+$officeTranslationPath = Join-Path $resolvedRoot 'test\Abp.ZeroCore.SampleApp\Core\Shop\OfficeTranslation.cs'
 
-foreach ($path in @($modulePath, $officeAppServicePath)) {
+foreach ($path in @($modulePath, $officeAppServicePath, $officeTranslationPath)) {
     if (-not (Test-Path -LiteralPath $path)) {
         throw "Required generated file not found: $path"
     }
@@ -42,12 +43,17 @@ foreach ($path in @($modulePath, $officeAppServicePath)) {
 
 $moduleContent = Get-Content -LiteralPath $modulePath -Raw
 $officeAppServiceContent = Get-Content -LiteralPath $officeAppServicePath -Raw
+$officeTranslationContent = Get-Content -LiteralPath $officeTranslationPath -Raw
 
-Assert-Contains -Content $moduleContent -Expected 'CreateMultiLingualMap<Office,int, OfficeTranslation, OfficeListDto>' -Label 'SampleApp module'
-Assert-NotContains -Content $moduleContent -Unexpected 'CreateMultiLingualMap<Office,string, OfficeTranslation, OfficeListDto>' -Label 'SampleApp module'
+Assert-Contains -Content $moduleContent -Expected 'CreateMultiLingualMap<Office,string, OfficeTranslation, OfficeListDto>' -Label 'SampleApp module'
+Assert-NotContains -Content $moduleContent -Unexpected 'CreateMultiLingualMap<Office,int, OfficeTranslation, OfficeListDto>' -Label 'SampleApp module'
 Assert-NotContains -Content $moduleContent -Unexpected 'CreateMultiLingualMap<Office, int, OfficeTranslation, long, OfficeListDto>' -Label 'SampleApp module'
 
 Assert-Contains -Content $officeAppServiceContent -Expected 'IRepository<OfficeTranslation, string>' -Label 'Office app service'
 Assert-NotContains -Content $officeAppServiceContent -Unexpected 'IRepository<OfficeTranslation, long>' -Label 'Office app service'
+Assert-Contains -Content $officeTranslationContent -Expected 'IEntityTranslation<Office, string>' -Label 'Office translation'
+Assert-NotContains -Content $officeTranslationContent -Unexpected 'IEntityTranslation<Office>' -Label 'Office translation'
+Assert-Contains -Content $officeTranslationContent -Expected 'public string CoreId { get; set; }' -Label 'Office translation'
+Assert-NotContains -Content $officeTranslationContent -Unexpected 'public int CoreId { get; set; }' -Label 'Office translation'
 
 Write-Host 'Office regression checks passed.'

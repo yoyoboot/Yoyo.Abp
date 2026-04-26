@@ -1,24 +1,27 @@
-# 全局通用的配置变量信息
-$version = "1.0.0"
+[CmdletBinding()]
+param(
+    [string]$Version,
 
-# 是否为发布
-$isProduction = $env:IS_PRODUCTION
+    [string]$BranchName
+)
 
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
 
+$repoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
+. (Join-Path $repoRoot 'tools\yoyo-abp-migration\YoyoAbpVersioning.ps1')
 
-Write-Host "IS_PRODUCTION: $isProduction" -ForegroundColor Blue
-
-
-
-
-# 发布模式，从环境变量读取
-if ($isProduction -eq $True) {
-    Write-Host "TAG: $env:TAG" -ForegroundColor Blue
-
-    $version = $env:TAG
-    Write-Host "version: $version" 
-
+$explicitVersion = $Version
+if ([string]::IsNullOrWhiteSpace($explicitVersion) -and !([string]::IsNullOrWhiteSpace($env:TAG))) {
+    $explicitVersion = $env:TAG
 }
+
+$resolvedVersion = Get-YoyoAbpPackageVersion `
+    -ExplicitVersion $explicitVersion `
+    -BranchName $BranchName `
+    -CommonPropsPath (Join-Path $repoRoot 'common.props')
+
+Write-Host "Resolved package version: $resolvedVersion" -ForegroundColor Blue
 
 # Paths
 $packFolder = (Get-Item -Path "./" -Verbose).FullName
@@ -86,7 +89,7 @@ foreach ($project in $projects) {
         -o $distPath `
         -p:IncludeSymbols=true `
         -p:SymbolPackageFormat=snupkg `
-        -p:Version=${version}
+        -p:Version=${resolvedVersion}
 
     $packageCounter += 1
 }

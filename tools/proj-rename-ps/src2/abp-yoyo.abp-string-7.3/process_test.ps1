@@ -205,9 +205,14 @@ function ReplaceTests {
         $content = $content -creplace '(class Order.*?EntityDto).*', '$1<int>'
 
         $content = $content -creplace [Regex]::Escape('CreateMultiLingualMap<Product, ProductTranslation'), 'CreateMultiLingualMap<Product,int, ProductTranslation'
-        $content = $content -creplace [Regex]::Escape('CreateMultiLingualMap<Office, int, OfficeTranslation, long, OfficeListDto>'), 'CreateMultiLingualMap<Office,int, OfficeTranslation, OfficeListDto>'
+        $content = $content -creplace 'CreateMultiLingualMap<Office,\s*int,\s*OfficeTranslation,\s*(long,\s*)?OfficeListDto>', 'CreateMultiLingualMap<Office,string, OfficeTranslation, OfficeListDto>'
         $content = $content -creplace [Regex]::Escape('CreateMultiLingualMap<Order, OrderTranslation'), 'CreateMultiLingualMap<Order,int, OrderTranslation'
         $content = $content -creplace [Regex]::Escape('Repository<OfficeTranslation, long>'), 'Repository<OfficeTranslation, string>'
+
+        if ($path.EndsWith('OfficeTranslation.cs')) {
+            $content = $content -creplace [Regex]::Escape('IEntityTranslation<Office>'), 'IEntityTranslation<Office, string>'
+            $content = $content -creplace [Regex]::Escape('public int CoreId { get; set; }'), 'public string CoreId { get; set; }'
+        }
 
         $content = $content -creplace '(class UserTestEntity.*?AggregateRoot).*?,', '$1<int>,'
 

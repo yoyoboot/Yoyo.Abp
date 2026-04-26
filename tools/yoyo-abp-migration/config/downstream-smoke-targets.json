@@ -1,16 +1,16 @@
 {
-  "targets": [
-    {
-      "name": "YoyoBoot",
-      "repoRoot": "C:\\Code\\yoyoboot\\YoyoBoot",
-      "solution": "Yoyo.Monorepo.sln",
-      "versionProperty": "YoyoAbpVersion"
-    },
-    {
-      "name": "RiderAspNetCore",
-      "repoRoot": "C:\\Code\\gitea\\Rider\\src\\aspnet-core",
-      "solution": "YoyoBoot.Template.sln",
-      "versionProperty": "YoyoAbpVersion"
-    }
-  ]
+    "targets": [
+        {
+            "name": "YoyoBoot",
+            "repoRoot": "C:\\Code\\yoyoboot\\YoyoBoot",
+            "solution": "Yoyo.Monorepo.sln",
+            "versionProperty": "YoyoAbpVersion"
+        },
+        {
+            "name": "RiderAspNetCore",
+            "repoRoot": "C:\\Code\\gitea\\Rider\\src\\aspnet-core",
+            "solution": "YoyoBoot.Template.sln",
+            "versionProperty": "YoyoAbpVersion"
+        }
+    ]
 }

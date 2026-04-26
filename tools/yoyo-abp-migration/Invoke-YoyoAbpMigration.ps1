@@ -80,6 +80,28 @@ function Resolve-FullPath {
         }
     }
 
+    function Sync-TopLevelFiles {
+        param(
+            [Parameter(Mandatory = $true)][string]$SourceRoot,
+            [Parameter(Mandatory = $true)][string]$DestinationRoot,
+            [string[]]$FileNames
+        )
+
+        $files = @(Get-ChildItem -LiteralPath $SourceRoot -Force -File)
+        if ($FileNames -and $FileNames.Count -gt 0) {
+            $allowedFileNames = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+            foreach ($fileName in $FileNames) {
+                [void]$allowedFileNames.Add($fileName)
+            }
+
+            $files = @($files | Where-Object { $allowedFileNames.Contains($_.Name) })
+        }
+
+        foreach ($file in $files) {
+            Copy-Item -LiteralPath $file.FullName -Destination (Join-Path $DestinationRoot $file.Name) -Force
+        }
+    }
+
 $resolvedUpstreamPath = Resolve-FullPath $UpstreamPath
 $resolvedOutputPath = Resolve-FullPath $OutputPath
 $resolvedEngineRoot = Resolve-FullPath $EngineRoot
@@ -124,6 +146,7 @@ if (Test-IsSameOrChildPath -Path $resolvedOutputPath -ParentPath $resolvedUpstre
 }
 
 Copy-DirectoryContents -SourceRoot $resolvedUpstreamPath -DestinationRoot $resolvedOutputPath -ExcludePath $copyExclusionPath
+Sync-TopLevelFiles -SourceRoot $resolvedUpstreamPath -DestinationRoot $resolvedOutputPath
 
 if ($SkipEngineRun) {
     Write-Host "SkipEngineRun is set. Output contains copied upstream source only."
@@ -141,6 +164,8 @@ try {
 finally {
     Pop-Location
 }
+
+Sync-TopLevelFiles -SourceRoot $resolvedUpstreamPath -DestinationRoot $resolvedOutputPath -FileNames @('LICENSE.md')
 
 Write-Host "Migration output: $resolvedOutputPath"
 Write-Host "Migration log: $resolvedLogPath"

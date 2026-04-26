@@ -48,3 +48,22 @@ pwsh tools/yoyo-abp-migration/Invoke-YoyoAbpDownstreamSmoke.ps1 `
   -PackageSource C:\temp\feed `
   -WhatIf
 ```
+
+## Package version policy
+
+Use a three-segment package version for every release or verify line:
+
+- `release/7.4` -> `7.4.0`
+- `verify/7.4-yoyo-on-dev-7.3.0` -> `7.4.1`
+- `release/9.4.2` -> `9.4.2`
+- `release/10.3` -> `10.3.0`
+
+Prefer an explicit package-version override in build and pack automation:
+
+```powershell
+pwsh version-update.ps1 -Version 7.4.0
+pwsh nupkg/pack.ps1 -Version 7.4.0
+nuke Pack --packageVersion 7.4.0
+```
+
+If no explicit package version is supplied, the shared helper falls back to branch-aware mapping for `release/*` and `verify/*`, then to `common.props`.

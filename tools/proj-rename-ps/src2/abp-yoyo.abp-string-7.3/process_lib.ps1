@@ -33,11 +33,44 @@ function RemoveNetFrameworkCompatibility {
 }
 
 ## 删除冗余库
+function RemoveProjectDirectoryFromSolution {
+    param (
+        [string]$SolutionPath,
+        [string]$ProjectDirectoryPath
+    )
+
+    if (!(Test-Path -LiteralPath $SolutionPath) -or !(Test-Path -LiteralPath $ProjectDirectoryPath)) {
+        return
+    }
+
+    $solutionContent = Get-Content -LiteralPath $SolutionPath -Raw -Encoding UTF8
+    $projectFiles = @(Get-ChildItem -LiteralPath $ProjectDirectoryPath -Recurse -Filter '*.csproj' -File)
+
+    foreach ($projectFile in $projectFiles) {
+        $relativeProjectPath = [System.IO.Path]::GetRelativePath((Split-Path -Parent $SolutionPath), $projectFile.FullName).Replace('/', '\')
+
+        if ($solutionContent -notlike "*$relativeProjectPath*") {
+            continue
+        }
+
+        dotnet sln "$SolutionPath" remove "$($projectFile.FullName)"
+        if ($LASTEXITCODE -ne 0) {
+            throw "Failed to remove legacy project from solution: $($projectFile.FullName)"
+        }
+
+        $solutionContent = Get-Content -LiteralPath $SolutionPath -Raw -Encoding UTF8
+    }
+}
+
 function RmLib {
     param (
         $rootPath,
         $projNames
     )
+    $rootDirectory = Get-Item -LiteralPath $rootPath
+    $solutionRoot = $rootDirectory.Parent.FullName
+    $slnPath = Join-Path $solutionRoot 'Abp.sln'
+
     $dirs = Get-ChildItem -Path $rootPath -Directory
 
     foreach ($item in $dirs) {
@@ -49,9 +82,8 @@ function RmLib {
             continue
         }
 
-        $slnPath = Join-Path (Split-Path $rootPath) 'Abp.sln'
         $projPath = Join-Path $rootPath $item.Name
-        dotnet sln  "$slnPath" remove  "$projPath"
+        RemoveProjectDirectoryFromSolution -SolutionPath $slnPath -ProjectDirectoryPath $projPath
         Remove-Item -Force -Recurse -Path "$projPath"
     }
 

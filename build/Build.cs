@@ -38,6 +38,9 @@ class Build : NukeBuild
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
+    [Parameter("Package version override for pack output")]
+    readonly string PackageVersion;
+
     [CI] readonly AzurePipelines AzurePipelines;
     [Solution] readonly Solution Solution;
 
@@ -84,6 +87,7 @@ class Build : NukeBuild
                 .SetOutputDirectory(PackagesDirectory)
                 .SetNoBuild(InvokedTargets.Contains(Compile))
                 .SetProperty("SourceLinkCreate", true)
+                .When(!string.IsNullOrWhiteSpace(PackageVersion), _ => _.SetVersion(PackageVersion))
                 .CombineWith(
                     Solution.AllProjects.Where(x => x.SolutionFolder?.Name == "src"), (_, v) => _
                         .SetProject(v)));
