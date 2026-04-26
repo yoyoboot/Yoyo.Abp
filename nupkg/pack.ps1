@@ -16,7 +16,7 @@ if ($isProduction -eq $True) {
     Write-Host "TAG: $env:TAG" -ForegroundColor Blue
 
     $version = $env:TAG
-    Write-Host "version: $version" 
+    Write-Host "version: $version"
 
 }
 
@@ -70,7 +70,7 @@ Set-Location $slnPath
 # Copy all nuget packages to the pack folder
 $packageCounter = 0
 foreach ($project in $projects) {
-    
+
     ## path
     $projectFolder = Join-Path $srcPath $project
     $csprojFile = Join-Path $projectFolder ($project + '.csproj')
