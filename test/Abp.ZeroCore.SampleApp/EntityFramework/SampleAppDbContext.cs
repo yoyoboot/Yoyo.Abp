@@ -25,6 +25,10 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework
         public DbSet<Product> Products { get; set; }
 
         public DbSet<ProductTranslation> ProductTranslations { get; set; }
+        
+        public DbSet<Office> Offices { get; set; }
+
+        public DbSet<OfficeTranslation> OfficeTranslations { get; set; }
 
         public DbSet<Author> Authors { get; set; }
 
@@ -39,8 +43,8 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework
         public DbSet<Country> Countries { get; set; }
 
         public DbSet<Foo> Foo { get; set; }
-
-        public SampleAppDbContext(DbContextOptions<SampleAppDbContext> options)
+        
+        public SampleAppDbContext(DbContextOptions<SampleAppDbContext> options) 
             : base(options)
         {
         }
@@ -57,7 +61,7 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework
 
             modelBuilder.Entity<Blog>().OwnsOne(x => x.More);
 
-            modelBuilder.Entity<Blog>().OwnsMany(x => x.Promotions, b =>
+            modelBuilder.Entity<Blog>().OwnsMany(x => x.Promotions, b => 
             {
                 b.WithOwner().HasForeignKey(bp => bp.BlogId);
                 b.Property<int>("Id");
@@ -84,7 +88,7 @@ namespace Abp.ZeroCore.SampleApp.EntityFramework
             modelBuilder.Entity<Book>().Property(e => e.Id).ValueGeneratedNever();
 
             modelBuilder.Entity<Store>().Property(e => e.Id).HasColumnName("StoreId");
-
+            
             // Register custom entity which is not in DbContext
             modelBuilder.Entity(typeof(CustomEntity));
             modelBuilder.Entity(typeof(CustomEntityWithGuidId));

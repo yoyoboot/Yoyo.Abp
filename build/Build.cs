@@ -19,12 +19,12 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [MSBuildVerbosityMapping]
 [AzurePipelines(
     AzurePipelinesImage.WindowsLatest,
-    InvokedTargets = new[] { nameof(Test) },
-    ExcludedTargets = new[] { nameof(Clean) },
-    NonEntryTargets = new[] { nameof(Restore), nameof(Compile) })]
+    InvokedTargets = new[] {nameof(Test)},
+    ExcludedTargets = new[] {nameof(Clean)},
+    NonEntryTargets = new[] {nameof(Restore), nameof(Compile)})]
 [AppVeyor(
     AppVeyorImage.VisualStudioLatest,
-    InvokedTargets = new[] { nameof(Test) },
+    InvokedTargets = new[] {nameof(Test)},
     AutoGenerate = false)]
 class Build : NukeBuild
 {
@@ -37,9 +37,6 @@ class Build : NukeBuild
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
-
-    [Parameter("Package version override for pack output")]
-    readonly string PackageVersion;
 
     [CI] readonly AzurePipelines AzurePipelines;
     [Solution] readonly Solution Solution;
@@ -79,7 +76,6 @@ class Build : NukeBuild
 
     Target Pack => _ => _
         .DependsOn(Compile)
-        .Requires(() => !string.IsNullOrWhiteSpace(PackageVersion))
         .Produces(PackagesDirectory / "*.nupkg")
         .Executes(() =>
         {
@@ -88,7 +84,6 @@ class Build : NukeBuild
                 .SetOutputDirectory(PackagesDirectory)
                 .SetNoBuild(InvokedTargets.Contains(Compile))
                 .SetProperty("SourceLinkCreate", true)
-                .When(!string.IsNullOrWhiteSpace(PackageVersion), _ => _.SetVersion(PackageVersion))
                 .CombineWith(
                     Solution.AllProjects.Where(x => x.SolutionFolder?.Name == "src"), (_, v) => _
                         .SetProject(v)));
