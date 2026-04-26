@@ -363,6 +363,12 @@ function ReplaceEntitys {
         $content = $content -creplace [Regex]::Escape('int id, '), 'string id, '
         $content = $content -creplace [Regex]::Escape('<TEntity, int>'), '<TEntity, string>'
     }
+    ## AutoMapExtensions.cs
+    if ($path.EndsWith('AutoMapExtensions.cs')) {
+        $content = $content -creplace [Regex]::Escape('CreateMultiLingualMap<TMultiLingualEntity, TMultiLingualEntityPrimaryKey, TTranslation, TTranslationPrimaryKey, TDestination>('), 'CreateMultiLingualMap<TMultiLingualEntity, TMultiLingualEntityPrimaryKey, TTranslation, TDestination>('
+        $content = $content -creplace [Regex]::Escape('where TTranslation : class, IEntityTranslation<TMultiLingualEntity, TMultiLingualEntityPrimaryKey>, IEntity<TTranslationPrimaryKey>'), 'where TTranslation : class, IEntityTranslation<TMultiLingualEntity, TMultiLingualEntityPrimaryKey>'
+        $content = $content -creplace [Regex]::Escape('CreateMultiLingualMap<TMultiLingualEntity, int, TTranslation, int, TDestination>('), 'CreateMultiLingualMap<TMultiLingualEntity, int, TTranslation, TDestination>('
+    }
     ## TenantInfo.cs
     if ([regex]::IsMatch($content, 'class TenantInfo')) {
         $content = $content -creplace [Regex]::Escape('int Id'), 'string Id'
