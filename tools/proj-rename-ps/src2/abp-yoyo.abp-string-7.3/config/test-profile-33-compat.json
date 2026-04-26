@@ -1,0 +1,22 @@
+{
+  "profileName": "33-compat-tests",
+  "testProjects": [
+    "Abp.AspNetCore.Tests",
+    "Abp.AutoMapper.Tests",
+    "Abp.Castle.Log4Net.Tests",
+    "Abp.Dapper.Tests",
+    "Abp.EntityFramework.Tests",
+    "Abp.EntityFrameworkCore.Dapper.Tests",
+    "Abp.EntityFrameworkCore.Tests",
+    "Abp.MailKit.Tests",
+    "Abp.MemoryDb.Tests",
+    "Abp.Quartz.Tests",
+    "Abp.RedisCache.Tests",
+    "Abp.TestBase.Tests",
+    "Abp.Tests",
+    "Abp.Web.Common.Tests",
+    "Abp.ZeroCore.IdentityServer4.Tests",
+    "Abp.ZeroCore.SampleApp",
+    "Abp.ZeroCore.Tests"
+  ]
+}

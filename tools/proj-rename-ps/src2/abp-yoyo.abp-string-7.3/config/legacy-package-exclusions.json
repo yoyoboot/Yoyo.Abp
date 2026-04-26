@@ -1,0 +1,19 @@
+{
+  "exactProjectNames": [
+    "Abp.Web",
+    "Abp.Web.Api",
+    "Abp.Web.Mvc",
+    "Abp.Web.SignalR",
+    "Abp.Web.Resources",
+    "Abp.Zero",
+    "Abp.Zero.EntityFramework",
+    "Abp.Zero.NHibernate",
+    "Abp.Zero.Owin"
+  ],
+  "tokenPatterns": [
+    "NHibernate",
+    "Owin",
+    "GraphDiff",
+    "FluentMigrator"
+  ]
+}
