@@ -22,3 +22,15 @@ pwsh tools/yoyo-abp-migration/Invoke-YoyoAbpMigration.ps1 `
 - If `OutputPath` is placed under `UpstreamPath` (for example a copy-only smoke run), the wrapper excludes that output subtree during the copy so it does not recurse into itself.
 - Logs are written under `tools/yoyo-abp-migration/logs/` and are ignored by git.
 - Generated outputs belong under `artifacts/yoyo-abp-migration/` and are ignored by git.
+
+## Upgrade radar
+
+Use this command to classify an upstream input and capture the first visible project/config deltas before running the migration engine:
+
+The report title and version-specific summary fields are derived dynamically from the upstream `common.props` version.
+
+```powershell
+pwsh tools/yoyo-abp-migration/Invoke-YoyoAbpUpgradeRadar.ps1 `
+  -UpstreamPath artifacts/yoyo-abp-migration/upstream-v9.4.2 `
+  -OutputPath docs/superpowers/reports/2026-04-26-yoyo-abp-v9.4.2-upgrade-radar.md
+```
