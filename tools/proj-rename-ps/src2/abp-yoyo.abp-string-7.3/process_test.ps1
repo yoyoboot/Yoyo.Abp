@@ -205,7 +205,9 @@ function ReplaceTests {
         $content = $content -creplace '(class Order.*?EntityDto).*', '$1<int>'
 
         $content = $content -creplace [Regex]::Escape('CreateMultiLingualMap<Product, ProductTranslation'), 'CreateMultiLingualMap<Product,int, ProductTranslation'
+        $content = $content -creplace [Regex]::Escape('CreateMultiLingualMap<Office, int, OfficeTranslation, long, OfficeListDto>'), 'CreateMultiLingualMap<Office,string, OfficeTranslation, OfficeListDto>'
         $content = $content -creplace [Regex]::Escape('CreateMultiLingualMap<Order, OrderTranslation'), 'CreateMultiLingualMap<Order,int, OrderTranslation'
+        $content = $content -creplace [Regex]::Escape('Repository<OfficeTranslation, long>'), 'Repository<OfficeTranslation, string>'
 
         $content = $content -creplace '(class UserTestEntity.*?AggregateRoot).*?,', '$1<int>,'
 
