@@ -36,6 +36,21 @@ function ConvertTo-YoyoAbpThreeSegmentVersion {
     throw "Version '$VersionText' must use either major.minor or major.minor.patch format."
 }
 
+function Test-YoyoAbpVersionText {
+    param(
+        [string]$VersionText
+    )
+
+    if ([string]::IsNullOrWhiteSpace($VersionText)) {
+        return $false
+    }
+
+    return [System.Text.RegularExpressions.Regex]::IsMatch(
+        $VersionText.Trim(),
+        '^\d+(\.\d+){1,3}$',
+        [System.Text.RegularExpressions.RegexOptions]::CultureInvariant)
+}
+
 function Get-YoyoAbpVerifyPackageVersion {
     param(
         [Parameter(Mandatory = $true)]

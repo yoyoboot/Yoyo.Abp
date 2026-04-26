@@ -19,7 +19,7 @@ if (!([string]::IsNullOrWhiteSpace($env:IS_PRODUCTION))) {
     $isProduction = [System.Convert]::ToBoolean($env:IS_PRODUCTION)
 }
 
-if ([string]::IsNullOrWhiteSpace($explicitVersion) -and $isProduction -and !([string]::IsNullOrWhiteSpace($env:TAG))) {
+if ([string]::IsNullOrWhiteSpace($explicitVersion) -and $isProduction -and (Test-YoyoAbpVersionText -VersionText $env:TAG)) {
     $explicitVersion = $env:TAG
 }
 

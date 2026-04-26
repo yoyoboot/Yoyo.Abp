@@ -92,15 +92,25 @@ The package-version decision chain is centralized in:
 Precedence order:
 
 1. explicit version override
-2. production `TAG` when `IS_PRODUCTION=true`
+2. production `TAG` when `IS_PRODUCTION=true` and the `TAG` value is already version-shaped
 3. branch-aware mapping for `release/*` and `verify/*`
 4. `common.props`
 
 ### Build and pack entry points
 
 - `nupkg/pack.ps1` supports explicit `-Version` and branch-aware fallback.
+- `nupkg/pack.ps1` must ignore production `TAG` values that are actually branch names such as `release/7.4`; those lines must still resolve through branch policy.
+- `nupkg/pack_push.ps1` supports explicit `NUGET_CHANNEL` override and otherwise derives `stable` / `validation` from the current branch.
+- `stable` publish routing uses `NUGET_STABLE_SOURCE` / `NUGET_STABLE_SOURCE_APIKEY`; `validation` routing uses `NUGET_VALIDATION_SOURCE` / `NUGET_VALIDATION_SOURCE_APIKEY`.
 - `nuke Pack` must be given `--packageVersion`; it must fail fast when the version is omitted.
 - `version-update.ps1` and `read-version.ps1` remain `common.props` utilities and are not, by themselves, the full branch-aware release policy.
+
+### GitLab branch publishing
+
+- `.gitlab-ci.yml` now includes `.gitlab/ci/module-nuget.branch-ci.yml` in addition to the legacy tag pipeline.
+- `release/*` branches produce package artifacts and expose a manual stable-feed publish job.
+- `verify/*` branches produce package artifacts and expose a manual validation-feed publish job.
+- Tag-based publishing remains available for legacy release automation, but branch lines are now first-class publish routes.
 
 ## Commit policy for `proj-rename-ps`
 

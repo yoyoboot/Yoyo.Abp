@@ -75,7 +75,7 @@ nuke Pack --packageVersion 7.4.0
 For `nupkg/pack.ps1`, precedence is:
 
 1. `-Version`
-2. production `TAG` when `IS_PRODUCTION=true`
+2. production `TAG` when `IS_PRODUCTION=true` **and the tag text is already version-shaped**
 3. branch-aware mapping for `release/*` and `verify/*`
 4. `common.props`
 
@@ -83,3 +83,14 @@ Feed policy:
 
 - `release/*` package lines publish to the **stable feed** for downstream consumption.
 - `verify/*` package lines publish to the **validation feed** and must complete package/downstream smoke before a release patch is promoted.
+
+Branch publish automation now uses `nupkg/pack_push.ps1` channel routing:
+
+- `NUGET_CHANNEL=stable` routes to `NUGET_STABLE_SOURCE` / `NUGET_STABLE_SOURCE_APIKEY`
+- `NUGET_CHANNEL=validation` routes to `NUGET_VALIDATION_SOURCE` / `NUGET_VALIDATION_SOURCE_APIKEY`
+- if no explicit channel is supplied, the script derives `stable` or `validation` from the current `release/*` or `verify/*` branch name
+
+GitLab branch pipelines now include `.gitlab/ci/module-nuget.branch-ci.yml`:
+
+- `release/*` branches build packages and expose a manual stable-feed publish job
+- `verify/*` branches build packages and expose a manual validation-feed publish job

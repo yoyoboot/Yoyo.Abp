@@ -1,0 +1,79 @@
+# Branch-driven package build/publish for formal release and verify lines
+# release/* branches map to the stable package channel.
+# verify/* branches map to the validation package channel.
+
+pre_packs_release_branch:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^release\//'
+  tags:
+    - portal-runner
+  retry:
+    max: 2
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
+    entrypoint: [ "" ]
+  artifacts:
+    name: "BasicFramework-$CI_COMMIT_REF_NAME"
+    when: on_success
+    expire_in: 1 day
+    paths:
+      - ./nupkg/dist/
+  script:
+    - cd nupkg
+    - pwsh ./pack.ps1 -BranchName "$CI_COMMIT_REF_NAME"
+
+push_stable_branch_packages:
+  stage: deploy
+  when: manual
+  dependencies:
+    - pre_packs_release_branch
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^release\//'
+  tags:
+    - portal-runner
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
+    entrypoint: [ "" ]
+  script:
+    - cd nupkg
+    - export NUGET_CHANNEL=stable
+    - pwsh ./pack_push.ps1 -BranchName "$CI_COMMIT_REF_NAME"
+
+pre_packs_verify_branch:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^verify\//'
+  tags:
+    - portal-runner
+  retry:
+    max: 2
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
+    entrypoint: [ "" ]
+  artifacts:
+    name: "BasicFramework-$CI_COMMIT_REF_NAME"
+    when: on_success
+    expire_in: 1 day
+    paths:
+      - ./nupkg/dist/
+  script:
+    - cd nupkg
+    - pwsh ./pack.ps1 -BranchName "$CI_COMMIT_REF_NAME"
+
+push_validation_branch_packages:
+  stage: deploy
+  when: manual
+  dependencies:
+    - pre_packs_verify_branch
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^verify\//'
+  tags:
+    - portal-runner
+  image:
+    name: registry.cn-shanghai.aliyuncs.com/staneee/powershell:lts-debian-10-dotnet-6
+    entrypoint: [ "" ]
+  script:
+    - cd nupkg
+    - export NUGET_CHANNEL=validation
+    - pwsh ./pack_push.ps1 -BranchName "$CI_COMMIT_REF_NAME"
