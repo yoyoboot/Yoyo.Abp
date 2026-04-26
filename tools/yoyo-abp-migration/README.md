@@ -34,3 +34,17 @@ pwsh tools/yoyo-abp-migration/Invoke-YoyoAbpUpgradeRadar.ps1 `
   -UpstreamPath artifacts/yoyo-abp-migration/upstream-v9.4.2 `
   -OutputPath docs/superpowers/reports/2026-04-26-yoyo-abp-v9.4.2-upgrade-radar.md
 ```
+
+## Downstream smoke template
+
+Preview the downstream smoke commands without executing them:
+
+`-WhatIf` only renders command templates; it does not validate whether configured `repoRoot` or `solution` paths currently exist on the local machine. The sample config is intended as a local template.
+
+```powershell
+pwsh tools/yoyo-abp-migration/Invoke-YoyoAbpDownstreamSmoke.ps1 `
+  -ConfigPath tools/yoyo-abp-migration/config/downstream-smoke-targets.json `
+  -PackageVersion 9.4.2-preview `
+  -PackageSource C:\temp\feed `
+  -WhatIf
+```
