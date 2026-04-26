@@ -9,9 +9,15 @@ $ErrorActionPreference = 'Stop'
 
 $scriptRoot = $PSScriptRoot
 $Src = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Src)
+$repoRoot = [System.IO.Path]::GetFullPath((Join-Path $scriptRoot '..\..\..\..'))
+$stageKeepHelperPath = Join-Path $repoRoot 'tools\yoyo-abp-migration\YoyoAbpMigrationStageKeep.ps1'
 
 if (!(Test-Path -LiteralPath $Src -PathType Container)) {
     throw "Src must be an existing directory: $Src"
+}
+
+if (!(Test-Path -LiteralPath $stageKeepHelperPath -PathType Leaf)) {
+    throw "Stage-keep helper was not found: $stageKeepHelperPath"
 }
 
 function Assert-RequiredProjectList {
@@ -58,6 +64,7 @@ function NormalizeRootBuildCompatibility {
 . (Join-Path $scriptRoot 'process_test_demo.ps1')
 . (Join-Path $scriptRoot 'validate_output.ps1')
 . (Join-Path $scriptRoot 'engine_config.ps1')
+. $stageKeepHelperPath
 
 $configRoot = Get-MigrationConfigRoot -ScriptRoot $scriptRoot
 $libraryProfile = Get-LibraryProfile33Compat -ConfigRoot $configRoot
@@ -112,5 +119,10 @@ $nupkgPath = "${Src}\nupkg\"
 Copy-Item (Join-Path $scriptRoot 'abp\pack.ps1') -Destination ($nupkgPath + 'pack.ps1') -Force
 
 NormalizeRootBuildCompatibility -RootPath $Src
+
+Restore-YoyoAbpStageKeepProjects -RepoRoot $repoRoot -OutputRoot $Src -ProjectNames @(
+    'Abp.ZeroCore.IdentityServer4',
+    'Abp.ZeroCore.IdentityServer4.EntityFrameworkCore'
+)
 
 Assert-MigrationOutput -Src $Src -ExpectedLibraryProjectNames $libraryProjectNames -LegacyExclusionConfig $legacyPackageExclusions

@@ -1,10 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <Import Project="..\..\common.props" />
   <Import Project="..\..\configureawait.props" />
-
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>Yoyo.Abp.EntityFramework</AssemblyName>
     <PackageId>Yoyo.Abp.EntityFramework</PackageId>
@@ -19,24 +17,24 @@
     <RootNamespace>Abp</RootNamespace>
     <Description>Yoyo.Abp.EntityFramework</Description>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Abp\Abp.csproj" />
     <ProjectReference Include="..\Abp.EntityFramework.Common\Abp.EntityFramework.Common.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="EntityFramework.DynamicFilters" Version="3.2.4" />
+    <PackageReference Update="ConfigureAwait.Fody" Version="3.3.2" />
+    <PackageReference Include="EntityFramework" Version="6.5.1" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Update="Fody" Version="6.6.4">
+    <PackageReference Update="Fody" Version="6.8.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
 
-    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
-
 </Project>

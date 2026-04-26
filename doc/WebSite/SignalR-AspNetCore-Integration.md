@@ -35,9 +35,9 @@ Then use the **AddSignalR** and **UseSignalR** methods in your Startup class:
     
             public void Configure(IApplicationBuilder app)
             {
-                app.UseEndpoints(routes =>
+                app.UseEndpoints(endpoints =>
                 {
-                    routes.MapHub<AbpCommonHub>("/signalr");
+                    endpoints.MapHub<AbpCommonHub>("/signalr");
                 });
             }
         }
@@ -86,6 +86,8 @@ connecting:
             return time * 2; //(default is twice of previous time)
         };
     </script>
+
+This is mostly useful when you need to register your custom events to SignalR becasue if you register your events after `abp.signalr.connect()` is called, your events will not be triggered.
 
 Note: See [Official SignalR documentation](https://learn.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-6.0&tabs=javascript#configure-additional-options) for withUrlOptions values.
 
@@ -161,7 +163,7 @@ that we want to add a Hub to our application:
 
 <!-- -->
 
-    routes.MapHub<MyChatHub>("/signalr-myChatHub"); // Prefix with '/signalr'
+    endpoints.MapHub<MyChatHub>("/signalr-myChatHub"); // Prefix with '/signalr'
 
 We implemented the **ITransientDependency** interface to simply register our hub to the
 [dependency injection](/Pages/Documents/Dependency-Injection) system

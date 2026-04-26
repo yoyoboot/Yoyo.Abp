@@ -175,18 +175,46 @@ namespace Abp.EntityFrameworkCore.Repositories
 
         public override IQueryable<TEntity> GetAll()
         {
-            return GetAllIncluding();
+            return GetQueryable();
+        }
+
+        public override IQueryable<TEntity> GetAllReadonly()
+        {
+            return GetQueryable().AsNoTracking();
         }
 
         public override async Task<IQueryable<TEntity>> GetAllAsync()
         {
-            return await GetAllIncludingAsync();
+            return await GetQueryableAsync();
+        }
+
+        public override async Task<IQueryable<TEntity>> GetAllReadonlyAsync()
+        {
+            return (await GetQueryableAsync()).AsNoTracking();
         }
 
         public override IQueryable<TEntity> GetAllIncluding(
             params Expression<Func<TEntity, object>>[] propertySelectors)
         {
-            var query = GetQueryable();
+            var query = GetAll();
+
+            if (propertySelectors.IsNullOrEmpty())
+            {
+                return query;
+            }
+
+            foreach (var propertySelector in propertySelectors)
+            {
+                query = query.Include(propertySelector);
+            }
+
+            return query;
+        }
+        
+        public override IQueryable<TEntity> GetAllReadonlyIncluding(
+            params Expression<Func<TEntity, object>>[] propertySelectors)
+        {
+            var query = GetAllReadonly();
 
             if (propertySelectors.IsNullOrEmpty())
             {
@@ -204,7 +232,7 @@ namespace Abp.EntityFrameworkCore.Repositories
         public override async Task<IQueryable<TEntity>> GetAllIncludingAsync(
             params Expression<Func<TEntity, object>>[] propertySelectors)
         {
-            var query = await GetQueryableAsync();
+            var query = await GetAllAsync();
 
             if (propertySelectors.IsNullOrEmpty())
             {
@@ -251,10 +279,11 @@ namespace Abp.EntityFrameworkCore.Repositories
         {
             return GetTable().Add(entity).Entity;
         }
-
-        public override Task<TEntity> InsertAsync(TEntity entity)
+        
+        public override async Task<TEntity> InsertAsync(TEntity entity)
         {
-            return Task.FromResult(Insert(entity));
+            var table = await GetTableAsync();
+            return (await table.AddAsync(entity)).Entity;
         }
 
         public override TPrimaryKey InsertAndGetId(TEntity entity)
@@ -352,7 +381,7 @@ namespace Abp.EntityFrameworkCore.Repositories
 
         public override async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await (await GetAllAsync()).Where(predicate).CountAsync(CancellationTokenProvider.Token);
+            return await (await GetAllAsync()).CountAsync(predicate,CancellationTokenProvider.Token);
         }
 
         public override async Task<long> LongCountAsync()
@@ -362,7 +391,7 @@ namespace Abp.EntityFrameworkCore.Repositories
 
         public override async Task<long> LongCountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await (await GetAllAsync()).Where(predicate).LongCountAsync(CancellationTokenProvider.Token);
+            return await (await GetAllAsync()).LongCountAsync(predicate, CancellationTokenProvider.Token);
         }
 
         protected virtual void AttachIfNot(TEntity entity)

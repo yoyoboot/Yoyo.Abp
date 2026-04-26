@@ -90,7 +90,7 @@ namespace Abp.EntityHistory
                 return;
             }
 
-            using (var uow = UnitOfWorkManager.Begin(TransactionScopeOption.Suppress))
+            using (var uow = UnitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
             {
                 await EntityHistoryStore.SaveAsync(changeSet);
                 await uow.CompleteAsync();
@@ -111,7 +111,7 @@ namespace Abp.EntityHistory
                 return;
             }
 
-            using (var uow = UnitOfWorkManager.Begin(TransactionScopeOption.Suppress))
+            using (var uow = UnitOfWorkManager.Begin(TransactionScopeOption.RequiresNew))
             {
                 EntityHistoryStore.Save(changeSet);
                 uow.Complete();
@@ -300,9 +300,9 @@ namespace Abp.EntityHistory
                         }
 
                         var propertyEntry = entityEntry.Property(property.Name);
-                        
-                        var newValue = propertyEntry.GetNewValue()?.ToJsonString();
-                        var oldValue = propertyEntry.GetOriginalValue()?.ToJsonString();
+
+                        var newValue = propertyEntry.GetNewValue();
+                        var oldValue = propertyEntry.GetOriginalValue();
 
                         // Add foreign key
                         entityChange.PropertyChanges.Add(CreateEntityPropertyChange(oldValue, newValue, property));

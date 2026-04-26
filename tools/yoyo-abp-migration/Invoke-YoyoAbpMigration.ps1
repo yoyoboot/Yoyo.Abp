@@ -10,6 +10,11 @@ param(
 
     [string]$LogPath = (Join-Path $PSScriptRoot 'logs\last-run.log'),
 
+    [string[]]$StageKeepProjects = @(
+        'Abp.ZeroCore.IdentityServer4',
+        'Abp.ZeroCore.IdentityServer4.EntityFrameworkCore'
+    ),
+
     [switch]$CleanOutput,
 
     [switch]$SkipEngineRun
@@ -17,6 +22,8 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+. (Join-Path $PSScriptRoot 'YoyoAbpMigrationStageKeep.ps1')
 
     $pathComparison = if ($IsWindows) {
         [System.StringComparison]::OrdinalIgnoreCase
@@ -106,6 +113,7 @@ $resolvedUpstreamPath = Resolve-FullPath $UpstreamPath
 $resolvedOutputPath = Resolve-FullPath $OutputPath
 $resolvedEngineRoot = Resolve-FullPath $EngineRoot
 $resolvedLogPath = Resolve-FullPath $LogPath
+$resolvedRepoRoot = Resolve-FullPath (Join-Path $PSScriptRoot '..\..')
 
 if (!(Test-Path $resolvedUpstreamPath)) {
     throw "UpstreamPath does not exist: $resolvedUpstreamPath"
@@ -163,6 +171,10 @@ try {
 }
 finally {
     Pop-Location
+}
+
+if ($StageKeepProjects -and $StageKeepProjects.Count -gt 0) {
+    Restore-YoyoAbpStageKeepProjects -RepoRoot $resolvedRepoRoot -OutputRoot $resolvedOutputPath -ProjectNames $StageKeepProjects
 }
 
 Sync-TopLevelFiles -SourceRoot $resolvedUpstreamPath -DestinationRoot $resolvedOutputPath -FileNames @('LICENSE.md')
