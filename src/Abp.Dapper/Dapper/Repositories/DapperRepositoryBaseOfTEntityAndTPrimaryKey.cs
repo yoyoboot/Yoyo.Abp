@@ -5,6 +5,8 @@ using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Abp.Dapper_Extensions;
+using Abp.Dapper_Extensions.Predicate;
 using Abp.Dapper.Extensions;
 using Abp.Dapper.Filters.Action;
 using Abp.Dapper.Filters.Query;
@@ -13,7 +15,6 @@ using Abp.Domain.Entities;
 using Abp.Domain.Uow;
 using Abp.Events.Bus.Entities;
 using Dapper;
-using DapperExtensions;
 
 namespace Abp.Dapper.Repositories
 {

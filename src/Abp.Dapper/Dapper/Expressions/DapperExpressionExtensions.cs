@@ -1,7 +1,7 @@
 using System;
 using System.Linq.Expressions;
+using Abp.Dapper_Extensions.Predicate;
 using Abp.Domain.Entities;
-using DapperExtensions;
 using JetBrains.Annotations;
 
 namespace Abp.Dapper.Expressions

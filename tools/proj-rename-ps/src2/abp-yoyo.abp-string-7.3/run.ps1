@@ -121,8 +121,10 @@ Copy-Item (Join-Path $scriptRoot 'abp\pack.ps1') -Destination ($nupkgPath + 'pac
 NormalizeRootBuildCompatibility -RootPath $Src
 
 Restore-YoyoAbpStageKeepProjects -RepoRoot $repoRoot -OutputRoot $Src -ProjectNames @(
+    'Abp.EntityFrameworkCore.EFPlus',
     'Abp.ZeroCore.IdentityServer4',
-    'Abp.ZeroCore.IdentityServer4.EntityFrameworkCore'
+    'Abp.ZeroCore.IdentityServer4.EntityFrameworkCore',
+    'Abp.ZeroCore.IdentityServer4.vNext'
 )
 
 Assert-MigrationOutput -Src $Src -ExpectedLibraryProjectNames $libraryProjectNames -LegacyExclusionConfig $legacyPackageExclusions

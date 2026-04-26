@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Abp.Dapper_Extensions;
+using Abp.Dapper_Extensions.Predicate;
 using Abp.Domain.Entities;
-using DapperExtensions;
 
 namespace Abp.Dapper.Expressions
 {

@@ -3,99 +3,98 @@ using System.Linq;
 using Abp.Runtime.Security;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Abp.AspNetCore.SignalR.Hubs
+namespace Abp.AspNetCore.SignalR.Hubs;
+
+public static class HubCallerContextExtensions
 {
-    public static class HubCallerContextExtensions
+    public static string GetTenantId(this HubCallerContext context)
     {
-        public static string GetTenantId(this HubCallerContext context)
+        if (context?.User == null)
         {
-            if (context?.User == null)
-            {
-                return null;
-            }
-
-            var tenantIdClaim = context.User.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.TenantId);
-            if (string.IsNullOrEmpty(tenantIdClaim?.Value))
-            {
-                return null;
-            }
-
-            return tenantIdClaim.Value;
+            return null;
         }
 
-        public static string GetUserIdOrNull(this HubCallerContext context)
+        var tenantIdClaim = context.User.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.TenantId);
+        if (string.IsNullOrEmpty(tenantIdClaim?.Value))
         {
-            if (context?.User == null)
-            {
-                return null;
-            }
-
-            var userIdClaim = context.User.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.UserId);
-            if (string.IsNullOrEmpty(userIdClaim?.Value))
-            {
-                return null;
-            }
-
-            return userIdClaim?.Value??string.Empty; var userId = string.Empty;
-            {
-                return null;
-            }
-
-            return userId;
+            return null;
         }
 
-        public static string GetUserId(this HubCallerContext context)
-        {
-            var userId = context.GetUserIdOrNull();
-            if (userId == null)
-            {
-                throw new AbpException("UserId is null! Probably, user is not logged in.");
-            }
+        return tenantIdClaim.Value;
+    }
 
-            return userId;
+    public static string GetUserIdOrNull(this HubCallerContext context)
+    {
+        if (context?.User == null)
+        {
+            return null;
         }
 
-        public static string GetImpersonatorUserId(this HubCallerContext context)
+        var userIdClaim = context.User.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.UserId);
+        if (string.IsNullOrEmpty(userIdClaim?.Value))
         {
-            if (context?.User == null)
-            {
-                return null;
-            }
-
-            var impersonatorUserIdClaim = context.User.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.ImpersonatorUserId);
-            if (string.IsNullOrEmpty(impersonatorUserIdClaim?.Value))
-            {
-                return null;
-            }
-
-            return impersonatorUserIdClaim.Value;
+            return null;
         }
 
-        public static string GetImpersonatorTenantId(this HubCallerContext context)
+        return userIdClaim?.Value??string.Empty; var userId = string.Empty;
         {
-            if (context?.User == null)
-            {
-                return null;
-            }
-
-            var impersonatorTenantIdClaim = context.User.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.ImpersonatorTenantId);
-            if (string.IsNullOrEmpty(impersonatorTenantIdClaim?.Value))
-            {
-                return null;
-            }
-
-            return impersonatorTenantIdClaim.Value;
+            return null;
         }
 
-        public static UserIdentifier ToUserIdentifier(this HubCallerContext context)
-        {
-            var userId = context.GetUserIdOrNull();
-            if (userId == null)
-            {
-                return null;
-            }
+        return userId;
+    }
 
-            return new UserIdentifier(context.GetTenantId(), context.GetUserId());
+    public static string GetUserId(this HubCallerContext context)
+    {
+        var userId = context.GetUserIdOrNull();
+        if (userId == null)
+        {
+            throw new AbpException("UserId is null! Probably, user is not logged in.");
         }
+
+        return userId;
+    }
+
+    public static string GetImpersonatorUserId(this HubCallerContext context)
+    {
+        if (context?.User == null)
+        {
+            return null;
+        }
+
+        var impersonatorUserIdClaim = context.User.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.ImpersonatorUserId);
+        if (string.IsNullOrEmpty(impersonatorUserIdClaim?.Value))
+        {
+            return null;
+        }
+
+        return impersonatorUserIdClaim.Value;
+    }
+
+    public static string GetImpersonatorTenantId(this HubCallerContext context)
+    {
+        if (context?.User == null)
+        {
+            return null;
+        }
+
+        var impersonatorTenantIdClaim = context.User.Claims.FirstOrDefault(c => c.Type == AbpClaimTypes.ImpersonatorTenantId);
+        if (string.IsNullOrEmpty(impersonatorTenantIdClaim?.Value))
+        {
+            return null;
+        }
+
+        return impersonatorTenantIdClaim.Value;
+    }
+
+    public static UserIdentifier ToUserIdentifier(this HubCallerContext context)
+    {
+        var userId = context.GetUserIdOrNull();
+        if (userId == null)
+        {
+            return null;
+        }
+
+        return new UserIdentifier(context.GetTenantId(), context.GetUserId());
     }
 }

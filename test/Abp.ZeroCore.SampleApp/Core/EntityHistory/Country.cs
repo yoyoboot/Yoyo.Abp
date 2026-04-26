@@ -1,9 +1,8 @@
 using Abp.Domain.Entities.Auditing;
 
-namespace Abp.ZeroCore.SampleApp.Core.EntityHistory
+namespace Abp.ZeroCore.SampleApp.Core.EntityHistory;
+
+public class Country : FullAuditedEntity
 {
-    public class Country : FullAuditedEntity
-    {
-        public string CountryCode { get; set; }
-    }
+    public string CountryCode { get; set; }
 }

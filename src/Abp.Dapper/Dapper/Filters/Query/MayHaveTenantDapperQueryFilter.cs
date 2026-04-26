@@ -2,12 +2,11 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-
+using Abp.Dapper_Extensions;
+using Abp.Dapper_Extensions.Predicate;
 using Abp.Dapper.Utils;
 using Abp.Domain.Entities;
 using Abp.Domain.Uow;
-
-using DapperExtensions;
 
 namespace Abp.Dapper.Filters.Query
 {

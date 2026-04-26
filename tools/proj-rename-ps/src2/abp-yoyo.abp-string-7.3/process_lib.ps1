@@ -5,11 +5,35 @@ function RemoveNetFrameworkCompatibility {
 
     $contentText = $Content -join [Environment]::NewLine
 
-    $contentText = $contentText -creplace '(?s)\s*<ItemGroup\s+Condition="\s*''\$\(TargetFramework\)''\s*==\s*''net4\d+''\s*"\s*>.*?</ItemGroup>', ''
-    $contentText = $contentText -creplace '(?s)\s*<PropertyGroup\s+Condition="\s*''\$\(TargetFramework\)''\s*==\s*''net4\d+''\s*"\s*>.*?</PropertyGroup>', ''
+    $contentText = $contentText -creplace '(?s)\s*<ItemGroup\s+Condition="\s*''\$\(TargetFramework\)''\s*==\s*''net4\d+''[^\"]*"\s*>.*?</ItemGroup>', ''
+    $contentText = $contentText -creplace '(?s)\s*<PropertyGroup\s+Condition="\s*''\$\(TargetFramework\)''\s*==\s*''net4\d+''[^\"]*"\s*>.*?</PropertyGroup>', ''
     $contentText = $contentText -creplace '(?m)^\s*<PackageReference\s+(?:Include|Update)="Microsoft\.NETFramework\.ReferenceAssemblies"[^>]*/>\s*$', ''
     $contentText = $contentText -creplace 'portable-net45\+win8\+wp8\+wpa81;?', ''
     $contentText = $contentText -creplace '<AssetTargetFallback>\$\(AssetTargetFallback\);?</AssetTargetFallback>\s*', ''
+
+    $contentText = [Regex]::Replace($contentText, 'Condition="([^"]*)"', {
+            param($match)
+
+            $conditionText = $match.Groups[1].Value
+            if ($conditionText -notmatch "\$\(TargetFramework\).*net4\d+") {
+                return $match.Value
+            }
+
+            $updatedConditionText = $conditionText
+            $updatedConditionText = [Regex]::Replace($updatedConditionText, "\s+and\s+'\$\(TargetFramework\)'\s*!=\s*'net4\d+'", '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+            $updatedConditionText = [Regex]::Replace($updatedConditionText, "'\$\(TargetFramework\)'\s*!=\s*'net4\d+'\s+and\s+", '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+            $updatedConditionText = [Regex]::Replace($updatedConditionText, "'\$\(TargetFramework\)'\s*!=\s*'net4\d+'", '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+            $updatedConditionText = [Regex]::Replace($updatedConditionText, '^\s*(and|or)\s+', '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+            $updatedConditionText = [Regex]::Replace($updatedConditionText, '\s+(and|or)\s*$', '', [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+            $updatedConditionText = [Regex]::Replace($updatedConditionText, '\s{2,}', ' ')
+            $updatedConditionText = $updatedConditionText.Trim()
+
+            if ([string]::IsNullOrWhiteSpace($updatedConditionText)) {
+                return ''
+            }
+
+            return ('Condition="' + $updatedConditionText + '"')
+        })
 
     $contentText = [Regex]::Replace($contentText, '<TargetFrameworks>(.*?)</TargetFrameworks>', {
             param($match)

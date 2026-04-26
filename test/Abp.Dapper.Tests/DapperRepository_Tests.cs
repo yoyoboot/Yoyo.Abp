@@ -7,7 +7,6 @@ using Abp.Dapper.Repositories;
 using Abp.Dapper.Tests.Entities;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
-using DapperExtensions;
 using Shouldly;
 using Xunit;
 
@@ -126,7 +125,7 @@ namespace Abp.Dapper.Tests
                     var productWithTenant2 = await _productRepository.GetAsync(productWithTenant2Id);
 
                     productWithTenant2.TenantId
-                        .ShouldBe(1); // Not sure about that?,Because we changed TenantId to 2 in this scope !!! Abp.TenantId = "2" now NOT 1 !!!
+                        .ShouldBe(1); // Not sure about that?,Because we changed TenantId to 2 in this scope !!! Abp-TenantId = "2" now NOT 1 !!!
                 }
 
                 using (_unitOfWorkManager.Current.SetTenantId("3"))
@@ -144,7 +143,7 @@ namespace Abp.Dapper.Tests
 
                 productWithTenantId3FromDapper.ShouldBeNull();
 
-                Product p = await _productDapperRepository.FirstOrDefaultAsync(x => x.Status == Status.Active);
+                Product p = await _productDapperRepository.FirstOrDefaultAsync(x => x.IsDeleted == false);
                 p.ShouldNotBeNull();
 
                 using (_unitOfWorkManager.Current.SetTenantId("3"))

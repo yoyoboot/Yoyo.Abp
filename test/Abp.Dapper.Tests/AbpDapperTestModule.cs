@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Transactions;
-
+using Abp.Dapper_Extensions;
+using Abp.Dapper_Extensions.Sql;
 using Abp.EntityFramework;
 using Abp.Modules;
 using Abp.TestBase;
-
-using DapperExtensions.Sql;
 
 namespace Abp.Dapper.Tests
 {
@@ -26,9 +25,9 @@ namespace Abp.Dapper.Tests
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
-            DapperExtensions.DapperExtensions.SqlDialect = new SqliteDialect();
+            DapperExtensions.SqlDialect = new SqliteDialect();
 
-            DapperExtensions.DapperExtensions.SetMappingAssemblies(new List<Assembly> { Assembly.GetExecutingAssembly() });
+            DapperExtensions.SetMappingAssemblies(new List<Assembly> { Assembly.GetExecutingAssembly() });
         }
     }
 }

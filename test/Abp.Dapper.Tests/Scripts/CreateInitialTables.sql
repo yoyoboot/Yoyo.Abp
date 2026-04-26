@@ -9,7 +9,7 @@
 										,	CreationTime DATETIME
 										,	CreatorUserId NVARCHAR(1024)
 										,	TenantId NVARCHAR(1024)
-										, Status BOOLEAN
+										, Status INTEGER NULLABLE
 									);
 
  CREATE TABLE IF NOT EXISTS ProductDetails (

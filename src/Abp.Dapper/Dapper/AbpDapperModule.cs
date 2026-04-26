@@ -2,6 +2,7 @@ using Abp.Dependency;
 using Abp.Modules;
 using Abp.Orm;
 using Abp.Reflection.Extensions;
+using Slapper;
 
 namespace Abp.Dapper
 {
@@ -11,6 +12,7 @@ namespace Abp.Dapper
         public override void PreInitialize()
         {
             Configuration.UnitOfWork.IsTransactionScopeAvailable = false;
+            Slapper.AutoMapper.Configuration.TypeConverters.Add(new AutoMapper.Configuration.EnumConverter());
         }
 
         public override void Initialize()

@@ -1,5 +1,5 @@
+using Abp.Dapper_Extensions.Mapper;
 using Abp.Dapper.Tests.Entities;
-using DapperExtensions.Mapper;
 
 namespace Abp.Dapper.Tests.Mappings
 {

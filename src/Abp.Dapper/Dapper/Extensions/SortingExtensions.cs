@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using DapperExtensions;
+using Abp.Dapper_Extensions;
+using Abp.Dapper_Extensions.Predicate;
 using JetBrains.Annotations;
 
 namespace Abp.Dapper.Extensions
@@ -18,7 +19,7 @@ namespace Abp.Dapper.Extensions
             var sortList = new List<ISort>();
             sortingExpression.ToList().ForEach(sortExpression =>
             {
-                MemberInfo sortProperty = ReflectionHelper.GetProperty(sortExpression);
+                var sortProperty = DapperExtensionsReflectionHelper.GetProperty(sortExpression) as MemberInfo;
                 sortList.Add(new Sort { Ascending = ascending, PropertyName = sortProperty.Name });
             });
 
