@@ -299,26 +299,14 @@ function Assert-PackageSurface {
 function Assert-LegacyPackageExclusions {
     param(
         [Parameter(Mandatory = $true)]
-        [string[]]$PackProjectNames
+        [string[]]$PackProjectNames,
+
+        [Parameter(Mandatory = $true)]
+        [hashtable]$LegacyExclusionConfig
     )
 
-    $legacyExactNames = @(
-        'Abp.Web',
-        'Abp.Web.Api',
-        'Abp.Web.Mvc',
-        'Abp.Web.SignalR',
-        'Abp.Web.Resources',
-        'Abp.Zero',
-        'Abp.Zero.EntityFramework',
-        'Abp.Zero.NHibernate',
-        'Abp.Zero.Owin'
-    )
-    $legacyTokenPatterns = @(
-        'NHibernate',
-        'Owin',
-        'GraphDiff',
-        'FluentMigrator'
-    )
+    $legacyExactNames = @($LegacyExclusionConfig['exactProjectNames'])
+    $legacyTokenPatterns = @($LegacyExclusionConfig['tokenPatterns'])
 
     $legacyProjects = New-Object System.Collections.Generic.List[string]
     foreach ($projectName in $PackProjectNames) {
@@ -415,6 +403,31 @@ function Assert-FileContains {
     }
 }
 
+function Assert-RootMetadataFiles {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Src
+    )
+
+    $requiredRootFiles = @(
+        'LICENSE.md'
+    )
+
+    $missingRootFiles = New-Object System.Collections.Generic.List[string]
+    foreach ($requiredRootFile in $requiredRootFiles) {
+        if (!(Test-Path -LiteralPath (Join-Path $Src $requiredRootFile))) {
+            $missingRootFiles.Add($requiredRootFile)
+        }
+    }
+
+    if ($missingRootFiles.Count -gt 0) {
+        Throw-ValidationFailure `
+            -Category 'RootMetadata' `
+            -Summary 'Generated output root is missing required pack/build metadata files.' `
+            -Examples @($missingRootFiles)
+    }
+}
+
 function Assert-KnownRegressionGuards {
     param(
         [Parameter(Mandatory = $true)]
@@ -434,7 +447,7 @@ function Assert-KnownRegressionGuards {
         -Src $Src `
         -RelativePath 'test\Abp.ZeroCore.SampleApp\AbpZeroCoreSampleAppModule.cs' `
         -ExpectedTexts @(
-            'CreateMultiLingualMap<Office,int, OfficeTranslation, OfficeListDto>'
+            'CreateMultiLingualMap<Office,string, OfficeTranslation, OfficeListDto>'
         ) `
         -Description 'Office multilingual map rewrite'
 
@@ -442,7 +455,7 @@ function Assert-KnownRegressionGuards {
         -Src $Src `
         -RelativePath 'test\Abp.ZeroCore.SampleApp\AbpZeroCoreSampleAppModule.cs' `
         -ForbiddenTexts @(
-            'CreateMultiLingualMap<Office,string, OfficeTranslation, OfficeListDto>',
+            'CreateMultiLingualMap<Office,int, OfficeTranslation, OfficeListDto>',
             'CreateMultiLingualMap<Office, int, OfficeTranslation, long, OfficeListDto>'
         ) `
         -Description 'Office multilingual map rewrite'
@@ -462,6 +475,24 @@ function Assert-KnownRegressionGuards {
             'Repository<OfficeTranslation, long>'
         ) `
         -Description 'Office translation repository key rewrite'
+
+    Assert-FileContains `
+        -Src $Src `
+        -RelativePath 'test\Abp.ZeroCore.SampleApp\Core\Shop\OfficeTranslation.cs' `
+        -ExpectedTexts @(
+            'IEntityTranslation<Office, string>',
+            'public string CoreId { get; set; }'
+        ) `
+        -Description 'Office translation CoreId rewrite'
+
+    Assert-FileDoesNotContain `
+        -Src $Src `
+        -RelativePath 'test\Abp.ZeroCore.SampleApp\Core\Shop\OfficeTranslation.cs' `
+        -ForbiddenTexts @(
+            'IEntityTranslation<Office>',
+            'public int CoreId { get; set; }'
+        ) `
+        -Description 'Office translation CoreId rewrite'
 }
 
 function Assert-MigrationOutput {
@@ -470,7 +501,10 @@ function Assert-MigrationOutput {
         [string]$Src,
 
         [Parameter(Mandatory = $true)]
-        [string[]]$ExpectedLibraryProjectNames
+        [string[]]$ExpectedLibraryProjectNames,
+
+        [Parameter(Mandatory = $true)]
+        [hashtable]$LegacyExclusionConfig
     )
 
     if (!(Test-Path -LiteralPath $Src)) {
@@ -486,6 +520,9 @@ function Assert-MigrationOutput {
     Write-Host 'Validate migration output: target frameworks'
     Assert-TargetFrameworkCompatibility -Src $Src
 
+    Write-Host 'Validate migration output: root metadata'
+    Assert-RootMetadataFiles -Src $Src
+
     $packScriptPath = Join-Path $Src 'nupkg\pack.ps1'
     $packProjectNames = Get-PackProjectNames -PackScriptPath $packScriptPath
 
@@ -493,7 +530,7 @@ function Assert-MigrationOutput {
     Assert-PackageSurface -Src $Src -ExpectedLibraryProjectNames $ExpectedLibraryProjectNames -PackProjectNames $packProjectNames
 
     Write-Host 'Validate migration output: legacy package exclusions'
-    Assert-LegacyPackageExclusions -PackProjectNames $packProjectNames
+    Assert-LegacyPackageExclusions -PackProjectNames $packProjectNames -LegacyExclusionConfig $LegacyExclusionConfig
 
     Write-Host 'Validate migration output: known high-risk regressions'
     Assert-KnownRegressionGuards -Src $Src

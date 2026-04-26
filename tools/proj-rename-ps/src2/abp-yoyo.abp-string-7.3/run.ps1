@@ -14,6 +14,26 @@ if (!(Test-Path -LiteralPath $Src -PathType Container)) {
     throw "Src must be an existing directory: $Src"
 }
 
+function Assert-RequiredProjectList {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string[]]$ProjectNames,
+
+        [Parameter(Mandatory = $true)]
+        [string]$ListLabel
+    )
+
+    if ($ProjectNames.Count -eq 0) {
+        throw "$ListLabel must not be empty."
+    }
+
+    foreach ($projectName in $ProjectNames) {
+        if ([string]::IsNullOrWhiteSpace($projectName)) {
+            throw "$ListLabel must contain only non-empty project names."
+        }
+    }
+}
+
 function NormalizeRootBuildCompatibility {
     param(
         [Parameter(Mandatory = $true)]
@@ -37,46 +57,18 @@ function NormalizeRootBuildCompatibility {
 . (Join-Path $scriptRoot 'process_test.ps1')
 . (Join-Path $scriptRoot 'process_test_demo.ps1')
 . (Join-Path $scriptRoot 'validate_output.ps1')
+. (Join-Path $scriptRoot 'engine_config.ps1')
 
+$configRoot = Get-MigrationConfigRoot -ScriptRoot $scriptRoot
+$libraryProfile = Get-LibraryProfile33Compat -ConfigRoot $configRoot
+$testProfile = Get-TestProfile33Compat -ConfigRoot $configRoot
+$legacyPackageExclusions = Get-LegacyPackageExclusions -ConfigRoot $configRoot
 
 
 # #====================== 基础库
 $rootPath = "${Src}\src\"
-$libraryProjectNames = @(
-    'Abp',
-    'Abp.Web.Common',
-    'Abp.AspNetCore',
-    'Abp.AspNetCore.OData',
-    'Abp.RedisCache',
-    'Abp.RedisCache.ProtoBuf',
-    'Abp.AspNetCore.PerRequestRedisCache',
-    'Abp.AspNetCore.SignalR',
-    'Abp.TestBase',
-    'Abp.AspNetCore.TestBase',
-    'Abp.AutoMapper',
-    'Abp.Castle.Log4Net',
-    'Abp.Dapper',
-    'Abp.EntityFramework.Common',
-    'Abp.EntityFramework',
-    'Abp.EntityFrameworkCore',
-    'Abp.EntityFrameworkCore.EFPlus',
-    'Abp.FluentValidation',
-    'Abp.HangFire',
-    'Abp.HangFire.AspNetCore',
-    'Abp.MailKit',
-    'Abp.MemoryDb',
-    'Abp.MongoDB',
-    'Abp.Quartz',
-    'Abp.Zero.Common',
-    'Abp.Zero.Ldap',
-    'Abp.ZeroCore',
-    'Abp.ZeroCore.EntityFramework',
-    'Abp.ZeroCore.EntityFrameworkCore',
-    'Abp.ZeroCore.IdentityServer4',
-    'Abp.ZeroCore.IdentityServer4.EntityFrameworkCore',
-    'Abp.ZeroCore.IdentityServer4.vNext',
-    'Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore'
-)
+$libraryProjectNames = @($libraryProfile['libraryProjects'])
+Assert-RequiredProjectList -ProjectNames $libraryProjectNames -ListLabel 'libraryProjects manifest list'
 
 
 RmLib -rootPath $rootPath -projNames $libraryProjectNames
@@ -85,25 +77,8 @@ RunLib -rootPath $rootPath -projNames $libraryProjectNames
 
 #====================== 测试
 $rootPath = "${Src}\test\"
-$testProjectNames = @(
-    'Abp.AspNetCore.Tests',
-    'Abp.AutoMapper.Tests',
-    'Abp.Castle.Log4Net.Tests',
-    'Abp.Dapper.Tests',
-    'Abp.EntityFramework.Tests',
-    'Abp.EntityFrameworkCore.Dapper.Tests',
-    'Abp.EntityFrameworkCore.Tests',
-    'Abp.MailKit.Tests',
-    'Abp.MemoryDb.Tests',
-    'Abp.Quartz.Tests',
-    'Abp.RedisCache.Tests',
-    'Abp.TestBase.Tests',
-    'Abp.Tests',
-    'Abp.Web.Common.Tests',
-    'Abp.ZeroCore.IdentityServer4.Tests',
-    'Abp.ZeroCore.SampleApp',
-    'Abp.ZeroCore.Tests'
-)
+$testProjectNames = @($testProfile['testProjects'])
+Assert-RequiredProjectList -ProjectNames $testProjectNames -ListLabel 'testProjects manifest list'
 
 RmLib -rootPath $rootPath -projNames $testProjectNames
 RunTest -rootPath $rootPath -projNames $testProjectNames
@@ -138,4 +113,4 @@ Copy-Item (Join-Path $scriptRoot 'abp\pack.ps1') -Destination ($nupkgPath + 'pac
 
 NormalizeRootBuildCompatibility -RootPath $Src
 
-Assert-MigrationOutput -Src $Src -ExpectedLibraryProjectNames $libraryProjectNames
+Assert-MigrationOutput -Src $Src -ExpectedLibraryProjectNames $libraryProjectNames -LegacyExclusionConfig $legacyPackageExclusions
