@@ -223,8 +223,7 @@ Assert-GenerationSelection -Version '9.4.2' -ExpectedGeneration 'v9-net8' -Expec
 Assert-GenerationSelection -Version '10.3.0' -ExpectedGeneration 'v10-net9' -ExpectedProfile 'v10-stable' -ExpectedTargetFramework 'net9.0' -ExpectedStageKeepProjects @(
     'Abp.AspNetCore.OpenIddict',
     'Abp.ZeroCore.OpenIddict',
-    'Abp.ZeroCore.OpenIddict.EntityFrameworkCore',
-    'Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore'
+    'Abp.ZeroCore.OpenIddict.EntityFrameworkCore'
 ) -ConfigRoot $configRoot
 
 $invalidLibraryJsonConfigRoot = New-TestConfigRoot -SourceConfigRoot $configRoot -FileName 'library-profile-v9-stable.json' -Content '{ invalid-json '

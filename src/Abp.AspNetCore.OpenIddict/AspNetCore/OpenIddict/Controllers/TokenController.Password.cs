@@ -103,10 +103,10 @@ public partial class TokenController<TTenant, TRole, TUser>
 
         // different from abp.io
         // ----------------------------------------------------------------------------------
-        principal.SetClaim(OpenIddictConstants.Claims.Subject, user.Id.ToString());
-        if (user.TenantId.HasValue)
+        principal.SetClaim(OpenIddictConstants.Claims.Subject, user.Id);
+        if (user.TenantId.HasValue())
         {
-            principal.SetClaim(AbpClaimTypes.TenantId, user.TenantId?.ToString());
+            principal.SetClaim(AbpClaimTypes.TenantId, user.TenantId);
         }
         // ----------------------------------------------------------------------------------
 

@@ -73,8 +73,7 @@ $projects = (
     "Abp.ZeroCore.EntityFramework",
     "Abp.ZeroCore.EntityFrameworkCore",
     "Abp.ZeroCore.OpenIddict",
-    "Abp.ZeroCore.OpenIddict.EntityFrameworkCore",
-    "Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore"
+    "Abp.ZeroCore.OpenIddict.EntityFrameworkCore"
 )
 
 if ($WhatIf) {

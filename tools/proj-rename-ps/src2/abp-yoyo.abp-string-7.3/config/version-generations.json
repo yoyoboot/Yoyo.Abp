@@ -47,8 +47,7 @@
             "stageKeepProjects": [
                 "Abp.AspNetCore.OpenIddict",
                 "Abp.ZeroCore.OpenIddict",
-                "Abp.ZeroCore.OpenIddict.EntityFrameworkCore",
-                "Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore"
+                "Abp.ZeroCore.OpenIddict.EntityFrameworkCore"
             ],
             "targetFramework": "net9.0",
             "riskNotes": [

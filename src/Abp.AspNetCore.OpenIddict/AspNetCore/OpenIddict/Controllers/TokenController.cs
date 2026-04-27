@@ -69,7 +69,7 @@ public partial class TokenController<TTenant, TRole, TUser> : AbpOpenIdDictContr
         throw new AbpException($"The specified grant type {request.GrantType} is not implemented!");
     }
 
-    private int? FindTenantId(ClaimsPrincipal principal)
+    private string FindTenantId(ClaimsPrincipal principal)
     {
         Check.NotNull(principal, nameof(principal));
 
@@ -79,11 +79,6 @@ public partial class TokenController<TTenant, TRole, TUser> : AbpOpenIdDictContr
             return null;
         }
 
-        if (int.TryParse(tenantIdOrNull.Value, out var guid))
-        {
-            return guid;
-        }
-
-        return null;
+        return tenantIdOrNull.Value;
     }
 }
