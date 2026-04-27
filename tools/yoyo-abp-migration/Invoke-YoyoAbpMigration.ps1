@@ -11,8 +11,10 @@ param(
     [string]$LogPath = (Join-Path $PSScriptRoot 'logs\last-run.log'),
 
     [string[]]$StageKeepProjects = @(
+        'Abp.EntityFrameworkCore.EFPlus',
         'Abp.ZeroCore.IdentityServer4',
-        'Abp.ZeroCore.IdentityServer4.EntityFrameworkCore'
+        'Abp.ZeroCore.IdentityServer4.EntityFrameworkCore',
+        'Abp.ZeroCore.IdentityServer4.vNext'
     ),
 
     [switch]$CleanOutput,
