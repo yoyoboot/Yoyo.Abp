@@ -46,6 +46,7 @@ $projects = (
     "Abp",
     "Abp.AspNetCore",
     "Abp.AspNetCore.OData",
+    "Abp.AspNetCore.OpenIddict",
     "Abp.AspNetCore.SignalR",
     "Abp.AspNetCore.TestBase",
     "Abp.AspNetCore.PerRequestRedisCache",
@@ -55,7 +56,6 @@ $projects = (
     "Abp.EntityFramework",
     "Abp.EntityFramework.Common",
     "Abp.EntityFrameworkCore",
-    "Abp.EntityFrameworkCore.EFPlus",
     "Abp.FluentValidation",
     "Abp.HangFire",
     "Abp.HangFire.AspNetCore",
@@ -72,9 +72,8 @@ $projects = (
     "Abp.ZeroCore",
     "Abp.ZeroCore.EntityFramework",
     "Abp.ZeroCore.EntityFrameworkCore",
-    "Abp.ZeroCore.IdentityServer4",
-    "Abp.ZeroCore.IdentityServer4.EntityFrameworkCore",
-    "Abp.ZeroCore.IdentityServer4.vNext",
+    "Abp.ZeroCore.OpenIddict",
+    "Abp.ZeroCore.OpenIddict.EntityFrameworkCore",
     "Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore"
 )
 

@@ -120,7 +120,7 @@ public class AbpLogInManager<TTenant, TRole, TUser> : IAbpLogInManager<TTenant, 
             }
         }
 
-        string tenantId = tenant == null ? (int?)null : tenant.Id;
+        string tenantId = tenant == null ? null : tenant.Id;
         using (UnitOfWorkManager.Current.SetTenantId(tenantId))
         {
             var user = await UserManager.FindAsync(tenantId, login);
@@ -198,7 +198,7 @@ public class AbpLogInManager<TTenant, TRole, TUser> : IAbpLogInManager<TTenant, 
             }
         }
 
-        var tenantId = tenant == null ? (int?)null : tenant.Id;
+        var tenantId = tenant == null ? null : tenant.Id;
         using (UnitOfWorkManager.Current.SetTenantId(tenantId))
         {
             await UserManager.InitializeOptionsAsync(tenantId);
@@ -275,7 +275,7 @@ public class AbpLogInManager<TTenant, TRole, TUser> : IAbpLogInManager<TTenant, 
     {
         using (var uow = UnitOfWorkManager.Begin(TransactionScopeOption.Suppress))
         {
-            var tenantId = loginResult.Tenant != null ? loginResult.Tenant.Id : (int?)null;
+            var tenantId = loginResult.Tenant != null ? loginResult.Tenant.Id : null;
             using (UnitOfWorkManager.Current.SetTenantId(tenantId))
             {
                 var loginAttempt = new UserLoginAttempt
@@ -283,7 +283,7 @@ public class AbpLogInManager<TTenant, TRole, TUser> : IAbpLogInManager<TTenant, 
                     TenantId = tenantId,
                     TenancyName = tenancyName.TruncateWithPostfix(UserLoginAttempt.MaxTenancyNameLength),
 
-                    UserId = loginResult.User != null ? loginResult.User.Id : (long?)null,
+                    UserId = loginResult.User != null ? loginResult.User.Id : null,
                     UserNameOrEmailAddress =
                         userNameOrEmailAddress.TruncateWithPostfix(UserLoginAttempt
                             .MaxUserNameOrEmailAddressLength),
@@ -321,7 +321,7 @@ public class AbpLogInManager<TTenant, TRole, TUser> : IAbpLogInManager<TTenant, 
     {
         using (var uow = UnitOfWorkManager.Begin(TransactionScopeOption.Suppress))
         {
-            var tenantId = loginResult.Tenant != null ? loginResult.Tenant.Id : (int?)null;
+            var tenantId = loginResult.Tenant != null ? loginResult.Tenant.Id : null;
             using (UnitOfWorkManager.Current.SetTenantId(tenantId))
             {
                 var loginAttempt = new UserLoginAttempt
@@ -329,7 +329,7 @@ public class AbpLogInManager<TTenant, TRole, TUser> : IAbpLogInManager<TTenant, 
                     TenantId = tenantId,
                     TenancyName = tenancyName.TruncateWithPostfix(UserLoginAttempt.MaxTenancyNameLength),
 
-                    UserId = loginResult.User != null ? loginResult.User.Id : (long?)null,
+                    UserId = loginResult.User != null ? loginResult.User.Id : null,
                     UserNameOrEmailAddress =
                         userNameOrEmailAddress.TruncateWithPostfix(UserLoginAttempt
                             .MaxUserNameOrEmailAddressLength),
@@ -396,7 +396,7 @@ public class AbpLogInManager<TTenant, TRole, TUser> : IAbpLogInManager<TTenant, 
             {
                 if (await source.Object.TryAuthenticateAsync(userNameOrEmailAddress, plainPassword, tenant))
                 {
-                    var tenantId = tenant == null ? (int?)null : tenant.Id;
+                    var tenantId = tenant == null ? null : tenant.Id;
                     using (UnitOfWorkManager.Current.SetTenantId(tenantId))
                     {
                         var user = await UserManager.FindByNameOrEmailAsync(tenantId, userNameOrEmailAddress);

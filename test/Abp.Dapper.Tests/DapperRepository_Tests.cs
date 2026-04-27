@@ -14,26 +14,26 @@ namespace Abp.Dapper.Tests
 {
     public class DapperRepository_Tests : DapperApplicationTestBase
     {
-        private readonly IDapperRepository<Product,int> _productDapperRepository;
-        private readonly IRepository<Product,int> _productRepository;
+        private readonly IDapperRepository<Product, int> _productDapperRepository;
+        private readonly IRepository<Product, int> _productRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly IRepository<ProductDetail,int> _productDetailRepository;
-        private readonly IDapperRepository<ProductDetail,int> _productDetailDapperRepository;
-        private readonly IRepository<Person,int> _personRepository;
-        private readonly IDapperRepository<Person,int> _personDapperRepository;
-        private readonly IDapperRepository<Good,int> _goodDapperRepository;
+        private readonly IRepository<ProductDetail, int> _productDetailRepository;
+        private readonly IDapperRepository<ProductDetail, int> _productDetailDapperRepository;
+        private readonly IRepository<Person, int> _personRepository;
+        private readonly IDapperRepository<Person, int> _personDapperRepository;
+        private readonly IDapperRepository<Good, int> _goodDapperRepository;
         private readonly IDapperQueryFilterExecuter _dapperQueryFilterExecuter;
 
         public DapperRepository_Tests()
         {
-            _productDapperRepository = Resolve<IDapperRepository<Product,int>>();
-            _productRepository = Resolve<IRepository<Product,int>>();
+            _productDapperRepository = Resolve<IDapperRepository<Product, int>>();
+            _productRepository = Resolve<IRepository<Product, int>>();
             _unitOfWorkManager = Resolve<IUnitOfWorkManager>();
-            _productDetailRepository = Resolve<IRepository<ProductDetail,int>>();
-            _productDetailDapperRepository = Resolve<IDapperRepository<ProductDetail,int>>();
-            _personRepository = Resolve<IRepository<Person,int>>();
-            _personDapperRepository = Resolve<IDapperRepository<Person,int>>();
-            _goodDapperRepository = Resolve<IDapperRepository<Good,int>>();
+            _productDetailRepository = Resolve<IRepository<ProductDetail, int>>();
+            _productDetailDapperRepository = Resolve<IDapperRepository<ProductDetail, int>>();
+            _personRepository = Resolve<IRepository<Person, int>>();
+            _personDapperRepository = Resolve<IDapperRepository<Person, int>>();
+            _goodDapperRepository = Resolve<IDapperRepository<Good, int>>();
             _dapperQueryFilterExecuter = Resolve<IDapperQueryFilterExecuter>();
         }
 
@@ -48,7 +48,7 @@ namespace Abp.Dapper.Tests
 
                 insertedProduct.ShouldNotBeNull();
                 insertedProduct.TenantId.ShouldBe(AbpSession.TenantId);
-                ((DateTime?) insertedProduct.CreationTime).ShouldNotBe(null);
+                ((DateTime?)insertedProduct.CreationTime).ShouldNotBe(null);
                 insertedProduct.CreatorUserId.ShouldBe(AbpSession.UserId);
 
                 //----Update operation should work and Modification Audits should be set---------------------------
@@ -59,7 +59,7 @@ namespace Abp.Dapper.Tests
 
                 productToUpdate.ShouldNotBeNull();
                 productToUpdate.TenantId.ShouldBe(AbpSession.TenantId);
-                ((DateTime?) productToUpdate.CreationTime).ShouldNotBe(null);
+                ((DateTime?)productToUpdate.CreationTime).ShouldNotBe(null);
                 productToUpdate.LastModifierUserId.ShouldBe(AbpSession.UserId);
 
                 //---Get method should return single-------------------------------------------------------------------
@@ -117,7 +117,7 @@ namespace Abp.Dapper.Tests
                     softDeletedProductFromDapperWhenFilterDisabled.ShouldNotBeNull();
                 }
 
-                using (AbpSession.Use("2","266"))
+                using (AbpSession.Use("2", "266"))
                 {
                     int productWithTenant2Id = await _productDapperRepository
                         .InsertAndGetIdAsync(new Product("ProductWithTenant2"));
@@ -125,7 +125,7 @@ namespace Abp.Dapper.Tests
                     var productWithTenant2 = await _productRepository.GetAsync(productWithTenant2Id);
 
                     productWithTenant2.TenantId
-                        .ShouldBe(1); // Not sure about that?,Because we changed TenantId to 2 in this scope !!! Abp-TenantId = "2" now NOT 1 !!!
+                        .ShouldBe("2");
                 }
 
                 using (_unitOfWorkManager.Current.SetTenantId("3"))
@@ -201,7 +201,7 @@ namespace Abp.Dapper.Tests
             {
                 using (_unitOfWorkManager.Current.SetTenantId(AbpSession.TenantId))
                 {
-                    await _goodDapperRepository.InsertAsync(new Good {Name = "AbpTest"});
+                    await _goodDapperRepository.InsertAsync(new Good { Name = "AbpTest" });
                     await _unitOfWorkManager.Current.SaveChangesAsync();
 
                     int? id = 1;

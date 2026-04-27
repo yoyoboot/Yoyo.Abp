@@ -29,69 +29,39 @@ function Assert-HasNonEmptyStringArrayProperty {
     }
 }
 
-function Assert-HasNonEmptyStringProperty {
+function Assert-Equal {
     param(
         [Parameter(Mandatory = $true)]
-        [hashtable]$Config,
+        [object]$Expected,
 
         [Parameter(Mandatory = $true)]
-        [string]$PropertyName,
+        [object]$Actual,
 
         [Parameter(Mandatory = $true)]
-        [string]$ConfigLabel
+        [string]$Context
     )
 
-    if (!($Config.ContainsKey($PropertyName))) {
-        throw "$ConfigLabel is missing required property '$PropertyName'."
-    }
-
-    $value = $Config[$PropertyName]
-    if ($value -isnot [string] -or [string]::IsNullOrWhiteSpace($value)) {
-        throw "$ConfigLabel property '$PropertyName' must be a non-empty string."
+    if ($Expected -ne $Actual) {
+        throw "$Context expected '$Expected' but found '$Actual'."
     }
 }
 
-function Assert-HasNonEmptyCollectionProperty {
+function Assert-SequenceEqual {
     param(
         [Parameter(Mandatory = $true)]
-        [hashtable]$Config,
+        [string[]]$Expected,
 
         [Parameter(Mandatory = $true)]
-        [string]$PropertyName,
+        [string[]]$Actual,
 
         [Parameter(Mandatory = $true)]
-        [string]$ConfigLabel
+        [string]$Context
     )
 
-    if (!($Config.ContainsKey($PropertyName))) {
-        throw "$ConfigLabel is missing required property '$PropertyName'."
-    }
-
-    $values = @($Config[$PropertyName])
-    if ($values.Count -eq 0) {
-        throw "$ConfigLabel property '$PropertyName' must not be empty."
-    }
-}
-
-function Assert-VersionGenerationsHaveRequiredShape {
-    param(
-        [Parameter(Mandatory = $true)]
-        [hashtable]$VersionMatrix
-    )
-
-    Assert-HasNonEmptyStringProperty -Config $VersionMatrix -PropertyName 'defaultProfile' -ConfigLabel 'version generation matrix'
-    Assert-HasNonEmptyCollectionProperty -Config $VersionMatrix -PropertyName 'generations' -ConfigLabel 'version generation matrix'
-
-    $index = 0
-    foreach ($generation in @($VersionMatrix['generations'])) {
-        if ($generation -isnot [hashtable]) {
-            throw "version generation matrix entry [$index] must be an object."
-        }
-
-        Assert-HasNonEmptyStringProperty -Config $generation -PropertyName 'name' -ConfigLabel "version generation matrix[$index]"
-        Assert-HasNonEmptyStringArrayProperty -Config $generation -PropertyName 'tagPrefixes' -ConfigLabel "version generation matrix[$index]"
-        Assert-HasNonEmptyStringProperty -Config $generation -PropertyName 'targetFramework' -ConfigLabel "version generation matrix[$index]"
-        $index++
+    $difference = Compare-Object -ReferenceObject @($Expected) -DifferenceObject @($Actual)
+    if ($difference) {
+        $formattedDifference = $difference | ForEach-Object { "{0} {1}" -f $_.SideIndicator, $_.InputObject }
+        throw "$Context does not match expected values:`n$($formattedDifference -join [Environment]::NewLine)"
     }
 }
 
@@ -148,45 +118,90 @@ function Assert-LoaderThrows {
     }
 }
 
+function Assert-GenerationSelection {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Version,
+
+        [Parameter(Mandatory = $true)]
+        [string]$ExpectedGeneration,
+
+        [Parameter(Mandatory = $true)]
+        [string]$ExpectedProfile,
+
+        [Parameter(Mandatory = $true)]
+        [string]$ExpectedTargetFramework,
+
+        [Parameter(Mandatory = $true)]
+        [string[]]$ExpectedStageKeepProjects,
+
+        [Parameter(Mandatory = $true)]
+        [string]$ConfigRoot
+    )
+
+    $selection = Get-MigrationGenerationSelection -Version $Version -ConfigRoot $ConfigRoot
+    Assert-Equal -Expected $ExpectedGeneration -Actual $selection['generation'] -Context "generation for $Version"
+    Assert-Equal -Expected $ExpectedProfile -Actual $selection['profile'] -Context "profile for $Version"
+    Assert-Equal -Expected $ExpectedTargetFramework -Actual $selection['targetFramework'] -Context "target framework for $Version"
+    Assert-SequenceEqual -Expected $ExpectedStageKeepProjects -Actual @($selection['stageKeepProjects']) -Context "stage keep projects for $Version"
+}
+
 $repoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..'))
 $configRoot = Join-Path $repoRoot 'tools\proj-rename-ps\src2\abp-yoyo.abp-string-7.3\config'
 $engineConfigPath = Join-Path $repoRoot 'tools\proj-rename-ps\src2\abp-yoyo.abp-string-7.3\engine_config.ps1'
 $runPath = Join-Path $repoRoot 'tools\proj-rename-ps\src2\abp-yoyo.abp-string-7.3\run.ps1'
 $validatorPath = Join-Path $repoRoot 'tools\proj-rename-ps\src2\abp-yoyo.abp-string-7.3\validate_output.ps1'
+$migrationPath = Join-Path $repoRoot 'tools\yoyo-abp-migration\Invoke-YoyoAbpMigration.ps1'
 $runContent = Get-Content -LiteralPath $runPath -Raw -Encoding UTF8
 $validatorContent = Get-Content -LiteralPath $validatorPath -Raw -Encoding UTF8
+$migrationContent = Get-Content -LiteralPath $migrationPath -Raw -Encoding UTF8
 
 if ($runContent -notmatch 'engine_config\.ps1') {
     throw 'run.ps1 does not load engine_config.ps1.'
 }
 
-if ($runContent -notmatch 'Get-LibraryProfile33Compat') {
-    throw 'run.ps1 does not use the manifest-backed library profile.'
+foreach ($requiredSnippet in @('Get-MigrationGenerationSelection', 'Get-LibraryProfileByName', 'Get-TestProfileByName')) {
+    if ($runContent -notmatch $requiredSnippet) {
+        throw "run.ps1 does not use $requiredSnippet."
+    }
 }
 
-if ($runContent -notmatch 'Get-TestProfile33Compat') {
-    throw 'run.ps1 does not use the manifest-backed test profile.'
-}
-
-if ($runContent -notmatch 'Get-LegacyPackageExclusions') {
-    throw 'run.ps1 does not use the manifest-backed legacy exclusion config.'
+if ($runContent -notmatch 'ExpectedPackProjectNames') {
+    throw 'run.ps1 does not pass expected pack projects into the validator.'
 }
 
 if ($runContent -notmatch '-LegacyExclusionConfig') {
     throw 'run.ps1 does not pass legacy exclusions into the validator.'
 }
 
-if ($validatorContent -notmatch 'LegacyExclusionConfig') {
-    throw 'validate_output.ps1 does not accept manifest-backed legacy exclusions.'
+if ($validatorContent -notmatch 'ExpectedPackProjectNames') {
+    throw 'validate_output.ps1 does not accept generation-aware pack project expectations.'
+}
+
+if ($migrationContent -notmatch 'Get-MigrationGenerationSelection') {
+    throw 'Invoke-YoyoAbpMigration.ps1 does not reuse generation-aware stage keep selection.'
 }
 
 . $engineConfigPath
 
-$libraryProfile = Get-LibraryProfile33Compat -ConfigRoot $configRoot
+$currentVersion = Get-VersionFromCommonProps -RootPath $repoRoot
+$currentSelection = Get-MigrationGenerationSelection -SourceRoot $repoRoot -ConfigRoot $configRoot
+
+if ($currentVersion.StartsWith('9.', [System.StringComparison]::OrdinalIgnoreCase)) {
+    Assert-Equal -Expected 'v9-stable' -Actual $currentSelection['profile'] -Context 'current worktree profile'
+}
+elseif ($currentVersion.StartsWith('10.', [System.StringComparison]::OrdinalIgnoreCase)) {
+    Assert-Equal -Expected 'v10-stable' -Actual $currentSelection['profile'] -Context 'current worktree profile'
+}
+else {
+    throw "Unexpected current version for release worktree test: $currentVersion"
+}
+
+$libraryProfile = Get-LibraryProfileByName -ProfileName $currentSelection['profile'] -ConfigRoot $configRoot
 Assert-HasNonEmptyStringArrayProperty -Config $libraryProfile -PropertyName 'libraryProjects' -ConfigLabel 'library profile'
 Assert-HasNonEmptyStringArrayProperty -Config $libraryProfile -PropertyName 'packProjects' -ConfigLabel 'library profile'
 
-$testProfile = Get-TestProfile33Compat -ConfigRoot $configRoot
+$testProfile = Get-TestProfileByName -ProfileName $currentSelection['profile'] -ConfigRoot $configRoot
 Assert-HasNonEmptyStringArrayProperty -Config $testProfile -PropertyName 'testProjects' -ConfigLabel 'test profile'
 
 $legacyPackageExclusions = Get-LegacyPackageExclusions -ConfigRoot $configRoot
@@ -194,17 +209,33 @@ Assert-HasNonEmptyStringArrayProperty -Config $legacyPackageExclusions -Property
 Assert-HasNonEmptyStringArrayProperty -Config $legacyPackageExclusions -PropertyName 'tokenPatterns' -ConfigLabel 'legacy package exclusions'
 
 $versionGenerationMatrix = Get-VersionGenerationMatrix -ConfigRoot $configRoot
-Assert-VersionGenerationsHaveRequiredShape -VersionMatrix $versionGenerationMatrix
+Assert-Equal -Expected '33-compat' -Actual $versionGenerationMatrix['defaultProfile'] -Context 'default profile in version generation matrix'
 
-$invalidLibraryJsonConfigRoot = New-TestConfigRoot -SourceConfigRoot $configRoot -FileName 'library-profile-33-compat.json' -Content '{ invalid-json '
+Assert-GenerationSelection -Version '9.4.2' -ExpectedGeneration 'v9-net8' -ExpectedProfile 'v9-stable' -ExpectedTargetFramework 'net8.0' -ExpectedStageKeepProjects @(
+    'Abp.AspNetCore.OpenIddict',
+    'Abp.ZeroCore.OpenIddict',
+    'Abp.ZeroCore.OpenIddict.EntityFrameworkCore',
+    'Abp.EntityFrameworkCore.EFPlus',
+    'Abp.ZeroCore.IdentityServer4.vNext',
+    'Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore'
+) -ConfigRoot $configRoot
+
+Assert-GenerationSelection -Version '10.3.0' -ExpectedGeneration 'v10-net9' -ExpectedProfile 'v10-stable' -ExpectedTargetFramework 'net9.0' -ExpectedStageKeepProjects @(
+    'Abp.AspNetCore.OpenIddict',
+    'Abp.ZeroCore.OpenIddict',
+    'Abp.ZeroCore.OpenIddict.EntityFrameworkCore',
+    'Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore'
+) -ConfigRoot $configRoot
+
+$invalidLibraryJsonConfigRoot = New-TestConfigRoot -SourceConfigRoot $configRoot -FileName 'library-profile-v9-stable.json' -Content '{ invalid-json '
 try {
     Assert-LoaderThrows `
-        -Loader { param($tempRoot) Get-LibraryProfile33Compat -ConfigRoot $tempRoot } `
+        -Loader { param($tempRoot) Get-LibraryProfileByName -ProfileName 'v9-stable' -ConfigRoot $tempRoot } `
         -ConfigRoot $invalidLibraryJsonConfigRoot `
-        -Scenario 'invalid library profile JSON' `
+        -Scenario 'invalid v9 stable library profile JSON' `
         -ExpectedMessageParts @(
             'Failed to parse migration config JSON',
-            'library-profile-33-compat.json'
+            'library-profile-v9-stable.json'
         )
 }
 finally {
@@ -213,18 +244,18 @@ finally {
     }
 }
 
-$invalidTestProfileConfigRoot = New-TestConfigRoot -SourceConfigRoot $configRoot -FileName 'test-profile-33-compat.json' -Content @'
+$invalidTestProfileConfigRoot = New-TestConfigRoot -SourceConfigRoot $configRoot -FileName 'test-profile-v10-stable.json' -Content @'
 {
   "testProjects": []
 }
 '@
 try {
     Assert-LoaderThrows `
-        -Loader { param($tempRoot) Get-TestProfile33Compat -ConfigRoot $tempRoot } `
+        -Loader { param($tempRoot) Get-TestProfileByName -ProfileName 'v10-stable' -ConfigRoot $tempRoot } `
         -ConfigRoot $invalidTestProfileConfigRoot `
-        -Scenario 'empty testProjects list' `
+        -Scenario 'empty v10 stable testProjects list' `
         -ExpectedMessageParts @(
-            'test-profile-33-compat.json',
+            'test-profile-v10-stable.json',
             'testProjects'
         )
 }
@@ -261,9 +292,10 @@ $invalidVersionGenerationConfigRoot = New-TestConfigRoot -SourceConfigRoot $conf
   "defaultProfile": "33-compat",
   "generations": [
     {
-      "name": "",
-      "tagPrefixes": [],
-      "targetFramework": ""
+      "name": "v9-net8",
+      "tagPrefixes": ["v9."],
+      "targetFramework": "net8.0",
+      "stageKeepProjects": ["Abp.AspNetCore.OpenIddict"]
     }
   ]
 }
@@ -272,10 +304,10 @@ try {
     Assert-LoaderThrows `
         -Loader { param($tempRoot) Get-VersionGenerationMatrix -ConfigRoot $tempRoot } `
         -ConfigRoot $invalidVersionGenerationConfigRoot `
-        -Scenario 'invalid version generation entry' `
+        -Scenario 'missing generation profile mapping' `
         -ExpectedMessageParts @(
             'version-generations.json',
-            'name'
+            'profile'
         )
 }
 finally {
@@ -284,4 +316,4 @@ finally {
     }
 }
 
-Write-Host 'run.ps1 and validate_output.ps1 are wired to manifest-backed config.' -ForegroundColor Green
+Write-Host 'run.ps1, validate_output.ps1 and Invoke-YoyoAbpMigration.ps1 are wired to generation-aware manifests.' -ForegroundColor Green

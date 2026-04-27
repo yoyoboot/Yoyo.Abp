@@ -67,15 +67,30 @@ function NormalizeRootBuildCompatibility {
 . $stageKeepHelperPath
 
 $configRoot = Get-MigrationConfigRoot -ScriptRoot $scriptRoot
-$libraryProfile = Get-LibraryProfile33Compat -ConfigRoot $configRoot
-$testProfile = Get-TestProfile33Compat -ConfigRoot $configRoot
+$generationSelection = Get-MigrationGenerationSelection -SourceRoot $Src -ConfigRoot $configRoot
+$profileName = $generationSelection['profile']
+$libraryProfile = Get-LibraryProfileByName -ProfileName $profileName -ConfigRoot $configRoot
+$testProfile = Get-TestProfileByName -ProfileName $profileName -ConfigRoot $configRoot
 $legacyPackageExclusions = Get-LegacyPackageExclusions -ConfigRoot $configRoot
+$resolvedStageKeepProjects = @($generationSelection['stageKeepProjects'])
+
+Write-Host ("Resolved migration version: {0}" -f $generationSelection['version']) -ForegroundColor Blue
+Write-Host ("Resolved migration generation: {0}" -f $generationSelection['generation']) -ForegroundColor Blue
+Write-Host ("Resolved migration profile: {0}" -f $profileName) -ForegroundColor Blue
+if ($resolvedStageKeepProjects.Count -gt 0) {
+    Write-Host ("Resolved stage-keep projects: {0}" -f ($resolvedStageKeepProjects -join ', ')) -ForegroundColor Blue
+}
+else {
+    Write-Host 'Resolved stage-keep projects: <none>' -ForegroundColor Blue
+}
 
 
 # #====================== 基础库
 $rootPath = "${Src}\src\"
 $libraryProjectNames = @($libraryProfile['libraryProjects'])
+$packProjectNames = @($libraryProfile['packProjects'])
 Assert-RequiredProjectList -ProjectNames $libraryProjectNames -ListLabel 'libraryProjects manifest list'
+Assert-RequiredProjectList -ProjectNames $packProjectNames -ListLabel 'packProjects manifest list'
 
 
 RmLib -rootPath $rootPath -projNames $libraryProjectNames
@@ -120,11 +135,12 @@ Copy-Item (Join-Path $scriptRoot 'abp\pack.ps1') -Destination ($nupkgPath + 'pac
 
 NormalizeRootBuildCompatibility -RootPath $Src
 
-Restore-YoyoAbpStageKeepProjects -RepoRoot $repoRoot -OutputRoot $Src -ProjectNames @(
-    'Abp.EntityFrameworkCore.EFPlus',
-    'Abp.ZeroCore.IdentityServer4',
-    'Abp.ZeroCore.IdentityServer4.EntityFrameworkCore',
-    'Abp.ZeroCore.IdentityServer4.vNext'
-)
+if ($resolvedStageKeepProjects.Count -gt 0) {
+    Restore-YoyoAbpStageKeepProjects -RepoRoot $repoRoot -OutputRoot $Src -ProjectNames $resolvedStageKeepProjects
+}
 
-Assert-MigrationOutput -Src $Src -ExpectedLibraryProjectNames $libraryProjectNames -LegacyExclusionConfig $legacyPackageExclusions
+Assert-MigrationOutput `
+    -Src $Src `
+    -ExpectedLibraryProjectNames $libraryProjectNames `
+    -ExpectedPackProjectNames $packProjectNames `
+    -LegacyExclusionConfig $legacyPackageExclusions

@@ -192,7 +192,7 @@ public abstract class AbpDbContext : DbContext, ITransientDependency, IShouldIni
             if (UseAbpQueryCompiler())
             {
                 mayHaveTenantFilter = e => MayHaveTenantFilter(((IMayHaveTenant)e).TenantId, CurrentTenantId, true);
-                modelBuilder.ConfigureMayHaveTenantDbFunction(typeof(AbpDbContext).GetMethod(nameof(MayHaveTenantFilter), new[] { typeof(int?), typeof(int?), typeof(bool) })!, this.GetService<AbpEfCoreCurrentDbContext>());
+                modelBuilder.ConfigureMayHaveTenantDbFunction(typeof(AbpDbContext).GetMethod(nameof(MayHaveTenantFilter), new[] { typeof(string), typeof(string), typeof(bool) })!, this.GetService<AbpEfCoreCurrentDbContext>());
             }
             expression = expression == null ? mayHaveTenantFilter : CombineExpressions(expression, mayHaveTenantFilter);
         }
@@ -203,7 +203,7 @@ public abstract class AbpDbContext : DbContext, ITransientDependency, IShouldIni
             if (UseAbpQueryCompiler())
             {
                 mustHaveTenantFilter = e => MustHaveTenantFilter(((IMustHaveTenant)e).TenantId, CurrentTenantId, true);
-                modelBuilder.ConfigureMustHaveTenantDbFunction(typeof(AbpDbContext).GetMethod(nameof(MustHaveTenantFilter), new[] { typeof(int), typeof(int?), typeof(bool) })!, this.GetService<AbpEfCoreCurrentDbContext>());
+                modelBuilder.ConfigureMustHaveTenantDbFunction(typeof(AbpDbContext).GetMethod(nameof(MustHaveTenantFilter), new[] { typeof(string), typeof(string), typeof(bool) })!, this.GetService<AbpEfCoreCurrentDbContext>());
             }
             expression = expression == null ? mustHaveTenantFilter : CombineExpressions(expression, mustHaveTenantFilter);
         }
@@ -230,12 +230,12 @@ public abstract class AbpDbContext : DbContext, ITransientDependency, IShouldIni
         throw new NotSupportedException(DbFunctionNotSupportedExceptionMessage);
     }
 
-    public static bool MustHaveTenantFilter(string tenantId, var currentTenantId, bool boolParam)
+    public static bool MustHaveTenantFilter(string tenantId, string currentTenantId, bool boolParam)
     {
         throw new NotSupportedException(DbFunctionNotSupportedExceptionMessage);
     }
 
-    public static bool MayHaveTenantFilter(string tenantId, var currentTenantId, bool boolParam)
+    public static bool MayHaveTenantFilter(string tenantId, string currentTenantId, bool boolParam)
     {
         throw new NotSupportedException(DbFunctionNotSupportedExceptionMessage);
     }

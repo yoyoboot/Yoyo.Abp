@@ -26,9 +26,9 @@ namespace Abp.Zero.EntityHistory;
 public class SimpleEntityHistory_Test : AbpZeroTestBase
 {
     private readonly IRepository<Advertisement, int> _advertisementRepository;
-    private readonly IRepository<Blog,int> _blogRepository;
+    private readonly IRepository<Blog, int> _blogRepository;
     private readonly IRepository<Post, Guid> _postRepository;
-    private readonly IRepository<Comment,int> _commentRepository;
+    private readonly IRepository<Comment, int> _commentRepository;
     private readonly IRepository<Foo> _fooRepository;
     private readonly IRepository<Employee> _employeeRepository;
     private readonly UserManager _userManager;
@@ -38,9 +38,9 @@ public class SimpleEntityHistory_Test : AbpZeroTestBase
     public SimpleEntityHistory_Test()
     {
         _advertisementRepository = Resolve<IRepository<Advertisement, int>>();
-        _blogRepository = Resolve<IRepository<Blog,int>>();
+        _blogRepository = Resolve<IRepository<Blog, int>>();
         _postRepository = Resolve<IRepository<Post, Guid>>();
-        _commentRepository = Resolve<IRepository<Comment,int>>();
+        _commentRepository = Resolve<IRepository<Comment, int>>();
         _fooRepository = Resolve<IRepository<Foo>>();
         _employeeRepository = Resolve<IRepository<Employee>>();
         _userManager = Resolve<UserManager>();
@@ -789,7 +789,7 @@ public class SimpleEntityHistory_Test : AbpZeroTestBase
     {
         Resolve<IEntityHistoryConfiguration>().Selectors.Add("Selected", typeof(Employee));
 
-        int? employeeId = null;
+        string employeeId = null;
         WithUnitOfWork(() =>
         {
             var john = new Employee

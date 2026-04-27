@@ -33,6 +33,6 @@ public class HttpCookieTenantResolveContributor : ITenantResolveContributor, ITr
             return null;
         }
 
-        return int.TryParse(tenantIdValue, out var tenantId) ? tenantId : (int?)null;
+        return tenantIdValue;
     }
 }

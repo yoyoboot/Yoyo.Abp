@@ -46,6 +46,6 @@ public class HttpHeaderTenantResolveContributor : ITenantResolveContributor, ITr
                 );
         }
 
-        return int.TryParse(tenantIdHeader.First(), out var tenantId) ? tenantId : (int?)null;
+        return tenantIdHeader.First();
     }
 }
