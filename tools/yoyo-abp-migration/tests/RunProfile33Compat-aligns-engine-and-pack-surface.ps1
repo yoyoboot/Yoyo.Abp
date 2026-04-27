@@ -20,6 +20,42 @@ function Get-RequiredProjectList {
     return $values
 }
 
+function Assert-Equal {
+    param(
+        [Parameter(Mandatory = $true)]
+        [object]$Expected,
+
+        [Parameter(Mandatory = $true)]
+        [object]$Actual,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Context
+    )
+
+    if ($Expected -ne $Actual) {
+        throw "$Context expected '$Expected' but found '$Actual'."
+    }
+}
+
+function Assert-SequenceMatches {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string[]]$Expected,
+
+        [Parameter(Mandatory = $true)]
+        [string[]]$Actual,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Context
+    )
+
+    $difference = Compare-Object -ReferenceObject @($Expected) -DifferenceObject @($Actual)
+    if ($difference) {
+        $formattedDifference = $difference | ForEach-Object { "{0} {1}" -f $_.SideIndicator, $_.InputObject }
+        throw "$Context does not match expected values:`n$($formattedDifference -join [Environment]::NewLine)"
+    }
+}
+
 function Get-PackProjectsFromScript {
     param(
         [string]$ScriptPath
@@ -52,9 +88,33 @@ function Get-PackProjectsFromScript {
 
 $repoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\..'))
 $configRoot = Join-Path $repoRoot 'tools\proj-rename-ps\src2\abp-yoyo.abp-string-7.3\config'
-$libraryProfilePath = Join-Path $configRoot 'library-profile-33-compat.json'
-$testProfilePath = Join-Path $configRoot 'test-profile-33-compat.json'
+$engineConfigPath = Join-Path $repoRoot 'tools\proj-rename-ps\src2\abp-yoyo.abp-string-7.3\engine_config.ps1'
 $packScriptPath = Join-Path $repoRoot 'nupkg\pack.ps1'
+
+if (!(Test-Path $engineConfigPath)) {
+    throw "Missing engine config: $engineConfigPath"
+}
+
+. $engineConfigPath
+
+$currentVersion = Get-VersionFromCommonProps -RootPath $repoRoot
+$selection = Get-MigrationGenerationSelection -SourceRoot $repoRoot -ConfigRoot $configRoot
+
+if ($currentVersion.StartsWith('7.', [System.StringComparison]::OrdinalIgnoreCase)) {
+    Assert-Equal -Expected '33-compat' -Actual $selection['profile'] -Context 'resolved profile for current repo'
+}
+elseif ($currentVersion.StartsWith('9.', [System.StringComparison]::OrdinalIgnoreCase)) {
+    Assert-Equal -Expected 'v9-stable' -Actual $selection['profile'] -Context 'resolved profile for current repo'
+}
+elseif ($currentVersion.StartsWith('10.', [System.StringComparison]::OrdinalIgnoreCase)) {
+    Assert-Equal -Expected 'v10-stable' -Actual $selection['profile'] -Context 'resolved profile for current repo'
+}
+else {
+    throw "Unexpected current version for profile alignment test: $currentVersion"
+}
+
+$libraryProfilePath = Join-Path $configRoot ("library-profile-{0}.json" -f $selection['profile'])
+$testProfilePath = Join-Path $configRoot ("test-profile-{0}.json" -f $selection['profile'])
 
 if (!(Test-Path $libraryProfilePath)) {
     throw "Missing library profile: $libraryProfilePath"
@@ -64,8 +124,8 @@ if (!(Test-Path $testProfilePath)) {
     throw "Missing test profile: $testProfilePath"
 }
 
-$libraryProfile = Get-Content $libraryProfilePath -Raw | ConvertFrom-Json -AsHashtable
-$testProfile = Get-Content $testProfilePath -Raw | ConvertFrom-Json -AsHashtable
+$libraryProfile = Get-LibraryProfileByName -ProfileName $selection['profile'] -ConfigRoot $configRoot
+$testProfile = Get-TestProfileByName -ProfileName $selection['profile'] -ConfigRoot $configRoot
 
 $libraryProjects = Get-RequiredProjectList -Profile $libraryProfile -PropertyName 'libraryProjects' -ProfilePath $libraryProfilePath
 $currentProjects = @(
@@ -89,16 +149,8 @@ $currentTestProjects = @(
         Sort-Object -Unique
 )
 
-if (Compare-Object $libraryProjects $currentProjects) {
-    throw 'library-profile-33-compat.json does not match current src package surface.'
-}
+Assert-SequenceMatches -Expected $libraryProjects -Actual $currentProjects -Context ("library profile {0}" -f $selection['profile'])
+Assert-SequenceMatches -Expected $packProjects -Actual $currentPackProjects -Context ("pack profile {0}" -f $selection['profile'])
+Assert-SequenceMatches -Expected $testProjects -Actual $currentTestProjects -Context ("test profile {0}" -f $selection['profile'])
 
-if (Compare-Object $packProjects $currentPackProjects) {
-    throw 'library-profile-33-compat.json does not match current nupkg/pack.ps1 project list.'
-}
-
-if (Compare-Object $testProjects $currentTestProjects) {
-    throw 'test-profile-33-compat.json does not match current test project surface.'
-}
-
-Write-Host 'Profile 33 compatibility manifest matches current src/test/pack surface.' -ForegroundColor Green
+Write-Host ("Generation-aware profile {0} matches current src/test/pack surface." -f $selection['profile']) -ForegroundColor Green

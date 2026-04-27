@@ -6,6 +6,12 @@
             "tagPrefixes": [
                 "v7."
             ],
+            "profile": "33-compat",
+            "stageKeepProjects": [
+                "Abp.EntityFrameworkCore.EFPlus",
+                "Abp.ZeroCore.IdentityServer4.vNext",
+                "Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore"
+            ],
             "targetFramework": "net6.0",
             "riskNotes": [
                 "Use current 33-package baseline as reference.",
@@ -17,6 +23,15 @@
             "tagPrefixes": [
                 "v9."
             ],
+            "profile": "v9-stable",
+            "stageKeepProjects": [
+                "Abp.AspNetCore.OpenIddict",
+                "Abp.ZeroCore.OpenIddict",
+                "Abp.ZeroCore.OpenIddict.EntityFrameworkCore",
+                "Abp.EntityFrameworkCore.EFPlus",
+                "Abp.ZeroCore.IdentityServer4.vNext",
+                "Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore"
+            ],
             "targetFramework": "net8.0",
             "riskNotes": [
                 "Expect upstream authentication and template drift.",
@@ -27,6 +42,13 @@
             "name": "v10-net9",
             "tagPrefixes": [
                 "v10."
+            ],
+            "profile": "v10-stable",
+            "stageKeepProjects": [
+                "Abp.AspNetCore.OpenIddict",
+                "Abp.ZeroCore.OpenIddict",
+                "Abp.ZeroCore.OpenIddict.EntityFrameworkCore",
+                "Abp.ZeroCore.IdentityServer4.vNext.EntityFrameworkCore"
             ],
             "targetFramework": "net9.0",
             "riskNotes": [

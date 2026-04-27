@@ -10,6 +10,10 @@ param(
 
     [string]$LogPath = (Join-Path $PSScriptRoot 'logs\last-run.log'),
 
+    [string]$ProfileName,
+
+    [string[]]$StageKeepProjects,
+
     [switch]$CleanOutput,
 
     [switch]$SkipEngineRun
@@ -17,6 +21,8 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+. (Join-Path $PSScriptRoot 'YoyoAbpMigrationStageKeep.ps1')
 
     $pathComparison = if ($IsWindows) {
         [System.StringComparison]::OrdinalIgnoreCase
@@ -106,6 +112,8 @@ $resolvedUpstreamPath = Resolve-FullPath $UpstreamPath
 $resolvedOutputPath = Resolve-FullPath $OutputPath
 $resolvedEngineRoot = Resolve-FullPath $EngineRoot
 $resolvedLogPath = Resolve-FullPath $LogPath
+$resolvedRepoRoot = Resolve-FullPath (Join-Path $PSScriptRoot '..\..')
+$engineConfigPath = Join-Path $resolvedEngineRoot 'engine_config.ps1'
 
 if (!(Test-Path $resolvedUpstreamPath)) {
     throw "UpstreamPath does not exist: $resolvedUpstreamPath"
@@ -117,6 +125,10 @@ if (!(Test-Path (Join-Path $resolvedUpstreamPath 'Abp.sln'))) {
 
 if (!(Test-Path (Join-Path $resolvedEngineRoot 'run.ps1'))) {
     throw "Migration engine run.ps1 not found under: $resolvedEngineRoot"
+}
+
+if (!(Test-Path -LiteralPath $engineConfigPath)) {
+    throw "Migration engine_config.ps1 not found under: $resolvedEngineRoot"
 }
 
 if ((Get-NormalizedPath $resolvedOutputPath).Equals((Get-NormalizedPath $resolvedUpstreamPath), $pathComparison)) {
@@ -156,13 +168,38 @@ if ($SkipEngineRun) {
 Write-Host "Run migration engine"
 Push-Location $resolvedEngineRoot
 try {
-    & .\run.ps1 -Src $resolvedOutputPath 2>&1 | Tee-Object -FilePath $resolvedLogPath
+    $engineArguments = @{
+        Src = $resolvedOutputPath
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($ProfileName)) {
+        $engineArguments['ProfileName'] = $ProfileName
+    }
+
+    & .\run.ps1 @engineArguments 2>&1 | Tee-Object -FilePath $resolvedLogPath
     if ($LASTEXITCODE -ne 0) {
         throw "Migration engine failed with exit code $LASTEXITCODE"
     }
 }
 finally {
     Pop-Location
+}
+
+. $engineConfigPath
+$configRoot = Get-MigrationConfigRoot -ScriptRoot $resolvedEngineRoot
+$generationSelection = Get-MigrationGenerationSelection -SourceRoot $resolvedOutputPath -ConfigRoot $configRoot
+$resolvedStageKeepProjects = if ($PSBoundParameters.ContainsKey('StageKeepProjects')) {
+    @($StageKeepProjects)
+}
+else {
+    @($generationSelection['stageKeepProjects'])
+}
+
+Write-Host ("Resolved post-run migration generation: {0}" -f $generationSelection['generation']) -ForegroundColor Blue
+Write-Host ("Resolved post-run migration profile: {0}" -f $generationSelection['profile']) -ForegroundColor Blue
+
+if ($resolvedStageKeepProjects -and $resolvedStageKeepProjects.Count -gt 0) {
+    Restore-YoyoAbpStageKeepProjects -RepoRoot $resolvedRepoRoot -OutputRoot $resolvedOutputPath -ProjectNames $resolvedStageKeepProjects
 }
 
 Sync-TopLevelFiles -SourceRoot $resolvedUpstreamPath -DestinationRoot $resolvedOutputPath -FileNames @('LICENSE.md')

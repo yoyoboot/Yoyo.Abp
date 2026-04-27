@@ -1,7 +1,9 @@
 param(
     # input src
     [Parameter(Mandatory = $true)]
-    [string]$Src
+    [string]$Src,
+
+    [string]$ProfileName
 )
 
 Set-StrictMode -Version Latest
@@ -9,9 +11,15 @@ $ErrorActionPreference = 'Stop'
 
 $scriptRoot = $PSScriptRoot
 $Src = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Src)
+$repoRoot = [System.IO.Path]::GetFullPath((Join-Path $scriptRoot '..\..\..\..'))
+$stageKeepHelperPath = Join-Path $repoRoot 'tools\yoyo-abp-migration\YoyoAbpMigrationStageKeep.ps1'
 
 if (!(Test-Path -LiteralPath $Src -PathType Container)) {
     throw "Src must be an existing directory: $Src"
+}
+
+if (!(Test-Path -LiteralPath $stageKeepHelperPath -PathType Leaf)) {
+    throw "Stage-keep helper was not found: $stageKeepHelperPath"
 }
 
 function Assert-RequiredProjectList {
@@ -51,6 +59,27 @@ function NormalizeRootBuildCompatibility {
     }
 }
 
+function Set-PackScriptProjectList {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$PackScriptPath,
+
+        [Parameter(Mandatory = $true)]
+        [string[]]$ProjectNames
+    )
+
+    $scriptContent = Get-Content -LiteralPath $PackScriptPath -Raw -Encoding UTF8
+    $projectBody = ($ProjectNames | ForEach-Object { '    "{0}"' -f $_ }) -join (',' + [Environment]::NewLine)
+    $replacement = '$projects = (' + [Environment]::NewLine + $projectBody + [Environment]::NewLine + ')'
+    $updatedContent = [regex]::Replace($scriptContent, '(?ms)^\$projects\s*=\s*\(\s*.*?^\)', $replacement)
+
+    if ($updatedContent -eq $scriptContent) {
+        throw "Failed to update `$projects list in generated pack script: $PackScriptPath"
+    }
+
+    Set-Content -LiteralPath $PackScriptPath -Value $updatedContent -Encoding UTF8
+}
+
 # 执行公用脚本
 . (Join-Path $scriptRoot 'common.ps1')
 . (Join-Path $scriptRoot 'process_lib.ps1')
@@ -58,17 +87,39 @@ function NormalizeRootBuildCompatibility {
 . (Join-Path $scriptRoot 'process_test_demo.ps1')
 . (Join-Path $scriptRoot 'validate_output.ps1')
 . (Join-Path $scriptRoot 'engine_config.ps1')
+. $stageKeepHelperPath
 
 $configRoot = Get-MigrationConfigRoot -ScriptRoot $scriptRoot
-$libraryProfile = Get-LibraryProfile33Compat -ConfigRoot $configRoot
-$testProfile = Get-TestProfile33Compat -ConfigRoot $configRoot
+$generationSelection = Get-MigrationGenerationSelection -SourceRoot $Src -ConfigRoot $configRoot
+$selectedProfileName = if (Test-IsNonEmptyString -Value $ProfileName) {
+    $ProfileName
+}
+else {
+    $generationSelection['profile']
+}
+
+$libraryProfile = Get-LibraryProfileByName -ProfileName $selectedProfileName -ConfigRoot $configRoot
+$testProfile = Get-TestProfileByName -ProfileName $selectedProfileName -ConfigRoot $configRoot
 $legacyPackageExclusions = Get-LegacyPackageExclusions -ConfigRoot $configRoot
+$resolvedStageKeepProjects = @($generationSelection['stageKeepProjects'])
+
+Write-Host ("Resolved migration version: {0}" -f $generationSelection['version']) -ForegroundColor Blue
+Write-Host ("Resolved migration generation: {0}" -f $generationSelection['generation']) -ForegroundColor Blue
+Write-Host ("Resolved migration profile: {0}" -f $selectedProfileName) -ForegroundColor Blue
+if ($resolvedStageKeepProjects.Count -gt 0) {
+    Write-Host ("Resolved stage-keep projects: {0}" -f ($resolvedStageKeepProjects -join ', ')) -ForegroundColor Blue
+}
+else {
+    Write-Host 'Resolved stage-keep projects: <none>' -ForegroundColor Blue
+}
 
 
 # #====================== 基础库
 $rootPath = "${Src}\src\"
 $libraryProjectNames = @($libraryProfile['libraryProjects'])
+$packProjectNames = @($libraryProfile['packProjects'])
 Assert-RequiredProjectList -ProjectNames $libraryProjectNames -ListLabel 'libraryProjects manifest list'
+Assert-RequiredProjectList -ProjectNames $packProjectNames -ListLabel 'packProjects manifest list'
 
 
 RmLib -rootPath $rootPath -projNames $libraryProjectNames
@@ -109,8 +160,18 @@ $abpPath = $rootPath + 'Abp\Extensions\'
 Copy-Item (Join-Path $scriptRoot 'abp\StringIdExtensions.cs') -Destination ($abpPath + 'StringIdExtensions.cs') -Force
 
 $nupkgPath = "${Src}\nupkg\"
-Copy-Item (Join-Path $scriptRoot 'abp\pack.ps1') -Destination ($nupkgPath + 'pack.ps1') -Force
+$generatedPackScriptPath = $nupkgPath + 'pack.ps1'
+Copy-Item (Join-Path $scriptRoot 'abp\pack.ps1') -Destination $generatedPackScriptPath -Force
+Set-PackScriptProjectList -PackScriptPath $generatedPackScriptPath -ProjectNames $packProjectNames
 
 NormalizeRootBuildCompatibility -RootPath $Src
 
-Assert-MigrationOutput -Src $Src -ExpectedLibraryProjectNames $libraryProjectNames -LegacyExclusionConfig $legacyPackageExclusions
+if ($resolvedStageKeepProjects.Count -gt 0) {
+    Restore-YoyoAbpStageKeepProjects -RepoRoot $repoRoot -OutputRoot $Src -ProjectNames $resolvedStageKeepProjects
+}
+
+Assert-MigrationOutput `
+    -Src $Src `
+    -ExpectedLibraryProjectNames $libraryProjectNames `
+    -ExpectedPackProjectNames $packProjectNames `
+    -LegacyExclusionConfig $legacyPackageExclusions

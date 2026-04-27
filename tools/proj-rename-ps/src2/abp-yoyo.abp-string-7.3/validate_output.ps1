@@ -233,16 +233,15 @@ function Assert-PackageSurface {
         [string[]]$ExpectedLibraryProjectNames,
 
         [Parameter(Mandatory = $true)]
+        [string[]]$ExpectedPackProjectNames,
+
+        [Parameter(Mandatory = $true)]
         [string[]]$PackProjectNames
     )
 
     $ExpectedLibraryProjectNames = @($ExpectedLibraryProjectNames)
+    $ExpectedPackProjectNames = @($ExpectedPackProjectNames)
     $PackProjectNames = @($PackProjectNames)
-
-    $expectedCount = $ExpectedLibraryProjectNames.Count
-    if ($expectedCount -ne 33) {
-        Throw-ValidationFailure -Category 'PackageSurface' -Summary "Expected library surface drifted inside run.ps1. This validator is designed for 33 packages, but received $expectedCount."
-    }
 
     $srcRoot = Join-Path $Src 'src'
     if (!(Test-Path -LiteralPath $srcRoot)) {
@@ -258,12 +257,10 @@ function Assert-PackageSurface {
 
     $missingSrcProjects = @(Get-SetDifference -ReferenceItems $ExpectedLibraryProjectNames -CandidateItems $srcProjectNames)
     $extraSrcProjects = @(Get-SetDifference -ReferenceItems $srcProjectNames -CandidateItems $ExpectedLibraryProjectNames)
-    $missingPackProjects = @(Get-SetDifference -ReferenceItems $ExpectedLibraryProjectNames -CandidateItems $PackProjectNames)
-    $extraPackProjects = @(Get-SetDifference -ReferenceItems $PackProjectNames -CandidateItems $ExpectedLibraryProjectNames)
+    $missingPackProjects = @(Get-SetDifference -ReferenceItems $ExpectedPackProjectNames -CandidateItems $PackProjectNames)
+    $extraPackProjects = @(Get-SetDifference -ReferenceItems $PackProjectNames -CandidateItems $ExpectedPackProjectNames)
 
     if (
-        $srcProjectNames.Count -ne $expectedCount -or
-        $PackProjectNames.Count -ne $expectedCount -or
         $missingSrcProjects.Count -gt 0 -or
         $extraSrcProjects.Count -gt 0 -or
         $missingPackProjects.Count -gt 0 -or
@@ -284,14 +281,15 @@ function Assert-PackageSurface {
         }
 
         if ($examples.Count -eq 0) {
-            $examples.Add("expected package count: $expectedCount")
+            $examples.Add("expected src project count: $($ExpectedLibraryProjectNames.Count)")
             $examples.Add("actual src project count: $($srcProjectNames.Count)")
+            $examples.Add("expected pack project count: $($ExpectedPackProjectNames.Count)")
             $examples.Add("actual pack project count: $($PackProjectNames.Count)")
         }
 
         Throw-ValidationFailure `
             -Category 'PackageSurface' `
-            -Summary "Generated package surface no longer matches the expected 33-library baseline. Expected=$expectedCount, src=$($srcProjectNames.Count), pack=$($PackProjectNames.Count)." `
+            -Summary "Generated package surface no longer matches the resolved generation baseline. Expected src=$($ExpectedLibraryProjectNames.Count), actual src=$($srcProjectNames.Count), expected pack=$($ExpectedPackProjectNames.Count), actual pack=$($PackProjectNames.Count)." `
             -Examples @($examples)
     }
 }
@@ -504,6 +502,9 @@ function Assert-MigrationOutput {
         [string[]]$ExpectedLibraryProjectNames,
 
         [Parameter(Mandatory = $true)]
+        [string[]]$ExpectedPackProjectNames,
+
+        [Parameter(Mandatory = $true)]
         [hashtable]$LegacyExclusionConfig
     )
 
@@ -527,7 +528,7 @@ function Assert-MigrationOutput {
     $packProjectNames = Get-PackProjectNames -PackScriptPath $packScriptPath
 
     Write-Host 'Validate migration output: package surface'
-    Assert-PackageSurface -Src $Src -ExpectedLibraryProjectNames $ExpectedLibraryProjectNames -PackProjectNames $packProjectNames
+    Assert-PackageSurface -Src $Src -ExpectedLibraryProjectNames $ExpectedLibraryProjectNames -ExpectedPackProjectNames $ExpectedPackProjectNames -PackProjectNames $packProjectNames
 
     Write-Host 'Validate migration output: legacy package exclusions'
     Assert-LegacyPackageExclusions -PackProjectNames $packProjectNames -LegacyExclusionConfig $LegacyExclusionConfig
@@ -535,5 +536,5 @@ function Assert-MigrationOutput {
     Write-Host 'Validate migration output: known high-risk regressions'
     Assert-KnownRegressionGuards -Src $Src
 
-    Write-Host 'Validation passed: generated migration output matches the current 7.3 baseline checks.' -ForegroundColor Green
+    Write-Host 'Validation passed: generated migration output matches the resolved generation baseline checks.' -ForegroundColor Green
 }
