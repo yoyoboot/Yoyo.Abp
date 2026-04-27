@@ -177,11 +177,11 @@ namespace Abp.EntityFrameworkCore
 
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
             {
-                Expression<Func<TEntity, bool>> softDeleteFilter = e => !IsSoftDeleteFilterEnabled || !((ISoftDelete) e).IsDeleted;
+                Expression<Func<TEntity, bool>> softDeleteFilter = e => !IsSoftDeleteFilterEnabled || !((ISoftDelete)e).IsDeleted;
                 if (UseAbpQueryCompiler())
                 {
                     softDeleteFilter = e => SoftDeleteFilter(((ISoftDelete)e).IsDeleted, true);
-                    modelBuilder.ConfigureSoftDeleteDbFunction(typeof(AbpDbContext).GetMethod(nameof(SoftDeleteFilter), new []{ typeof(bool), typeof(bool) })!, this.GetService<AbpEfCoreCurrentDbContext>());
+                    modelBuilder.ConfigureSoftDeleteDbFunction(typeof(AbpDbContext).GetMethod(nameof(SoftDeleteFilter), new[] { typeof(bool), typeof(bool) })!, this.GetService<AbpEfCoreCurrentDbContext>());
                 }
                 expression = expression == null ? softDeleteFilter : CombineExpressions(expression, softDeleteFilter);
             }
@@ -192,7 +192,7 @@ namespace Abp.EntityFrameworkCore
                 if (UseAbpQueryCompiler())
                 {
                     mayHaveTenantFilter = e => MayHaveTenantFilter(((IMayHaveTenant)e).TenantId, CurrentTenantId, true);
-                    modelBuilder.ConfigureMayHaveTenantDbFunction(typeof(AbpDbContext).GetMethod(nameof(MayHaveTenantFilter), new []{ typeof(int?), typeof(int?), typeof(bool) })!, this.GetService<AbpEfCoreCurrentDbContext>());
+                    modelBuilder.ConfigureMayHaveTenantDbFunction(typeof(AbpDbContext).GetMethod(nameof(MayHaveTenantFilter), new[] { typeof(string), typeof(string), typeof(bool) })!, this.GetService<AbpEfCoreCurrentDbContext>());
                 }
                 expression = expression == null ? mayHaveTenantFilter : CombineExpressions(expression, mayHaveTenantFilter);
             }
@@ -203,7 +203,7 @@ namespace Abp.EntityFrameworkCore
                 if (UseAbpQueryCompiler())
                 {
                     mustHaveTenantFilter = e => MustHaveTenantFilter(((IMustHaveTenant)e).TenantId, CurrentTenantId, true);
-                    modelBuilder.ConfigureMustHaveTenantDbFunction(typeof(AbpDbContext).GetMethod(nameof(MustHaveTenantFilter), new []{ typeof(int), typeof(int?), typeof(bool) })!, this.GetService<AbpEfCoreCurrentDbContext>());
+                    modelBuilder.ConfigureMustHaveTenantDbFunction(typeof(AbpDbContext).GetMethod(nameof(MustHaveTenantFilter), new[] { typeof(string), typeof(string), typeof(bool) })!, this.GetService<AbpEfCoreCurrentDbContext>());
                 }
                 expression = expression == null ? mustHaveTenantFilter : CombineExpressions(expression, mustHaveTenantFilter);
             }
@@ -223,19 +223,19 @@ namespace Abp.EntityFrameworkCore
 
         protected const string DbFunctionNotSupportedExceptionMessage = "Your EF Core database provider does not support 'User-defined function mapping'." +
                                                             "Please set 'UseAbpQueryCompiler' of 'IAbpEfCoreConfiguration' to false to disable it." +
-                                                            "See https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping for more information." ;
+                                                            "See https://learn.microsoft.com/en-us/ef/core/querying/user-defined-function-mapping for more information.";
 
         public static bool SoftDeleteFilter(bool isDeleted, bool boolParam)
         {
             throw new NotSupportedException(DbFunctionNotSupportedExceptionMessage);
         }
 
-        public static bool MustHaveTenantFilter(string tenantId, var currentTenantId, bool boolParam)
+        public static bool MustHaveTenantFilter(string tenantId, string currentTenantId, bool boolParam)
         {
             throw new NotSupportedException(DbFunctionNotSupportedExceptionMessage);
         }
 
-        public static bool MayHaveTenantFilter(string tenantId, var currentTenantId, bool boolParam)
+        public static bool MayHaveTenantFilter(string tenantId, string currentTenantId, bool boolParam)
         {
             throw new NotSupportedException(DbFunctionNotSupportedExceptionMessage);
         }

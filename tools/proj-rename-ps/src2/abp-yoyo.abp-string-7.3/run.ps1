@@ -57,6 +57,27 @@ function NormalizeRootBuildCompatibility {
     }
 }
 
+function Set-PackScriptProjectList {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$PackScriptPath,
+
+        [Parameter(Mandatory = $true)]
+        [string[]]$ProjectNames
+    )
+
+    $scriptContent = Get-Content -LiteralPath $PackScriptPath -Raw -Encoding UTF8
+    $projectBody = ($ProjectNames | ForEach-Object { '    "{0}"' -f $_ }) -join (',' + [Environment]::NewLine)
+    $replacement = '$projects = (' + [Environment]::NewLine + $projectBody + [Environment]::NewLine + ')'
+    $updatedContent = [regex]::Replace($scriptContent, '(?ms)^\$projects\s*=\s*\(\s*.*?^\)', $replacement)
+
+    if ($updatedContent -eq $scriptContent) {
+        throw "Failed to update `$projects list in generated pack script: $PackScriptPath"
+    }
+
+    Set-Content -LiteralPath $PackScriptPath -Value $updatedContent -Encoding UTF8
+}
+
 # 执行公用脚本
 . (Join-Path $scriptRoot 'common.ps1')
 . (Join-Path $scriptRoot 'process_lib.ps1')
@@ -67,15 +88,30 @@ function NormalizeRootBuildCompatibility {
 . $stageKeepHelperPath
 
 $configRoot = Get-MigrationConfigRoot -ScriptRoot $scriptRoot
-$libraryProfile = Get-LibraryProfile33Compat -ConfigRoot $configRoot
-$testProfile = Get-TestProfile33Compat -ConfigRoot $configRoot
+$generationSelection = Get-MigrationGenerationSelection -SourceRoot $Src -ConfigRoot $configRoot
+$profileName = $generationSelection['profile']
+$libraryProfile = Get-LibraryProfileByName -ProfileName $profileName -ConfigRoot $configRoot
+$testProfile = Get-TestProfileByName -ProfileName $profileName -ConfigRoot $configRoot
 $legacyPackageExclusions = Get-LegacyPackageExclusions -ConfigRoot $configRoot
+$resolvedStageKeepProjects = @($generationSelection['stageKeepProjects'])
+
+Write-Host ("Resolved migration version: {0}" -f $generationSelection['version']) -ForegroundColor Blue
+Write-Host ("Resolved migration generation: {0}" -f $generationSelection['generation']) -ForegroundColor Blue
+Write-Host ("Resolved migration profile: {0}" -f $profileName) -ForegroundColor Blue
+if ($resolvedStageKeepProjects.Count -gt 0) {
+    Write-Host ("Resolved stage-keep projects: {0}" -f ($resolvedStageKeepProjects -join ', ')) -ForegroundColor Blue
+}
+else {
+    Write-Host 'Resolved stage-keep projects: <none>' -ForegroundColor Blue
+}
 
 
 # #====================== 基础库
 $rootPath = "${Src}\src\"
 $libraryProjectNames = @($libraryProfile['libraryProjects'])
+$packProjectNames = @($libraryProfile['packProjects'])
 Assert-RequiredProjectList -ProjectNames $libraryProjectNames -ListLabel 'libraryProjects manifest list'
+Assert-RequiredProjectList -ProjectNames $packProjectNames -ListLabel 'packProjects manifest list'
 
 
 RmLib -rootPath $rootPath -projNames $libraryProjectNames
@@ -116,15 +152,18 @@ $abpPath = $rootPath + 'Abp\Extensions\'
 Copy-Item (Join-Path $scriptRoot 'abp\StringIdExtensions.cs') -Destination ($abpPath + 'StringIdExtensions.cs') -Force
 
 $nupkgPath = "${Src}\nupkg\"
-Copy-Item (Join-Path $scriptRoot 'abp\pack.ps1') -Destination ($nupkgPath + 'pack.ps1') -Force
+$generatedPackScriptPath = $nupkgPath + 'pack.ps1'
+Copy-Item (Join-Path $scriptRoot 'abp\pack.ps1') -Destination $generatedPackScriptPath -Force
+Set-PackScriptProjectList -PackScriptPath $generatedPackScriptPath -ProjectNames $packProjectNames
 
 NormalizeRootBuildCompatibility -RootPath $Src
 
-Restore-YoyoAbpStageKeepProjects -RepoRoot $repoRoot -OutputRoot $Src -ProjectNames @(
-    'Abp.EntityFrameworkCore.EFPlus',
-    'Abp.ZeroCore.IdentityServer4',
-    'Abp.ZeroCore.IdentityServer4.EntityFrameworkCore',
-    'Abp.ZeroCore.IdentityServer4.vNext'
-)
+if ($resolvedStageKeepProjects.Count -gt 0) {
+    Restore-YoyoAbpStageKeepProjects -RepoRoot $repoRoot -OutputRoot $Src -ProjectNames $resolvedStageKeepProjects
+}
 
-Assert-MigrationOutput -Src $Src -ExpectedLibraryProjectNames $libraryProjectNames -LegacyExclusionConfig $legacyPackageExclusions
+Assert-MigrationOutput `
+    -Src $Src `
+    -ExpectedLibraryProjectNames $libraryProjectNames `
+    -ExpectedPackProjectNames $packProjectNames `
+    -LegacyExclusionConfig $legacyPackageExclusions

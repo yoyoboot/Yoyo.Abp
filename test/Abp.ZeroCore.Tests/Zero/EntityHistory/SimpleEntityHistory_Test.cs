@@ -26,9 +26,9 @@ namespace Abp.Zero.EntityHistory
     public class SimpleEntityHistory_Test : AbpZeroTestBase
     {
         private readonly IRepository<Advertisement, int> _advertisementRepository;
-        private readonly IRepository<Blog,int> _blogRepository;
+        private readonly IRepository<Blog, int> _blogRepository;
         private readonly IRepository<Post, Guid> _postRepository;
-        private readonly IRepository<Comment,int> _commentRepository;
+        private readonly IRepository<Comment, int> _commentRepository;
         private readonly IRepository<Foo> _fooRepository;
         private readonly IRepository<Employee> _employeeRepository;
         private readonly UserManager _userManager;
@@ -38,9 +38,9 @@ namespace Abp.Zero.EntityHistory
         public SimpleEntityHistory_Test()
         {
             _advertisementRepository = Resolve<IRepository<Advertisement, int>>();
-            _blogRepository = Resolve<IRepository<Blog,int>>();
+            _blogRepository = Resolve<IRepository<Blog, int>>();
             _postRepository = Resolve<IRepository<Post, Guid>>();
-            _commentRepository = Resolve<IRepository<Comment,int>>();
+            _commentRepository = Resolve<IRepository<Comment, int>>();
             _fooRepository = Resolve<IRepository<Foo>>();
             _employeeRepository = Resolve<IRepository<Employee>>();
             _userManager = Resolve<UserManager>();
@@ -68,7 +68,7 @@ namespace Abp.Zero.EntityHistory
             int? advertisementId = null;
             WithUnitOfWork(() =>
             {
-                var advertisement = new Advertisement {Banner = "tracked-advertisement"};
+                var advertisement = new Advertisement { Banner = "tracked-advertisement" };
                 advertisementId = _advertisementRepository.InsertAndGetId(advertisement);
             });
 
@@ -78,7 +78,7 @@ namespace Abp.Zero.EntityHistory
 
                 var entityChange =
                     s.EntityChanges.Single(ec => ec.EntityTypeFullName == typeof(Advertisement).FullName);
-                ((DateTime?) entityChange.ChangeTime).ShouldNotBe(null);
+                ((DateTime?)entityChange.ChangeTime).ShouldNotBe(null);
                 entityChange.ChangeType.ShouldBe(EntityChangeType.Created);
                 entityChange.EntityId.ShouldBe(advertisementId.ToJsonString());
                 entityChange.PropertyChanges.Count.ShouldBe(1);
@@ -125,7 +125,7 @@ namespace Abp.Zero.EntityHistory
             await WithUnitOfWorkAsync(async () =>
             {
                 await _advertisementRepository.InsertAndGetIdAsync(new Advertisement
-                    {Banner = "tracked-advertisement"});
+                { Banner = "tracked-advertisement" });
             });
 
             UsingDbContext(context =>
@@ -351,7 +351,7 @@ namespace Abp.Zero.EntityHistory
                 blog2Id = blog2.Id;
                 blog2.More.ShouldBeNull();
 
-                blog2.More = new BlogEx() {BloggerName = "blogger-2"};
+                blog2.More = new BlogEx() { BloggerName = "blogger-2" };
                 uow.Complete();
             }
 
@@ -460,8 +460,8 @@ namespace Abp.Zero.EntityHistory
                 var advertisement2 = _advertisementRepository.Single(a => a.Banner == "test-advertisement-2");
                 advertisement2Id = advertisement2.Id;
 
-                blog1.Promotions.Add(new BlogPromotion {AdvertisementId = advertisement1.Id});
-                blog1.Promotions.Add(new BlogPromotion {AdvertisementId = advertisement2.Id});
+                blog1.Promotions.Add(new BlogPromotion { AdvertisementId = advertisement1.Id });
+                blog1.Promotions.Add(new BlogPromotion { AdvertisementId = advertisement2.Id });
                 uow.Complete();
             }
 
@@ -554,7 +554,7 @@ namespace Abp.Zero.EntityHistory
                 blog2.Promotions.Count.ShouldBe(0);
 
                 var advertisement1 = _advertisementRepository.Single(a => a.Banner == "test-advertisement-1");
-                blog2.Promotions.Add(new BlogPromotion {AdvertisementId = advertisement1.Id});
+                blog2.Promotions.Add(new BlogPromotion { AdvertisementId = advertisement1.Id });
 
                 uow.Complete();
 
@@ -572,7 +572,7 @@ namespace Abp.Zero.EntityHistory
                 advertisement2Id = advertisement2.Id;
 
                 blog1.Promotions.Add(
-                    new BlogPromotion {AdvertisementId = advertisement2.Id, Title = "test-promotion-2"});
+                    new BlogPromotion { AdvertisementId = advertisement2.Id, Title = "test-promotion-2" });
                 uow.Complete();
 
                 blog1.Promotions.Count.ShouldBe(1);
@@ -789,7 +789,7 @@ namespace Abp.Zero.EntityHistory
         {
             Resolve<IEntityHistoryConfiguration>().Selectors.Add("Selected", typeof(Employee));
 
-            int? employeeId = null;
+            string employeeId = null;
             WithUnitOfWork(() =>
             {
                 var john = new Employee
@@ -809,7 +809,7 @@ namespace Abp.Zero.EntityHistory
                     ec => ec.EntityTypeFullName == typeof(Employee).FullName
                 );
 
-                ((DateTime?) entityChange.ChangeTime).ShouldNotBe(null);
+                ((DateTime?)entityChange.ChangeTime).ShouldNotBe(null);
                 entityChange.ChangeType.ShouldBe(EntityChangeType.Created);
                 entityChange.EntityId.ShouldBe(employeeId.ToJsonString());
                 entityChange.PropertyChanges.Count.ShouldBe(5);
@@ -909,7 +909,7 @@ namespace Abp.Zero.EntityHistory
             UsingDbContext(context =>
             {
                 /* Category does not inherit from Entity<> and is not an owned entity*/
-                context.Categories.Add(new Category {DisplayName = "My Category"});
+                context.Categories.Add(new Category { DisplayName = "My Category" });
                 context.SaveChanges();
             });
 
@@ -924,7 +924,7 @@ namespace Abp.Zero.EntityHistory
             UsingDbContext(context =>
             {
                 /* Category does not inherit from Entity<> and is not an owned entity*/
-                context.Categories.Add(new Category {DisplayName = "My Category"});
+                context.Categories.Add(new Category { DisplayName = "My Category" });
                 context.SaveChanges();
             });
             _entityHistoryStore.ClearReceivedCalls();
@@ -947,7 +947,7 @@ namespace Abp.Zero.EntityHistory
             //Arrange
             UsingDbContext(context =>
             {
-                context.Categories.Add(new Category {DisplayName = "My Category"});
+                context.Categories.Add(new Category { DisplayName = "My Category" });
                 context.SaveChanges();
             });
             _entityHistoryStore.ClearReceivedCalls();
@@ -970,7 +970,7 @@ namespace Abp.Zero.EntityHistory
             //Arrange
             UsingDbContext(context =>
             {
-                context.Countries.Add(new Country {CountryCode = "My Country"});
+                context.Countries.Add(new Country { CountryCode = "My Country" });
                 context.SaveChanges();
             });
 
@@ -1014,7 +1014,7 @@ namespace Abp.Zero.EntityHistory
                 var comment1 = _commentRepository.Single(b => b.Content == "test-comment-1-content");
 
                 advertisement1.Feedbacks.Add(new AdvertisementFeedback
-                    {AdvertisementId = advertisement1.Id, CommentId = comment1.Id});
+                { AdvertisementId = advertisement1.Id, CommentId = comment1.Id });
             });
 
             //Assert

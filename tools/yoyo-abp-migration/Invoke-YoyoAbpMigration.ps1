@@ -10,12 +10,7 @@ param(
 
     [string]$LogPath = (Join-Path $PSScriptRoot 'logs\last-run.log'),
 
-    [string[]]$StageKeepProjects = @(
-        'Abp.EntityFrameworkCore.EFPlus',
-        'Abp.ZeroCore.IdentityServer4',
-        'Abp.ZeroCore.IdentityServer4.EntityFrameworkCore',
-        'Abp.ZeroCore.IdentityServer4.vNext'
-    ),
+    [string[]]$StageKeepProjects,
 
     [switch]$CleanOutput,
 
@@ -116,6 +111,7 @@ $resolvedOutputPath = Resolve-FullPath $OutputPath
 $resolvedEngineRoot = Resolve-FullPath $EngineRoot
 $resolvedLogPath = Resolve-FullPath $LogPath
 $resolvedRepoRoot = Resolve-FullPath (Join-Path $PSScriptRoot '..\..')
+$engineConfigPath = Join-Path $resolvedEngineRoot 'engine_config.ps1'
 
 if (!(Test-Path $resolvedUpstreamPath)) {
     throw "UpstreamPath does not exist: $resolvedUpstreamPath"
@@ -127,6 +123,10 @@ if (!(Test-Path (Join-Path $resolvedUpstreamPath 'Abp.sln'))) {
 
 if (!(Test-Path (Join-Path $resolvedEngineRoot 'run.ps1'))) {
     throw "Migration engine run.ps1 not found under: $resolvedEngineRoot"
+}
+
+if (!(Test-Path -LiteralPath $engineConfigPath)) {
+    throw "Migration engine_config.ps1 not found under: $resolvedEngineRoot"
 }
 
 if ((Get-NormalizedPath $resolvedOutputPath).Equals((Get-NormalizedPath $resolvedUpstreamPath), $pathComparison)) {
@@ -175,8 +175,21 @@ finally {
     Pop-Location
 }
 
-if ($StageKeepProjects -and $StageKeepProjects.Count -gt 0) {
-    Restore-YoyoAbpStageKeepProjects -RepoRoot $resolvedRepoRoot -OutputRoot $resolvedOutputPath -ProjectNames $StageKeepProjects
+. $engineConfigPath
+$configRoot = Get-MigrationConfigRoot -ScriptRoot $resolvedEngineRoot
+$generationSelection = Get-MigrationGenerationSelection -SourceRoot $resolvedOutputPath -ConfigRoot $configRoot
+$resolvedStageKeepProjects = if ($PSBoundParameters.ContainsKey('StageKeepProjects')) {
+    @($StageKeepProjects)
+}
+else {
+    @($generationSelection['stageKeepProjects'])
+}
+
+Write-Host ("Resolved post-run migration generation: {0}" -f $generationSelection['generation']) -ForegroundColor Blue
+Write-Host ("Resolved post-run migration profile: {0}" -f $generationSelection['profile']) -ForegroundColor Blue
+
+if ($resolvedStageKeepProjects -and $resolvedStageKeepProjects.Count -gt 0) {
+    Restore-YoyoAbpStageKeepProjects -RepoRoot $resolvedRepoRoot -OutputRoot $resolvedOutputPath -ProjectNames $resolvedStageKeepProjects
 }
 
 Sync-TopLevelFiles -SourceRoot $resolvedUpstreamPath -DestinationRoot $resolvedOutputPath -FileNames @('LICENSE.md')
